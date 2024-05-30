@@ -36,16 +36,17 @@ namespace Persistence.Queries.Empleados
                         BaseEmpleadoDTO empleado = new BaseEmpleadoDTO();
 
                         #region Mapear Empleado
-                        empleado.Nombre = reader.GetString(0);
-                        empleado.Apellido = reader.GetString(1);
-                        empleado.Email = reader.GetString(2);
-                        empleado.Telefono = reader.GetString(3);
-                        empleado.Cargo = reader.GetString(4);
-                        empleado.Departamento = reader.GetString(5);
-                        empleado.Superior = reader.GetString(6);
-                        empleado.Estatus = reader.GetString(7);
-                        empleado.Sueldo = reader.GetDecimal(8);
-                        empleado.Nomina_Impuesto_AFP_id = reader.GetInt32(9);
+                        empleado.empleado_id = reader.GetInt32(0);
+                        empleado.Nombre = reader.GetString(1);
+                        empleado.Apellido = reader.GetString(2);
+                        empleado.Email = reader.GetString(3);
+                        empleado.Telefono = reader.GetString(4);
+                        empleado.Cargo = reader.GetString(5);
+                        empleado.Departamento = reader.GetString(6);
+                        empleado.Superior = reader.GetString(7);
+                        empleado.Estatus = reader.GetString(8);
+                        empleado.Sueldo = reader.GetDecimal(9);
+                        empleado.Nomina_Impuesto_AFP_id = reader.GetInt32(10);
                         #endregion
 
                         empleados.Add(empleado);
@@ -76,14 +77,15 @@ namespace Persistence.Queries.Empleados
                         SaveEmpleadoDTO empleado = new SaveEmpleadoDTO();
 
                         #region Mapear Empleado
-                        empleado.Nombre = reader.GetString(0);
-                        empleado.Apellido = reader.GetString(1);
-                        empleado.Email = reader.GetString(2);
-                        empleado.Telefono = reader.GetString(3);
-                        empleado.Cargo = reader.GetString(4);
-                        empleado.Departamento = reader.GetString(5);
-                        empleado.Superior = reader.GetString(6);
-                        empleado.Estatus = reader.GetString(7);
+                        empleado.empleado_id = reader.GetInt32(0);
+                        empleado.Nombre = reader.GetString(1);
+                        empleado.Apellido = reader.GetString(2);
+                        empleado.Email = reader.GetString(3);
+                        empleado.Telefono = reader.GetString(4);
+                        empleado.Cargo = reader.GetString(5);
+                        empleado.Departamento = reader.GetString(6);
+                        empleado.Superior = reader.GetString(7);
+                        empleado.Estatus = reader.GetString(8);
                         #endregion
 
                         empleados.Add(empleado);
@@ -114,16 +116,17 @@ namespace Persistence.Queries.Empleados
                         BaseEmpleadoDTO empleado = new BaseEmpleadoDTO();
 
                         #region Mapear Empleado
-                        empleado.Nombre = reader.GetString(0);
-                        empleado.Apellido = reader.GetString(1);
-                        empleado.Email = reader.GetString(2);
-                        empleado.Telefono = reader.GetString(3);
-                        empleado.Cargo = reader.GetString(4);
-                        empleado.Departamento = reader.GetString(5);
-                        empleado.Superior = reader.GetString(6);
-                        empleado.Estatus = reader.GetString(7);
-                        empleado.Sueldo = reader.GetDecimal(8);
-                        empleado.Nomina_Impuesto_AFP_id = reader.GetInt32(9);
+                        empleado.empleado_id = reader.GetInt32(0);
+                        empleado.Nombre = reader.GetString(1);
+                        empleado.Apellido = reader.GetString(2);
+                        empleado.Email = reader.GetString(3);
+                        empleado.Telefono = reader.GetString(4);
+                        empleado.Cargo = reader.GetString(5);
+                        empleado.Departamento = reader.GetString(6);
+                        empleado.Superior = reader.GetString(7);
+                        empleado.Estatus = reader.GetString(8);
+                        empleado.Sueldo = reader.GetDecimal(9);
+                        empleado.Nomina_Impuesto_AFP_id = reader.GetInt32(10);
                         #endregion
 
                         empleados.Add(empleado);
@@ -154,14 +157,15 @@ namespace Persistence.Queries.Empleados
                         SaveEmpleadoDTO empleado = new SaveEmpleadoDTO();
 
                         #region Mapear Empleado
-                        empleado.Nombre = reader.GetString(0);
-                        empleado.Apellido = reader.GetString(1);
-                        empleado.Email = reader.GetString(2);
-                        empleado.Telefono = reader.GetString(3);
-                        empleado.Cargo = reader.GetString(4);
-                        empleado.Departamento = reader.GetString(5);
-                        empleado.Superior = reader.GetString(6);
-                        empleado.Estatus = reader.GetString(7);
+                        empleado.empleado_id = reader.GetInt32(0);
+                        empleado.Nombre = reader.GetString(1);
+                        empleado.Apellido = reader.GetString(2);
+                        empleado.Email = reader.GetString(3);
+                        empleado.Telefono = reader.GetString(4);
+                        empleado.Cargo = reader.GetString(5);
+                        empleado.Departamento = reader.GetString(6);
+                        empleado.Superior = reader.GetString(7);
+                        empleado.Estatus = reader.GetString(8);
                         #endregion
 
                         empleados.Add(empleado);
@@ -175,11 +179,44 @@ namespace Persistence.Queries.Empleados
             }
         }
 
-        public int Post(SaveEmpleadoDTO dto)
+        public int PostAdmin(BaseEmpleadoDTO dto)
         {
             using (_conn)
             {
-                SqlCommand comd = new SqlCommand("INSERT INTO dbo.Empledos(nombre,apellido,email,telefono,cargo,departamento,superior,estatus) VALUES(@param1,@param2,@param3,@param4,@param5,@param6,@param7,@param8)", _conn);
+                SqlCommand comd = new SqlCommand("INSERT INTO dbo.Empledos(nombre,apellido,email,telefono,cargo,departamento,superior,estatus,sueldo) VALUES(@param1,@param2,@param3,@param4,@param5,@param6,@param7,@param8,@param9)", _conn);
+
+                SqlDataReader reader = comd.ExecuteReader();
+
+                try
+                {
+                    BaseEmpleadoDTO empleado = new BaseEmpleadoDTO();
+
+                    #region Mapear Empleado
+                    comd.Parameters.AddWithValue("@param1", dto.Nombre);
+                    comd.Parameters.AddWithValue("@param2", dto.Apellido);
+                    comd.Parameters.AddWithValue("@param3", dto.Email);
+                    comd.Parameters.AddWithValue("@param4", dto.Telefono);
+                    comd.Parameters.AddWithValue("@param5", dto.Cargo);
+                    comd.Parameters.AddWithValue("@param6", dto.Departamento);
+                    comd.Parameters.AddWithValue("@param7", dto.Superior);
+                    comd.Parameters.AddWithValue("@param8", Entities.Empleados.EstatusEnum.ACTIVO.ToString());
+                    comd.Parameters.AddWithValue("@param9", dto.Sueldo);
+                    #endregion
+
+                    return comd.ExecuteNonQuery();
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+        }
+
+        public int PostEmpleado(SaveEmpleadoDTO dto)
+        {
+            using (_conn)
+            {
+                SqlCommand comd = new SqlCommand("INSERT INTO dbo.Empledos(nombre,apellido,email,telefono) VALUES(@param1,@param2,@param3,@param4)", _conn);
 
                 SqlDataReader reader = comd.ExecuteReader();
 
@@ -192,10 +229,6 @@ namespace Persistence.Queries.Empleados
                     comd.Parameters.AddWithValue("@param2", dto.Apellido);
                     comd.Parameters.AddWithValue("@param3", dto.Email);
                     comd.Parameters.AddWithValue("@param4", dto.Telefono);
-                    comd.Parameters.AddWithValue("@param5", dto.Cargo);
-                    comd.Parameters.AddWithValue("@param6", dto.Departamento);
-                    comd.Parameters.AddWithValue("@param7", dto.Superior);
-                    comd.Parameters.AddWithValue("@param8", Entities.Empleados.EstatusEnum.ACTIVO.ToString());
                     #endregion
 
                     return comd.ExecuteNonQuery();

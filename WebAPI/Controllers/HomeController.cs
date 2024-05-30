@@ -17,9 +17,9 @@ namespace WebAPI.Controllers
         public IActionResult Index()
         {
 
-            GetAllEmpleados getAllEmpleados = new GetAllEmpleados();
+            EmpleadosQueries empleadosQueries = new EmpleadosQueries();
 
-            getAllEmpleados.ReadEmpleados();
+            ViewBag.Empleados = empleadosQueries.GetAdmin();
 
             return View();
         }

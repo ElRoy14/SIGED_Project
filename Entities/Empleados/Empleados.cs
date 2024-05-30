@@ -8,6 +8,8 @@ namespace Entities.Empleados
 {
     public class Empleados
     {
+        public int? Empleado_id { get; set; }
+
         public string? Nombre { get; set; }
 
         public string? Apellido { get; set; }

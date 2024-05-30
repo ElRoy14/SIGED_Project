@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Empleados
 {
-    public class SaveEmpleadoDTO
+    public record SaveEmpleadoDTO
     {
+        public int? empleado_id { get; set; }
+
         public string? Nombre { get; set; }
 
         public string? Apellido { get; set; }
