@@ -99,7 +99,7 @@ namespace Persistence.Queries.Empleados
             }
         }
 
-        public List<BaseEmpleadoDTO> GetAdminById(int id)
+        public BaseEmpleadoDTO GetAdminById(int id)
         {
             using (_conn)
             {
@@ -107,31 +107,27 @@ namespace Persistence.Queries.Empleados
 
                 SqlDataReader reader = comd.ExecuteReader();
 
-                List<BaseEmpleadoDTO> empleados = new List<BaseEmpleadoDTO>();
-
                 try
                 {
-                    while (reader.Read())
-                    {
-                        BaseEmpleadoDTO empleado = new BaseEmpleadoDTO();
+                    BaseEmpleadoDTO empleado = new BaseEmpleadoDTO();
 
-                        #region Mapear Empleado
-                        empleado.empleado_id = reader.GetInt32(0);
-                        empleado.Nombre = reader.GetString(1);
-                        empleado.Apellido = reader.GetString(2);
-                        empleado.Email = reader.GetString(3);
-                        empleado.Telefono = reader.GetString(4);
-                        empleado.Cargo = reader.GetString(5);
-                        empleado.Departamento = reader.GetString(6);
-                        empleado.Superior = reader.GetString(7);
-                        empleado.Estatus = reader.GetString(8);
-                        empleado.Sueldo = reader.GetDecimal(9);
-                        empleado.Nomina_Impuesto_AFP_id = reader.GetInt32(10);
-                        #endregion
+                    reader.Read();
 
-                        empleados.Add(empleado);
-                    }
-                    return empleados;
+                    #region Mapear Empleado
+                    empleado.empleado_id = reader.GetInt32(0);
+                    empleado.Nombre = reader.GetString(1);
+                    empleado.Apellido = reader.GetString(2);
+                    empleado.Email = reader.GetString(3);
+                    empleado.Telefono = reader.GetString(4);
+                    empleado.Cargo = reader.GetString(5);
+                    empleado.Departamento = reader.GetString(6);
+                    empleado.Superior = reader.GetString(7);
+                    empleado.Estatus = reader.GetString(8);
+                    empleado.Sueldo = reader.GetDecimal(9);
+                    empleado.Nomina_Impuesto_AFP_id = reader.GetInt32(10);
+                    #endregion
+
+                    return empleado;
                 }
                 finally
                 {
@@ -140,7 +136,7 @@ namespace Persistence.Queries.Empleados
             }
         }
 
-        public List<SaveEmpleadoDTO> GetEmpleadoById(int id)
+        public SaveEmpleadoDTO GetEmpleadoById(int id)
         {
             using (_conn)
             {
@@ -148,29 +144,25 @@ namespace Persistence.Queries.Empleados
 
                 SqlDataReader reader = comd.ExecuteReader();
 
-                List<SaveEmpleadoDTO> empleados = new List<SaveEmpleadoDTO>();
-
                 try
                 {
-                    while (reader.Read())
-                    {
-                        SaveEmpleadoDTO empleado = new SaveEmpleadoDTO();
+                    SaveEmpleadoDTO empleado = new SaveEmpleadoDTO();
 
-                        #region Mapear Empleado
-                        empleado.empleado_id = reader.GetInt32(0);
-                        empleado.Nombre = reader.GetString(1);
-                        empleado.Apellido = reader.GetString(2);
-                        empleado.Email = reader.GetString(3);
-                        empleado.Telefono = reader.GetString(4);
-                        empleado.Cargo = reader.GetString(5);
-                        empleado.Departamento = reader.GetString(6);
-                        empleado.Superior = reader.GetString(7);
-                        empleado.Estatus = reader.GetString(8);
-                        #endregion
+                    reader.Read();
 
-                        empleados.Add(empleado);
-                    }
-                    return empleados;
+                    #region Mapear Empleado
+                    empleado.empleado_id = reader.GetInt32(0);
+                    empleado.Nombre = reader.GetString(1);
+                    empleado.Apellido = reader.GetString(2);
+                    empleado.Email = reader.GetString(3);
+                    empleado.Telefono = reader.GetString(4);
+                    empleado.Cargo = reader.GetString(5);
+                    empleado.Departamento = reader.GetString(6);
+                    empleado.Superior = reader.GetString(7);
+                    empleado.Estatus = reader.GetString(8);
+                    #endregion
+
+                    return empleado;
                 }
                 finally
                 {

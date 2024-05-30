@@ -59,7 +59,7 @@ namespace Persistence.Queries.Asistencia
         {
             using (_conn)
             {
-                SqlCommand comd = new SqlCommand("SELECT * FROM vw_ResumenAsistencia", _conn);
+                SqlCommand comd = new SqlCommand($"SELECT * FROM vw_ResumenAsistencia WHERE empleado_id = {id}", _conn);
 
                 SqlDataReader reader = comd.ExecuteReader();
 

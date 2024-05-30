@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
 
             EmpleadosQueries empleadosQueries = new EmpleadosQueries();
 
-            ViewBag.Empleados = empleadosQueries.GetAdmin();
+            ViewBag.Empleados = empleadosQueries.GetEmpleadoById(2);
 
             return View();
         }

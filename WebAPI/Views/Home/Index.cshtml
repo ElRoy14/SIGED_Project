@@ -10,11 +10,8 @@
 
 <div>
 
-    @foreach(var empleado in ViewBag.Empleados)
-    {
-        <p>@empleado.Nombre</p>
+        <p>@ViewBag.Empleados.Nombre</p>
         <br/>
-        <p>@empleado.Email</p>
-    }
+        <p>@ViewBag.Empleados.Email</p>
 
 </div>
