@@ -1,8 +1,10 @@
 ﻿using Application.DTOs.Asistencia;
 using Application.DTOs.Empleados;
 using Persistence.DBConnections;
+using Persistence.Queries.Empleados;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -55,7 +57,7 @@ namespace Persistence.Queries.Asistencia
             }
         }
 
-        public List<BaseAsistenciaDTO> GetById(int id)
+        public BaseAsistenciaDTO GetById(int id)
         {
             using (_conn)
             {
@@ -67,22 +69,20 @@ namespace Persistence.Queries.Asistencia
 
                 try
                 {
-                    while (reader.Read())
-                    {
-                        BaseAsistenciaDTO asistencia = new BaseAsistenciaDTO();
+                    BaseAsistenciaDTO asistencia = new BaseAsistenciaDTO();
 
-                        #region Mapear Asistencia
-                        asistencia.Nombre = reader.GetString(1);
-                        asistencia.Apellido = reader.GetString(2);
-                        asistencia.Fecha = reader.GetDateTime(3);
-                        asistencia.HoraEntrada = reader.GetDateTime(4);
-                        asistencia.HoraSalida = reader.GetDateTime(5);
-                        asistencia.HorasTrabajadas = reader.GetDecimal(6);
-                        #endregion
+                    reader.Read();
 
-                        asistencias.Add(asistencia);
-                    }
-                    return asistencias;
+                    #region Mapear Asistencia
+                    asistencia.Nombre = reader.GetString(1);
+                    asistencia.Apellido = reader.GetString(2);
+                    asistencia.Fecha = reader.GetDateTime(3);
+                    asistencia.HoraEntrada = reader.GetDateTime(4);
+                    asistencia.HoraSalida = reader.GetDateTime(5);
+                    asistencia.HorasTrabajadas = reader.GetDecimal(6);
+                    #endregion
+
+                    return asistencia;
                 }
                 finally
                 {
@@ -90,6 +90,66 @@ namespace Persistence.Queries.Asistencia
                 }
             }
         }
+
+        public int RegistrarEntrada(BaseAsistenciaDTO dto)
+        {
+
+            using (_conn)
+            {
+                SqlCommand comd = new SqlCommand("RegistrarEntrada", _conn);
+
+                comd.CommandType = CommandType.StoredProcedure;
+
+                try
+                {
+                    BaseAsistenciaDTO empleado = new BaseAsistenciaDTO();
+
+                    #region Mapear Asistencia
+                    comd.Parameters.AddWithValue("@Nombre", dto.Nombre);
+                    comd.Parameters.AddWithValue("@Apellido", dto.Apellido);
+                    comd.Parameters.AddWithValue("@Firma", dto.Firma);
+                    comd.Parameters.AddWithValue("@Fecha", dto.Fecha);
+                    comd.Parameters.AddWithValue("@HoraEntrada", dto.HoraEntrada);
+                    #endregion
+
+                    return comd.ExecuteNonQuery();
+                }catch(Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        public int RegistrarSalida(BaseAsistenciaDTO dto)
+        {
+
+            using (_conn)
+            {
+                SqlCommand comd = new SqlCommand("RegistrarSalida", _conn);
+
+                comd.CommandType = CommandType.StoredProcedure;
+
+                try
+                {
+                    BaseAsistenciaDTO empleado = new BaseAsistenciaDTO();
+
+                    #region Mapear Asistencia
+                    comd.Parameters.AddWithValue("@Nombre", dto.Nombre);
+                    comd.Parameters.AddWithValue("@Apellido", dto.Apellido);
+                    comd.Parameters.AddWithValue("@Fecha", dto.Fecha);
+                    comd.Parameters.AddWithValue("@HoraSalida", dto.HoraSalida);
+                    #endregion
+
+                    return comd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+
 
     }
 }

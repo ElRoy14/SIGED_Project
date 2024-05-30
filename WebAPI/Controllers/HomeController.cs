@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.DTOs.Asistencia;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using Persistence.Queries.Asistencia;
 using Persistence.Queries.Empleados;
 using System.Diagnostics;
 using WebAPI.Models;
@@ -17,9 +20,16 @@ namespace WebAPI.Controllers
         public IActionResult Index()
         {
 
-            EmpleadosQueries empleadosQueries = new EmpleadosQueries();
+            AsistenciaQueries asistenciaQueries = new AsistenciaQueries();
 
-            ViewBag.Empleados = empleadosQueries.GetEmpleadoById(2);
+            BaseAsistenciaDTO asistencia = new BaseAsistenciaDTO();
+
+            asistencia.Nombre = "Juan";
+            asistencia.Apellido = "Pérez";
+            asistencia.Fecha = DateTime.Parse("2024-05-30");
+            asistencia.HoraSalida = Convert.ToDateTime("18:00:00.0000000");
+
+            asistenciaQueries.RegistrarSalida(asistencia);
 
             return View();
         }
