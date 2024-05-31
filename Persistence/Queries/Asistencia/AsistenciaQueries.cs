@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Asistencia;
-using Application.DTOs.Empleados;
+﻿using Persistence.DTOs.Asistencia;
+using Persistence.DTOs.Empleados;
 using Persistence.DBConnections;
 using Persistence.Queries.Empleados;
 using System;
@@ -91,6 +91,43 @@ namespace Persistence.Queries.Asistencia
             }
         }
 
+        public List<BaseAsistenciaDTO> GetByDate(DateTime fecha) 
+        {
+            using (_conn)
+            {
+                SqlCommand comd = new SqlCommand($"SELECT * FROM vw_ResumenAsistencia WHERE fecha = {fecha}", _conn);
+
+                SqlDataReader reader = comd.ExecuteReader();
+
+                List<BaseAsistenciaDTO> asistencias = new List<BaseAsistenciaDTO>();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        BaseAsistenciaDTO asistencia = new BaseAsistenciaDTO();
+
+                        #region Mapear Asistencia
+                        asistencia.Nombre = reader.GetString(1);
+                        asistencia.Apellido = reader.GetString(2);
+                        asistencia.Fecha = reader.GetDateTime(3);
+                        asistencia.HoraEntrada = reader.GetDateTime(4);
+                        asistencia.HoraSalida = reader.GetDateTime(5);
+                        asistencia.HorasTrabajadas = reader.GetDecimal(6);
+                        #endregion
+
+                        asistencias.Add(asistencia);
+                    }
+                    return asistencias;
+                }
+                finally
+                {
+                    reader.Close();
+                }
+
+            }
+        }
+
         public int RegistrarEntrada(BaseAsistenciaDTO dto)
         {
 
@@ -148,8 +185,6 @@ namespace Persistence.Queries.Asistencia
                 }
             }
         }
-
-
 
     }
 }

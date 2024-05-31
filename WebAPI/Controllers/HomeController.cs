@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Asistencia;
+﻿using Persistence.DTOs.Asistencia;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using Persistence.Queries.Asistencia;
@@ -19,17 +19,6 @@ namespace WebAPI.Controllers
 
         public IActionResult Index()
         {
-
-            AsistenciaQueries asistenciaQueries = new AsistenciaQueries();
-
-            BaseAsistenciaDTO asistencia = new BaseAsistenciaDTO();
-
-            asistencia.Nombre = "Juan";
-            asistencia.Apellido = "Pérez";
-            asistencia.Fecha = DateTime.Parse("2024-05-30");
-            asistencia.HoraSalida = Convert.ToDateTime("18:00:00.0000000");
-
-            asistenciaQueries.RegistrarSalida(asistencia);
 
             return View();
         }

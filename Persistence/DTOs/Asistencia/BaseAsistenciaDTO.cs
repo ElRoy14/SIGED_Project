@@ -1,11 +1,11 @@
-﻿using Application.DTOs.Empleados;
+﻿using Persistence.DTOs.Empleados;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Asistencia
+namespace Persistence.DTOs.Asistencia
 {
     public record BaseAsistenciaDTO : BaseEmpleadoDTO
     {
