@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Siged.API.Models;
 using System.Diagnostics;
+using Siged.API.Models;
 
-namespace Siged.API.Controllers
+namespace WebAPI.Controllers
 {
     public class HomeController : Controller
     {
@@ -15,6 +15,7 @@ namespace Siged.API.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
