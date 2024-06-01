@@ -19,9 +19,10 @@ namespace WebAPI.Controllers
             return View();
         }
 
+        // Redirige a la acción Index del controlador Auth para mostrar la vista de inicio de sesión
         public IActionResult Privacy()
         {
-            return View();
+            return RedirectToAction("Index", "Auth");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

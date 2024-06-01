@@ -9,6 +9,7 @@ namespace Siged.API.Controllers
     [ApiController]
     public class AuthController : Controller
     {
+        [Route("Index")]
         public IActionResult Index()
         {
             return View();
