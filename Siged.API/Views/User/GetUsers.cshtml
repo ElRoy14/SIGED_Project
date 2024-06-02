@@ -1,0 +1,74 @@
+﻿<script>
+    $(document).ready(function () {
+        fetchUsers();
+        mostrarToken();
+    });
+
+    function fetchUsers() {
+        var token = localStorage.getItem('token'); // **Obtener el token de localStorage**
+
+        $.ajax({
+            url: '/api/User/GetAllUsers',
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token // **Agregar el token a los encabezados de la solicitud**
+            },
+            success: function (response) {
+                if (response.status) {
+                    var usersTableBody = $("#usersTableBody");
+                    usersTableBody.empty(); // Limpiar el cuerpo de la tabla
+
+                    response.value.forEach(function (user) {
+                        var row = "<tr>" +
+                            "<td>" + user.fullName + "</td>" +
+                            "<td>" + user.email + "</td>" +
+                            "<td>" +
+                            "<button class='btn btn-primary' onclick='editUser(" + user.id + ")'>Edit</button>" +
+                            "<button class='btn btn-danger' onclick='deleteUser(" + user.id + ")'>Delete</button>" +
+                            "</td>" +
+                            "</tr>";
+                        usersTableBody.append(row);
+                    });
+                } else {
+                    alert("Error: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching users: ", xhr.responseText);
+            }
+        });
+    }
+
+    function editUser(id) {
+        // Redirigir a la página de edición de usuario o mostrar el formulario de edición de usuario
+        window.location.href = '/User/Edit/' + id;
+    }
+
+    function deleteUser(id) {
+        var token = localStorage.getItem('token');
+
+        $.ajax({
+            url: '/api/User/DeleteUser/' + id,
+            type: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function (response) {
+                if (response.status) {
+                    alert("User deleted successfully.");
+                    fetchUsers(); // Actualizar la lista de usuarios
+                } else {
+                    alert("Error: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error deleting user: ", xhr.responseText);
+            }
+        });
+    }
+
+    function mostrarToken() {
+        var token = localStorage.getItem('token'); // **Obtener el token de localStorage**
+        console.log("Token:", token); // **Mostrar el token por consola**
+    }
+</script>

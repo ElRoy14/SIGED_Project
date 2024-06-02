@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Siged.Application.Users.DTOs.GetUser>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h2>Usuarios</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>
+                    <!-- Añade aquí las acciones que deseas, como editar o eliminar -->
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
