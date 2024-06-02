@@ -2,6 +2,7 @@
 using Siged.API.Utility;
 using Siged.Application.Authentication.DTOs;
 using Siged.Application.Authentication.Interfaces;
+using System.Threading.Tasks;
 
 namespace Siged.API.Controllers
 {
@@ -9,12 +10,6 @@ namespace Siged.API.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        [Route("Index")]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         private readonly IAuthService _authService;
 
         public AuthController(IAuthService authService)
@@ -22,17 +17,32 @@ namespace Siged.API.Controllers
             _authService = authService;
         }
 
+        [Route("Index")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> login([FromBody] LoginRequest login)
+        public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             var response = new Response<LoginResponse>();
 
             try
             {
-                response.status = true;
-                response.value = await _authService.Login(login.Email, login.UserPassword);
-                response.message = "User logged in successfully";
+                var result = await _authService.Login(login.Email, login.UserPassword);
+                if (result != null)
+                {
+                    response.status = true;
+                    response.value = result;
+                    response.message = "User logged in successfully";
+                }
+                else
+                {
+                    response.status = false;
+                    response.message = "Invalid login credentials";
+                }
             }
             catch (Exception ex)
             {
@@ -41,9 +51,6 @@ namespace Siged.API.Controllers
             }
 
             return Ok(response);
-
         }
-
     }
-
 }

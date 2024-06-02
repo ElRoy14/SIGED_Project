@@ -20,3 +20,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Estilos personalizados para el menú */
+.nav-pills .nav-link {
+    color: #fff; /* Color del texto de los enlaces */
+    background-color: #007bff; /* Color de fondo de los enlaces */
+}
+
+    .nav-pills .nav-link.active,
+    .nav-pills .nav-link:hover {
+        color: #fff; /* Color del texto de los enlaces activos y al pasar el mouse */
+        background-color: #0056b3; /* Color de fondo de los enlaces activos y al pasar el mouse */
+    }

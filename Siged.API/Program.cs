@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Siged.API.Config;
 using Siged.Application;
 using Siged.Infrastructure;
+using System;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,15 +26,15 @@ builder.Services.ConfigDbConnection(builder.Configuration);
 var key = builder.Configuration.GetValue<string>("JwtSettings:key");
 var keyBytes = Encoding.ASCII.GetBytes(key);
 
-builder.Services.AddAuthentication(config =>
+builder.Services.AddAuthentication(options =>
 {
-    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(config =>
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
 {
-    config.RequireHttpsMetadata = false;
-    config.SaveToken = true;
-    config.TokenValidationParameters = new TokenValidationParameters
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
@@ -49,6 +54,9 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+// Add IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -71,9 +79,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}"); // Página de inicio de sesión por defecto
 
-app.MapControllers(); // **Make sure to add this line to map attribute routed controllers**
-
+app.MapControllers(); // Asegúrate de agregar esta línea para mapear los controladores con rutas por atributo
 
 app.Run();
