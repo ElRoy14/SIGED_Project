@@ -1,5 +1,69 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    /* Estilos para el menú */
+    .navbar {
+        background-color: #333;
+        color: #fff;
+        width: 100%;
+        position: fixed; /* Fijar el menú en la parte superior */
+        top: 0; /* Alinear el menú en la parte superior */
+        left: 0; /* Alinear el menú en el lado izquierdo */
+        z-index: 1000; /* Asegurar que el menú esté sobre otros elementos */
+    }
 
+    .navbar-brand {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .navbar-nav .nav-link {
+        color: #fff;
+        font-size: 1.2rem;
+        transition: color 0.3s;
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #ccc;
+        }
+
+    .container {
+        margin-top: 60px; /* Ajustar el margen superior para evitar que el contenido quede oculto detrás del menú */
+    }
+</style>
+
+<header>
+    <nav class="navbar navbar-expand-md">
+        <div class="container-fluid">
+            <!-- Aquí va el título de tu aplicación -->
+            <a class="navbar-brand" href="#">Tu Aplicación</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- Aquí van los enlaces del menú -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("login", "Auth")">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "User")">Lista de Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Auth")">Productos</a>
+                    </li>
+                    <!-- Agrega más enlaces según sea necesario -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container mt-5">
+    <h1 class="my-4">¡Bienvenido a tu aplicación!</h1>
+    <p>Esta es la página de inicio de tu aplicación.</p>
+</div>
