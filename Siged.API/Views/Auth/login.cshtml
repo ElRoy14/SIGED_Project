@@ -1,8 +1,58 @@
-﻿
-@{
-    ViewData["Title"] = "login";
+﻿@{
+    ViewData["Title"] = "All Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>logizn</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">All Users</h3>
+        <div id="userList" class="table-responsive"></div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/Login/Index'; // Redirect to login if no token
+                return;
+            }
+
+            $.ajax({
+                url: '/api/User/GetAllUsers',
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function (response) {
+                    if (response.status) {
+                        var users = response.value;
+                        var userListHtml = '<table class="table table-bordered"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Department</th></tr></thead><tbody>';
+                        users.forEach(function (user) {
+                            userListHtml += '<tr><td>' + user.userId + '</td><td>' + user.fullName + '</td><td>' + user.email + '</td><td>' + user.rolDescription + '</td><td>' + user.departmentDescription + '</td></tr>';
+                        });
+                        userListHtml += '</tbody></table>';
+                        $('#userList').html(userListHtml);
+                    } else {
+                        $('#userList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
 
