@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Usuarios
+namespace Persistence.DTOs.Usuarios
 {
     public class UsuarioDTO
     {

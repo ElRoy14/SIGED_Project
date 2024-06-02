@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Usuarios;
+﻿using Persistence.DTOs.Usuarios;
 using Persistence.DBConnections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
