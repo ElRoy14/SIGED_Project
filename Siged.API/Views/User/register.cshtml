@@ -3,6 +3,153 @@
     ViewData["Title"] = "register";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        /* Custom styles */
+        .table thead th {
+            background-color: #343a40;
+            color: #fff;
+        }
 
-<h1>register</h1>
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-custom {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form id="editUserForm">
+        <div class="mb-3">
+            <label for="editIdentificationCard" class="form-label">Identification Card</label>
+            <input type="text" class="form-control" id="editIdentificationCard" name="identificationCard" required>
+        </div>
+        <div class="mb-3">
+            <label for="editFullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="editFullName" name="fullName" required>
+        </div>
+        <div class="mb-3">
+            <label for="editPhoneNumber" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="editPhoneNumber" name="phoneNumber" required>
+        </div>
+        <div class="mb-3">
+            <label for="editEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="editEmail" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="editUserPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="editUserPassword" name="userPassword" required>
+        </div>
+        <div class="mb-3">
+            <label for="editRolId" class="form-label">Role</label>
+            <select class="form-control" id="editRolId" name="rolId" required>
+                <option>Select Role</option>
+                @foreach (var rol in ViewBag.Roles)
+                {
+                    <option value="@rol.RolId">@rol.NameRol</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="editJobTitleId" class="form-label">Job Title</label>
+            <select class="form-control" id="editJobTitleId" name="jobTitleId" required>
+                <option>Select Job Title</option>
+                @foreach (var jobTitle in ViewBag.JobTitles)
+                {
+                    <option value="@jobTitle.JobTitleId">@jobTitle.JobTitleName</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="editDepartmentId" class="form-label">Department</label>
+            <select class="form-control" id="editDepartmentId" name="departmentId" required>
+                <option>Select Department</option>
+                @foreach (var department in ViewBag.Departments)
+                {
+                    <option value="@department.DepartmentId">@department.DepartmentName</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="editSalaryId" class="form-label">Salary</label>
+            <select class="form-control" id="editSalaryId" name="salaryId" required>
+                <option>Select Salary</option>
+                @foreach (var salary in ViewBag.Salarys)
+                {
+                    <option value="@salary.SalaryId">@salary.Amount</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="editIsActive" class="form-label">Is Active</label>
+            <select class="form-control" id="editIsActive" name="isActive" required>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+            </select>
+        </div>
+        <input type="hidden" id="editUserId" name="userId">
+    </form>
+</body>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $('#saveUserChanges').click(function () {
+                var userId = $('#editUserId').val();
+                var identificationCard = $('#editIdentificationCard').val();
+                var fullName = $('#editFullName').val();
+                var phoneNumber = $('#editPhoneNumber').val();
+                var email = $('#editEmail').val();
+                var userPassword = $('#editUserPassword').val();
+                var rolId = $('#editRolId').val();
+                var jobTitleId = $('#editJobTitleId').val();
+                var departmentId = $('#editDepartmentId').val();
+                var salaryId = $('#editSalaryId').val();
+                var isActive = $('#editIsActive').val();
+
+                var userData = {
+                    userId: userId,
+                    identificationCard: identificationCard,
+                    fullName: fullName,
+                    phoneNumber: phoneNumber,
+                    email: email,
+                    userPassword: userPassword,
+                    rolId: rolId,
+                    jobTitleId: jobTitleId,
+                    departmentId: departmentId,
+                    salaryId: salaryId,
+                    isActive: isActive
+                };
+
+                $.ajax({
+                    url: '/api/User/UpdateUser',
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function (response) {
+                        if (response.status) {
+                            $('#editUserModal').modal('hide');
+                            loadUsers();
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+    <script/>
 

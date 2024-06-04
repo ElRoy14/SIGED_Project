@@ -4,7 +4,11 @@ using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json.Linq;
 using NuGet.Protocol.Core.Types;
 using Siged.API.Utility;
+using Siged.Application.Departments.Interfaces;
+using Siged.Application.JobTitles.Interfaces;
+using Siged.Application.Roles.DTOs;
 using Siged.Application.Roles.Interfaces;
+using Siged.Application.Salarys.Interfaces;
 using Siged.Application.Users.DTOs;
 using Siged.Application.Users.Interfaces;
 using Siged.Domain.Entities;
@@ -15,21 +19,30 @@ namespace Siged.API.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        public IActionResult Index()
-        {
-            ViewBag.Roles = _rolService.GetAllRolesAsync();
-            return View();
-
-        }
-
         private readonly IUserService _userService;
         private readonly IRolService _rolService;
+        private readonly IDepartamentService _departmentService;
+        private readonly IJobTitleService _jobTitleService;
+        private readonly ISalaryService _salaryService;
 
 
-        public UserController(IUserService userService, IRolService rolService)
+        public UserController(IUserService userService, IRolService rolService, IDepartamentService departmentService, IJobTitleService jobTitleService, ISalaryService salaryService)
         {
             _userService = userService;
             _rolService = rolService;
+            _departmentService = departmentService;
+            _jobTitleService = jobTitleService;
+            _salaryService = salaryService;
+        }
+
+        public IActionResult Index()
+        {
+            ViewBag.Roles = _rolService.GetAllRolesAsync().Result;
+            ViewBag.Departments = _departmentService.GetAllDepartmentsAsync().Result;
+            ViewBag.JobTitles = _jobTitleService.GetAllJobTitleAsync().Result;
+            ViewBag.Salarys = _salaryService.GetAllSalaryAsync().Result;
+            return View();
+
         }
 
         [Authorize]

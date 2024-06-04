@@ -68,24 +68,43 @@
                         <div class="mb-3">
                             <label for="editRolId" class="form-label">Role</label>
                             <select class="form-control" id="editRolId" name="rolId" required>
+                                <option>Select Role</option>
                                 @foreach (var rol in ViewBag.Roles)
                                 {
-                                    <option value="@rol.rolId">@rol.Description</option>
+                                    <option value="@rol.RolId">@rol.NameRol</option>
                                 }
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="editJobTitleId" class="form-label">Job Title</label>
-                            <select class="form-control" id="editJobTitleId" name="jobTitleId" required></select>
+                            <select class="form-control" id="editJobTitleId" name="jobTitleId" required>
+                                <option>Select Job Title</option>
+                                @foreach (var jobTitle in ViewBag.JobTitles)
+                                {
+                                    <option value="@jobTitle.JobTitleId">@jobTitle.JobTitleName</option>
+                                }
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="editDepartmentId" class="form-label">Department</label>
-                            <select class="form-control" id="editDepartmentId" name="departmentId" required></select>
+                            <select class="form-control" id="editDepartmentId" name="departmentId" required>
+                                <option>Select Department</option>
+                                @foreach (var department in ViewBag.Departments)
+                                {
+                                    <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                }
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="editSalaryId" class="form-label">Salary</label>
-                            <select class="form-control" id="editSalaryId" name="salaryId" required></select>
+                            <select class="form-control" id="editSalaryId" name="salaryId" required>
+                                <option>Select Salary</option>
+                                @foreach (var salary in ViewBag.Salarys)
+                                {
+                                    <option value="@salary.SalaryId">@salary.Amount</option>
+                                }
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="editIsActive" class="form-label">Is Active</label>
@@ -176,7 +195,7 @@
                 $('#editIsActive').val(isActive);
                 $('#editUserId').val(userId);
 
-                loadSelects();
+                // loadSelects();
 
                 $('#editUserModal').modal('show');
             });
