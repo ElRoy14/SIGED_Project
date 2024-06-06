@@ -68,11 +68,11 @@ namespace Siged.API.Controllers
             return Ok(response);
 
         }
-
+        // Controlador UserController.cs
         [Authorize]
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> register([FromBody] CreateUser user)
+        public async Task<IActionResult> Register([FromBody] CreateUser user)
         {
             var response = new Response<GetUser>();
 
@@ -89,7 +89,6 @@ namespace Siged.API.Controllers
             }
 
             return Ok(response);
-
         }
 
         [Authorize]
