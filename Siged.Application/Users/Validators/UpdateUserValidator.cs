@@ -47,7 +47,6 @@ namespace Siged.Application.Users.Validators
                 .NotNull().WithMessage("El estado activo es requerido")
                 .InclusiveBetween(0, 1).WithMessage("El estado debe estar entre 0 y 1");
 
-
         }
 
     }
