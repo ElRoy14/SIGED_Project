@@ -9,45 +9,45 @@ namespace Siged.Application.Users.Validators
         {
 
             RuleFor(user => user.IdentificationCard)
-                .NotEmpty().WithMessage("The identification card is required")
-                .MaximumLength(50).WithMessage("The identification card cannot exceed 50 characters");
+    .NotEmpty().WithMessage("La cédula es requerida")
+    .Matches(@"^[0-9]*$").WithMessage("La cédula no acepta letras, solo números");
 
             RuleFor(user => user.PhoneNumber)
-                .NotEmpty().WithMessage("The phone number is required")
-                .MaximumLength(15).WithMessage("The phone number cannot exceed 15 characters");
+                .NotEmpty().WithMessage("El teléfono es requerido")
+                .Matches(@"^[0-9]*$").WithMessage("El teléfono no acepta letras, solo números");
 
             RuleFor(user => user.FullName)
-                .NotEmpty().WithMessage("The full name is required")
-                .MaximumLength(50).WithMessage("The full name cannot exceed 50 characters");
-
+                .NotEmpty().WithMessage("El nombre completo es requerido")
+                .MaximumLength(50).WithMessage("El nombre completo no puede exceder los 50 caracteres");
 
             RuleFor(user => user.Email)
-                .NotEmpty().WithMessage("The email is required")
-                .MaximumLength(100).WithMessage("The email cannot exceed 100 characters");
+                .NotEmpty().WithMessage("El correo electrónico es requerido")
+                .MaximumLength(100).WithMessage("El correo electrónico no puede exceder los 100 caracteres");
 
             RuleFor(user => user.UserPassword)
-                .NotEmpty().WithMessage("The password is required")
-                .MaximumLength(100).WithMessage("The password cannot exceed 100 characters");
+                .NotEmpty().WithMessage("La contraseña es requerida")
+                .MaximumLength(100).WithMessage("La contraseña no puede exceder los 100 caracteres");
 
             RuleFor(user => user.RolId)
-                .NotEmpty().WithMessage("The role ID is required")
-                .InclusiveBetween(1, 3).WithMessage("The role must be between 1 and 4");
+                .NotEmpty().WithMessage("El ID del rol es requerido")
+                .InclusiveBetween(1, 3).WithMessage("El rol debe estar entre 1 y 3");
 
             RuleFor(user => user.JobTitleId)
-                .NotEmpty().WithMessage("The role ID is required")
-                .InclusiveBetween(1, 5).WithMessage("The JobTitle must be between 1 and 4");
+                .NotEmpty().WithMessage("El ID del cargo es requerido")
+                .InclusiveBetween(1, 5).WithMessage("El cargo debe estar entre 1 y 5");
 
             RuleFor(user => user.DepartmentId)
-                .NotEmpty().WithMessage("The role ID is required")
-                .InclusiveBetween(1, 4).WithMessage("The Department must be between 1 and 4");
+                .NotEmpty().WithMessage("El ID del departamento es requerido")
+                .InclusiveBetween(1, 4).WithMessage("El departamento debe estar entre 1 y 4");
 
             RuleFor(user => user.SalaryId)
-                .NotEmpty().WithMessage("The role ID is required")
-                .InclusiveBetween(1, 4).WithMessage("The Salary must be between 1 and 4");
+                .NotEmpty().WithMessage("El ID del salario es requerido")
+                .InclusiveBetween(1, 4).WithMessage("El salario debe estar entre 1 y 4");
 
             RuleFor(user => user.IsActive)
-                .NotNull().WithMessage("The active state is required")
-                .InclusiveBetween(0, 1).WithMessage("The state must be between 0 and 1");
+                .NotNull().WithMessage("El estado activo es requerido")
+                .InclusiveBetween(0, 1).WithMessage("El estado debe estar entre 0 y 1");
+
 
         }
 

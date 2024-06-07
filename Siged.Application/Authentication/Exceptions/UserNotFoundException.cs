@@ -6,7 +6,7 @@
 
         public UserNotFoundException() : base()
         {
-            Message = "No user found";
+            Message = "No se encontro usuario con estas credenciales";
         }
 
     }

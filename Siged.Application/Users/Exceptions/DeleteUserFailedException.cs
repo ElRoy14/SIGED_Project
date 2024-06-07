@@ -1,4 +1,4 @@
-﻿namespace Siged.Application.Users.Validators
+﻿namespace Siged.Application.Users.Exceptions
 {
     public class DeleteUserFailedException : Exception
     {

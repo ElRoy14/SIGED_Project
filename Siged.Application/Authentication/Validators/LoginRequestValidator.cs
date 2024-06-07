@@ -9,11 +9,11 @@ namespace Siged.Application.Authentication.Validators
         {
             RuleFor(request => request.Email)
                 .NotEmpty()
-                .WithMessage("Email is required");
+                .WithMessage("El correo es requerido");
 
             RuleFor(request => request.UserPassword)
                 .NotEmpty()
-                .WithMessage("Password is required");
+                .WithMessage("La contraseña es requerida");
         }
 
     }
