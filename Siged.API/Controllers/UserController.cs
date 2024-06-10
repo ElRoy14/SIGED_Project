@@ -25,7 +25,6 @@ namespace Siged.API.Controllers
         private readonly IJobTitleService _jobTitleService;
         private readonly ISalaryService _salaryService;
 
-
         public UserController(IUserService userService, IRolService rolService, IDepartamentService departmentService, IJobTitleService jobTitleService, ISalaryService salaryService)
         {
             _userService = userService;
