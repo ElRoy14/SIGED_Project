@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "Inicio";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -67,3 +67,131 @@
     <h1 class="my-4">¡Bienvenido a tu aplicación!</h1>
     <p>Esta es la página de inicio de tu aplicación.</p>
 </div>
+ *@
+
+@{
+    ViewData["Title"] = "Inicio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif; /* Tipo de fuente Poppins */
+        }
+
+        /* Estilos básicos para el menú */
+        .navbar {
+            background-color: rgba(45, 147, 185, 1);
+            color: #fff;
+            width: 100%;
+            position: fixed; /* Menú fijado en la parte superior */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Encima de otros elementos */
+            display: flex; /* Distribución horizontal */
+            align-items: center; /* Centrado vertical */
+            padding: 10px 20px; /* Espaciado alrededor de los elementos */
+            height: 60px; /* Altura del menú */
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #fff; /* Color blanco */
+            text-decoration: none; /* Sin subrayado */
+            margin-right: 20px; /* Espacio entre el título y los enlaces */
+        }
+
+        /* Estilización de los enlaces en la navegación */
+        .navbar-nav {
+            list-style: none; /* Sin estilos de lista */
+            padding: 0;
+            margin: 0;
+            display: flex; /* Distribución horizontal */
+            align-items: center; /* Centrado vertical */
+        }
+
+        .nav-item {
+            margin-left: 20px; /* Espaciado horizontal entre ítems */
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff; /* Color de texto blanco */
+            font-size: 1rem;
+            text-decoration: none; /* Eliminar subrayado */
+            transition: color 0.3s;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #ccc; /* Cambio de color al pasar el mouse */
+            }
+
+        .container {
+            margin-top: 50px; /* Ajuste de margen superior para visibilidad del contenido */
+            padding: 20px; /* Espaciado interno */
+            height: auto; /* Ajuste de altura automática */
+            box-sizing: border-box; /* Incluir el padding en el cálculo del alto */
+            overflow: auto; /* Habilitar el desplazamiento si el contenido es demasiado largo */
+        }
+
+            /* Asegura que el contenido no se oculte detrás del header */
+            .container > * {
+                margin-top: 10px; /* Margen superior reducido para acercar el contenido al header */
+            }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 3px 0; /* Espaciado reducido en el pie de página */
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md">
+            <!-- Título de la aplicación -->
+            <a class="navbar-brand" href="#">SIGED</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- Opciones del menú -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("login", "Auth")">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "User")">Lista de Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index", "Auth")">Productos</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="my-4">¡Bienvenido!</h1>
+        <p>Esta es la página de inicio.</p>
+    </div>
+
+    <footer>
+        <p>© 2023 Tu Compañía. Todos los derechos reservados.</p>
+    </footer>
+</body>
