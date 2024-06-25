@@ -10,7 +10,6 @@
         public int? RolId { get; set; }
         public int? JobTitleId { get; set; }
         public int? DepartmentId { get; set; }
-        public int? SalaryId { get; set; }
         public int? IsActive { get; set; }
 
     }

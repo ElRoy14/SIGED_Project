@@ -14,8 +14,6 @@
         public string? JobTitleDescription { get; set; }
         public int? DepartmentId { get; set; }
         public string? DepartmentDescription { get; set; }
-        public int? SalaryId { get; set; }
-        public string? SalaryDescription { get; set; }
         public int? IsActive { get; set; }
 
     }

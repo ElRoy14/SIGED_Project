@@ -6,7 +6,7 @@ using Siged.Application.Authentication.DTOs;
 using Siged.Application.Authentication.Exceptions;
 using Siged.Application.Authentication.Interfaces;
 using Siged.Application.Authentication.Validators;
-using Siged.Domain.Entities;
+using Siged.Domain;
 using Siged.Domain.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -74,10 +74,10 @@ namespace Siged.Application.Authentication.Services
                 var user = userQuery.FirstOrDefault() ?? throw new UserNotFoundException();
 
                 UserInfo returnUser = userQuery.Include(rol => rol.Rol).First();
-                string token = GenerateToken(returnUser.UserId.ToString());
+                //string token = GenerateToken(returnUser.UserId.ToString());
 
                 var loginResponse = _mapper.Map<LoginResponse>(returnUser);
-                loginResponse.Token = token;
+                //loginResponse.Token = token;
 
                 return loginResponse;
 

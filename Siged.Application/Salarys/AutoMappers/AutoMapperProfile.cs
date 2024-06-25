@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Siged.Application.Salarys.DTOs;
-using Siged.Domain.Entities;
+using Siged.Domain;
 
 namespace Siged.Application.Salarys.AutoMappers
 {

@@ -40,10 +40,7 @@ namespace Siged.Application.Users.Validators
                 .NotEmpty().WithMessage("El ID del departamento es requerido")
                 .InclusiveBetween(1, 4).WithMessage("El departamento debe estar entre 1 y 4");
 
-            RuleFor(user => user.SalaryId)
-                .NotEmpty().WithMessage("El ID del salario es requerido")
-                .InclusiveBetween(1, 4).WithMessage("El salario debe estar entre 1 y 4");
-
+            
             RuleFor(user => user.IsActive)
                 .NotNull().WithMessage("El estado activo es requerido")
                 .InclusiveBetween(0, 1).WithMessage("El estado debe estar entre 0 y 1");

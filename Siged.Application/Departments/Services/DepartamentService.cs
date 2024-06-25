@@ -2,7 +2,7 @@
 using Siged.Application.Departments.DTOs;
 using Siged.Application.Departments.Exceptions;
 using Siged.Application.Departments.Interfaces;
-using Siged.Domain.Entities;
+using Siged.Domain;
 using Siged.Domain.Interfaces;
 
 namespace Siged.Application.Departments.Services

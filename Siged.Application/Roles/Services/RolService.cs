@@ -2,7 +2,7 @@
 using Siged.Application.Roles.DTOs;
 using Siged.Application.Roles.Exceptions;
 using Siged.Application.Roles.Interfaces;
-using Siged.Domain.Entities;
+using Siged.Domain;
 using Siged.Domain.Interfaces;
 
 namespace Siged.Application.Roles.Services

@@ -2,7 +2,7 @@
 using Siged.Application.Salarys.DTOs;
 using Siged.Application.Salarys.Exceptions;
 using Siged.Application.Salarys.Interfaces;
-using Siged.Domain.Entities;
+using Siged.Domain;
 using Siged.Domain.Interfaces;
 
 namespace Siged.Application.Salarys.Services

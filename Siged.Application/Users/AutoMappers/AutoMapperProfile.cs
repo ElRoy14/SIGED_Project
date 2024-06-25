@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Siged.Application.Users.DTOs;
-using Siged.Domain.Entities;
+using Siged.Domain;
 
 namespace Siged.Application.Users.AutoMappers
 {
@@ -22,10 +22,6 @@ namespace Siged.Application.Users.AutoMappers
                     options => options.MapFrom(origin => origin.Department.DepartmentName)
                  )
                 .ForMember(destination =>
-                    destination.SalaryDescription,
-                    options => options.MapFrom(origin => origin.Salary.Amount)
-                 )
-                .ForMember(destination =>
                     destination.IsActive,
                     options => options.MapFrom(origin => origin.IsActive == true ? 1 : 0)
                 );
@@ -41,10 +37,6 @@ namespace Siged.Application.Users.AutoMappers
                  )
                 .ForMember(destination =>
                     destination.Department,
-                    options => options.Ignore()
-                 )
-                .ForMember(destination =>
-                    destination.Salary,
                     options => options.Ignore()
                  )
                 .ForMember(destination =>

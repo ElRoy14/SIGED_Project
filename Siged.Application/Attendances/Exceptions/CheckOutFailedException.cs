@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Siged.Application.Attendance.Exceptions
+namespace Siged.Application.Attendances.Exceptions
 {
-    public class GetAttendanceException : Exception
+    public class CheckOutFailedException : Exception
     {
         public override string Message { get; }
 
-        public GetAttendanceException() : base()
+
+        public CheckOutFailedException() : base()
         {
-            Message = "No data found";
+            Message = "Could not Check Out";
         }
     }
 }

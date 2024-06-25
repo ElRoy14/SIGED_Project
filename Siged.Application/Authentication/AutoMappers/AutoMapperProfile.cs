@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Siged.Application.Authentication.DTOs;
-using Siged.Domain.Entities;
+using Siged.Domain;
 
 namespace Siged.Application.Authentication.AutoMappers
 {
@@ -15,8 +15,6 @@ namespace Siged.Application.Authentication.AutoMappers
                     destino.RolDescription,
                     options => options.MapFrom(origen => origen.Rol.NameRol)
                 );
-
-            CreateMap<UserInfo, LoginRequest>().ReverseMap();
         }
 
     }

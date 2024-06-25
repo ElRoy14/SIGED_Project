@@ -5,6 +5,8 @@
         public string? Email { get; set; }
         public string? UserPassword { get; set; }
 
+        public bool KeepSession { get; set; }
+
     }
 
 }

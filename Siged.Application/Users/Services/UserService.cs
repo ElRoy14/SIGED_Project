@@ -5,7 +5,7 @@ using Siged.Application.Users.DTOs;
 using Siged.Application.Users.Exceptions;
 using Siged.Application.Users.Interfaces;
 using Siged.Application.Users.Validators;
-using Siged.Domain.Entities;
+using Siged.Domain;
 using Siged.Domain.Enums;
 using Siged.Domain.Interfaces;
 
@@ -30,8 +30,7 @@ namespace Siged.Application.Users.Services
                 var listUser = userQuery
                     .Include(rol => rol.Rol)
                     .Include(rol => rol.JobTitle)
-                    .Include(rol => rol.Department)
-                    .Include(rol => rol.Salary).ToList();
+                    .Include(rol => rol.Department).ToList();
 
                 return _mapper.Map<List<GetUser>>(listUser);
             }
@@ -63,8 +62,7 @@ namespace Siged.Application.Users.Services
                 userCreated = query
                     .Include(rol => rol.Rol)
                     .Include(rol => rol.JobTitle)
-                    .Include(rol => rol.Department)
-                    .Include(rol => rol.Salary).First();
+                    .Include(rol => rol.Department).First();
 
                 return _mapper.Map<GetUser>(userCreated);
 
@@ -103,7 +101,6 @@ namespace Siged.Application.Users.Services
                 userToUpdate.RolId = userModel.RolId;
                 userToUpdate.JobTitleId = userModel.JobTitleId;
                 userToUpdate.DepartmentId = userModel.DepartmentId;
-                userToUpdate.SalaryId = userModel.SalaryId;
                 userToUpdate.IsActive = userModel.IsActive;
 
                 bool response = await _userRepository.UpdateAsync(userToUpdate);

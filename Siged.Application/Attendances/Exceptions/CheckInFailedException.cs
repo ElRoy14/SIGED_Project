@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Siged.Application.Attendance.Exceptions
+namespace Siged.Application.Attendances.Exceptions
 {
-    public class CheckOutFailedException : Exception
+    public class CheckInFailedException : Exception
     {
         public override string Message { get; }
 
 
-        public CheckOutFailedException() : base()
+        public CheckInFailedException() : base()
         {
-            Message = "Could not Check Out";
+            Message = "Could not Check In";
         }
     }
 }

@@ -2,7 +2,7 @@
 using Siged.Application.JobTitles.DTOs;
 using Siged.Application.JobTitles.Exceptions;
 using Siged.Application.JobTitles.Interfaces;
-using Siged.Domain.Entities;
+using Siged.Domain;
 using Siged.Domain.Interfaces;
 
 namespace Siged.Application.JobTitles.Services

@@ -1,8 +1,7 @@
-﻿using Siged.Application.Attendance.DTOs;
-using Siged.Application.Attendance.Exceptions;
-using Siged.Application.Attendance.Interfaces;
+﻿using Siged.Application.Attendances.DTOs;
+using Siged.Application.Attendances.Exceptions;
+using Siged.Application.Attendances.Interfaces;
 using Siged.Domain.Interfaces;
-using Siged.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Siged.Domain.Interfaces.Attendance;
+using Siged.Domain;
 
-namespace Siged.Application.Attendance.Services
+namespace Siged.Application.Attendances
 {
     public class AttendanceService : IAttendanceService
     {
@@ -25,17 +24,22 @@ namespace Siged.Application.Attendance.Services
             _mapper = mapper;
         }
 
-        public async Task<CheckIn> CheckIn(GetAttendance attendance)
+        public async Task<CreateCheckIn> CheckIn(GetAttendance attendance)
         {
             try
             {
                 var checkIn = await _attendanceRepository.CheckIn(attendance);
-                return _mapper.Map<CheckIn>(checkIn);
+                return _mapper.Map<CreateCheckIn>(checkIn);
             }
             catch
             {
                 throw new CheckInFailedException();
             }
+        }
+
+        public Task<GetAttendance> GetAttendanceByIdAsync(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<CheckOut> CheckOut(GetAttendance attendance)
@@ -65,5 +69,7 @@ namespace Siged.Application.Attendance.Services
                 throw new GetAttendanceException();
             }
         }
+
+        
     }
 }

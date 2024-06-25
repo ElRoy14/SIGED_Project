@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Siged.Application.JobTitles.DTOs;
-using Siged.Domain.Entities;
+using Siged.Domain;
 
 namespace Siged.Application.JobTitles.AutoMappers
 {

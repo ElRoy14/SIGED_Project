@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Siged.Application.Roles.DTOs;
-using Siged.Domain.Entities;
+using Siged.Domain;
 
 namespace Siged.Application.Roles.AutoMappers
 {

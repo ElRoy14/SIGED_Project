@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Siged.Application.Attendance.Exceptions
+namespace Siged.Application.Attendances.Exceptions
 {
-    public class CheckInFailedException : Exception
+    public class GetAttendanceException : Exception
     {
         public override string Message { get; }
 
-
-        public CheckInFailedException() : base()
+        public GetAttendanceException() : base()
         {
-            Message = "Could not Check In";
+            Message = "No data found";
         }
     }
 }
