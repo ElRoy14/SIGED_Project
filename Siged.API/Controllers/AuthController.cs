@@ -3,11 +3,14 @@ using Siged.API.Utility;
 using Siged.Application.Authentication.DTOs;
 using Siged.Application.Authentication.Interfaces;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -17,40 +20,55 @@ namespace Siged.API.Controllers
             _authService = authService;
         }
 
-        [Route("Index")]
+        //[Route("Index")]
         public IActionResult Index()
         {
+            ClaimsPrincipal claimUser = HttpContext.User;
+
+            if(claimUser.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index","Home");
+            }
+
             return View();
         }
 
+
         [HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest login)
+        //[Route("login")]
+        public async Task<IActionResult> Login(LoginRequest login)
         {
-            var response = new Response<LoginResponse>();
+            var result = await _authService.Login(login.Email, login.UserPassword);
 
-            try
+            if (result == null)
             {
-                var result = await _authService.Login(login.Email, login.UserPassword);
-                if (result != null)
-                {
-                    response.status = true;
-                    response.value = result;
-                    response.message = "User logged in successfully";
-                }
-                else
-                {
-                    response.status = false;
-                    response.message = "Invalid login credentials";
-                }
-            }
-            catch (Exception ex)
-            {
-                response.status = false;
-                response.message = ex.Message;
+                ViewData["Mensaje"] = "No se encontraron coincidencias";
+                return View();
             }
 
-            return Ok(response);
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, result.FullName),
+                new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString()),
+                new Claim(ClaimTypes.Role, result.RolDescription.ToString())
+            };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            AuthenticationProperties properties = new AuthenticationProperties()
+            {
+                AllowRefresh = true,
+                IsPersistent = login.KeepSession
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                properties
+                );
+
+            return RedirectToAction("Index","Home");
         }
     }
 }

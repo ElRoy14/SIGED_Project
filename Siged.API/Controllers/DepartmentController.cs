@@ -6,8 +6,9 @@ using Siged.Application.Departments.Interfaces;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class DepartmentController : Controller
     {
         public IActionResult Index()
@@ -22,9 +23,9 @@ namespace Siged.API.Controllers
             _departamentService = departamentService;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
-        [Route("GetAllDepartment")]
+        //[Route("GetAllDepartment")]
         public async Task<IActionResult> GetDepartment()
         {
             var response = new Response<List<GetDepartment>>();

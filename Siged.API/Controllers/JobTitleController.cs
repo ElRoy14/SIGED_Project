@@ -6,8 +6,9 @@ using Siged.Application.JobTitles.Interfaces;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class JobTitleController : Controller
     {
         public IActionResult Index()
@@ -22,9 +23,9 @@ namespace Siged.API.Controllers
             _jobTitleService = jobTitleService;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
-        [Route("GetAllJobTitle")]
+        //[Route("GetAllJobTitle")]
         public async Task<IActionResult> GetAllJobTitle()
         {
             var response = new Response<List<GetJobTitle>>();

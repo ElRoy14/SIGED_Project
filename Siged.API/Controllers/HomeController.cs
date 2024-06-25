@@ -1,10 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Siged.API.Models;
+using Microsoft.AspNetCore.Authentication;
+
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
-    
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -33,7 +39,11 @@ namespace WebAPI.Controllers
             return View();
         }
 
-       
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -41,5 +51,12 @@ namespace WebAPI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public async Task<IActionResult> ExitSection()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index","Auth");
+        }
+
     }
 }

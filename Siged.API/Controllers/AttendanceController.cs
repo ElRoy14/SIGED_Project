@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
-using Siged.Application.Attendance.DTOs;
-using Siged.Application.Attendance.Interfaces;
+using Siged.Application.Attendances.DTOs;
+using Siged.Application.Attendances.Interfaces;
 
 namespace Siged.API.Controllers
 {
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class AttendanceController : Controller
     {
         private readonly IAttendanceService _attendanceService;
@@ -14,8 +18,13 @@ namespace Siged.API.Controllers
         {
             _attendanceService = attendanceService;
         }
+        public IActionResult Index()
+        {
+            return View();
+        }
 
-        // GET: AttendanceController1
+        [HttpGet]
+        //[Route("GetAllAttendance")]
         public async Task<ActionResult> GetAllAttendance()
         {
             var response = new Response<List<GetAttendance>>();
@@ -36,10 +45,11 @@ namespace Siged.API.Controllers
 
         // POST: AttendanceController1/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[Route("Create")]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> CheckIn(GetAttendance attendance)
         {
-            var response = new Response<CheckIn>();
+            var response = new Response<CreateCheckIn>();
 
             try
             {
@@ -57,7 +67,7 @@ namespace Siged.API.Controllers
 
         // POST: AttendanceController1/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> CheckOut(GetAttendance attendance)
         {
             var response = new Response<CheckOut>();

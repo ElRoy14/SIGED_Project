@@ -6,8 +6,9 @@ using Siged.Application.Roles.Interfaces;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class RolController : Controller
     {
         public IActionResult Index()
@@ -22,9 +23,9 @@ namespace Siged.API.Controllers
             _rolService = rolService;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
-        [Route("GetAllRoles")]
+        //[Route("GetAllRoles")]
         public async Task<IActionResult> GetRoles()
         {
             var response = new Response<List<GetRol>>();

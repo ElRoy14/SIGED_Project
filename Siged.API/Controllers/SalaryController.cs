@@ -6,8 +6,9 @@ using Siged.Application.Salarys.Interfaces;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class SalaryController : Controller
     {
         public IActionResult Index()
@@ -22,9 +23,9 @@ namespace Siged.API.Controllers
             _salaryService = salaryService;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
-        [Route("GetAllSalary")]
+        //[Route("GetAllSalary")]
         public async Task<IActionResult> GetAllSalary()
         {
             var response = new Response<List<GetSalary>>();

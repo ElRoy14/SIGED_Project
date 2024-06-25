@@ -11,12 +11,13 @@ using Siged.Application.Roles.Interfaces;
 using Siged.Application.Salarys.Interfaces;
 using Siged.Application.Users.DTOs;
 using Siged.Application.Users.Interfaces;
-using Siged.Domain.Entities;
+using Siged.Domain;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -44,9 +45,9 @@ namespace Siged.API.Controllers
 
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
-        [Route("GetAllUsers")]
+        //[Route("GetAllUsers")]
         public async Task<IActionResult> GetUsers()
         {
             var response = new Response<List<GetUser>>();
@@ -68,9 +69,9 @@ namespace Siged.API.Controllers
 
         }
         // Controlador UserController.cs
-        [Authorize]
+        //[Authorize]
         [HttpPost]
-        [Route("register")]
+        //[Route("register")]
         public async Task<IActionResult> Register([FromBody] CreateUser user)
         {
             var response = new Response<GetUser>();
@@ -90,9 +91,9 @@ namespace Siged.API.Controllers
             return Ok(response);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut]
-        [Route("UpdateUser")]
+        //[Route("UpdateUser")]
         public async Task<IActionResult> EditUser([FromBody] UpdateUser user)
         {
             var response = new Response<bool>();
@@ -115,9 +116,9 @@ namespace Siged.API.Controllers
 
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete]
-        [Route("DeleteUser/{id:int}")]
+        //[Route("DeleteUser/{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var response = new Response<bool>();

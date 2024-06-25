@@ -10,10 +10,14 @@ using Siged.Infrastructure;
 using System;
 using System.Text;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
 
 builder.Services
     .AddApplication()
@@ -23,27 +27,11 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.ConfigDbConnection(builder.Configuration);
 
-var key = builder.Configuration.GetValue<string>("JwtSettings:key");
-var keyBytes = Encoding.ASCII.GetBytes(key);
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero,
-    };
-});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option => {
+        option.LoginPath = "/Auth/Index";
+        option.ExpireTimeSpan = TimeSpan.FromHours(1);
+    }) ;
 
 builder.Services.AddCors(options =>
 {
@@ -79,7 +67,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Login}/{id?}"); // Página de inicio de sesión por defecto
+    pattern: "{controller=Auth}/{action=Index}/{id?}"); // Página de inicio de sesión por defecto
 
 app.MapControllers(); // Asegúrate de agregar esta línea para mapear los controladores con rutas por atributo
 
