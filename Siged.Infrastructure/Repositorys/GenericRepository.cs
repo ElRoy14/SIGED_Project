@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Siged.Domain;
 using Siged.Domain.Interfaces;
+using Siged.Infrastructure.Context;
 using System.Linq.Expressions;
 
 namespace Siged.Infrastructure.Repositorys
 {
     public class GenericRepository<TModel> : IGenericRepository<TModel> where TModel : class
     {
-        private readonly SigedContext _dbContext;
+        private readonly DbSigedContext _dbContext;
         private readonly IMapper _mapper;
 
-        public GenericRepository(SigedContext dbContext)
+        public GenericRepository(DbSigedContext dbContext)
         {
             _dbContext = dbContext;
         }

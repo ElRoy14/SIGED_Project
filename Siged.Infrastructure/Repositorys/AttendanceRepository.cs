@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Siged.Domain;
-using Siged.Domain.Interfaces.Attendance;
+using Siged.Domain.Interfaces;
+using Siged.Infrastructure.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +8,14 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Siged.Infrastructure.Repositorys.Attendance
+namespace Siged.Infrastructure.Repositorys
 {
     public class AttendanceRepository<TModel> : IAttendanceRepository<TModel> where TModel : class
     {
-        private readonly SigedContext _dbContext;
+        private readonly DbSigedContext _dbContext;
         private readonly IMapper _mapper;
 
-        public AttendanceRepository(SigedContext context)
+        public AttendanceRepository(DbSigedContext context)
         {
             _dbContext = context;
         }
