@@ -3,4 +3,89 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba Ponche</h1>
+<h1>Prueba Ponche</h1
+   
+    <!DOCTYPE html/>
+    <html lang="es">
+        <head>
+
+        </head>
+        <body>
+            <form id="attendanceForm">
+                <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Hora Entrada</th>
+                    <th>Hora Salida</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td><input type="text" class="form-control" id="userName" value="@User.Identity.Name"/></td>
+                    <td><input type="text" class="form-control" id="date" /></td>
+                    <td><input type="text" class="form-control" id="entryTime" /></td>
+                    <td><input type="text" class="form-control" id="exitTime" /></td>
+                    <td><button type="button" id="btnCheckIn">Check In</button></a></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="form-control" id="userName" value="@User.Identity.Name"/></td>
+                    <td><input type="text" class="form-control" id="entryTime" /></td>
+                    <td><input type="text" class="form-control" id="exitTime" /></td>
+                    <td><button href="/Attendance/CheckOut">Check Out</button></td>
+                </tr>
+            </table>
+            </form>
+
+            <script src="~/vendor/jquery/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                var token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '/home/login';
+                }
+
+                var fecha = new Date();
+
+                document.getElementById("date").value = fecha.getFullYear() + "-" + fecha.getMonth() + "-" + fecha.getDay() + " " + fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+                document.getElementById("entryTime").value = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+
+                console.log(document.getElementById("date").value);
+                console.log(document.getElementById("entryTime").value);
+
+                document.addEventListener("click", function(){
+
+                    var username = document.getElementById("userName").value;
+                    var date = document.getElementById("date").value;
+                    var entryTime = document.getElementById("entryTime").value;
+
+                    var attendance = {
+                        UserDescription: username,
+                    }
+                    console.log(attendance);
+
+                    $.ajax({
+                        url: "/Attendance/checkIn",
+                        type: "POST",
+                        contentType: 'application/json',
+                        data: {attendance: attendance},
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                console.log(response.status);
+                                console.log(response.message)
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+
+                })
+
+            </script>
+
+        </body>
+    </html>

@@ -43,6 +43,12 @@ namespace Siged.API.Controllers
             return View(response);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> CheckIn()
+        {
+            return View();
+        }
+
         // POST: AttendanceController1/Create
         [HttpPost]
         //[Route("Create")]

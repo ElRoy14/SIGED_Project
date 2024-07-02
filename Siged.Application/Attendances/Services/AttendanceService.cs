@@ -28,6 +28,12 @@ namespace Siged.Application.Attendances
         {
             try
             {
+                attendance.UserDescription = "Roy";
+                attendance.AttendanceDate = DateTime.Now;
+                attendance.CheckIn = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                attendance.CheckOut = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                attendance.HoursWorked = 8;
+
                 var checkIn = await _attendanceRepository.CheckIn(attendance);
                 return _mapper.Map<CreateCheckIn>(checkIn);
             }
