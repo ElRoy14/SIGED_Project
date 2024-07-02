@@ -1,4 +1,4 @@
-﻿using Siged.Application.Users.DTOs;
+﻿﻿using Siged.Application.Users.DTOs;
 
 namespace Siged.Application.Users.Interfaces
 {
@@ -9,6 +9,7 @@ namespace Siged.Application.Users.Interfaces
         Task<bool> UpdateAsync(UpdateUser model);
         Task<bool> DeleteAsync(int id);
 
+        Task<GetUser> GetUserByIdAsync(int id);
     }
 
 }

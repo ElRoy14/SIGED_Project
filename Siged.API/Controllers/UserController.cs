@@ -1,22 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Options;
-using Newtonsoft.Json.Linq;
-using NuGet.Protocol.Core.Types;
 using Siged.API.Utility;
 using Siged.Application.Departments.Interfaces;
 using Siged.Application.JobTitles.Interfaces;
-using Siged.Application.Roles.DTOs;
 using Siged.Application.Roles.Interfaces;
 using Siged.Application.Salarys.Interfaces;
 using Siged.Application.Users.DTOs;
 using Siged.Application.Users.Interfaces;
-using Siged.Domain;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Siged.API.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
     [Authorize]
     public class UserController : Controller
     {
@@ -42,87 +38,93 @@ namespace Siged.API.Controllers
             ViewBag.JobTitles = _jobTitleService.GetAllJobTitleAsync().Result;
             ViewBag.Salarys = _salaryService.GetAllSalaryAsync().Result;
             return View();
-
         }
 
-        //[Authorize]
         [HttpGet]
-        //[Route("GetAllUsers")]
         public async Task<IActionResult> GetUsers()
         {
             var response = new Response<List<GetUser>>();
-
             try
             {
                 response.status = true;
                 response.value = await _userService.GetAllUserAsync();
                 response.message = "Successful data";
-                
             }
             catch (Exception ex)
             {
                 response.status = false;
                 response.message = ex.Message;
             }
-
             return Ok(response);
-
         }
-        // Controlador UserController.cs
-        //[Authorize]
+
         [HttpPost]
-        //[Route("register")]
         public async Task<IActionResult> Register([FromBody] CreateUser user)
         {
             var response = new Response<GetUser>();
-
             try
             {
                 response.status = true;
                 response.value = await _userService.Register(user);
-                response.message = "Registration successful";
+                response.message = "Registro exitoso";
             }
             catch (Exception ex)
             {
                 response.status = false;
                 response.message = ex.Message;
             }
-
             return Ok(response);
         }
 
-        //[Authorize]
         [HttpPut]
-        //[Route("UpdateUser")]
         public async Task<IActionResult> EditUser([FromBody] UpdateUser user)
         {
             var response = new Response<bool>();
-
             try
             {
                 response.status = true;
                 response.value = await _userService.UpdateAsync(user);
                 response.message = "User information updated successfully";
-                
-                
             }
             catch (Exception ex)
             {
                 response.status = false;
                 response.message = ex.Message;
             }
-
             return Ok(response);
-
         }
 
-        //[Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var response = new Response<GetUser>();
+            try
+            {
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user != null)
+                {
+                    response.status = true;
+                    response.value = user;
+                    response.message = "User found";
+                }
+                else
+                {
+                    response.status = false;
+                    response.message = $"User with id {id} not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+            return Ok(response);
+        }
+
         [HttpDelete]
-        //[Route("DeleteUser/{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var response = new Response<bool>();
-
             try
             {
                 response.status = true;
@@ -134,11 +136,7 @@ namespace Siged.API.Controllers
                 response.status = false;
                 response.message = ex.Message;
             }
-
             return Ok(response);
-
         }
-
     }
-
 }

@@ -73,6 +73,24 @@ namespace Siged.Application.Users.Services
             }
 
         }
+        public async Task<GetUser> GetUserByIdAsync(int id)
+        {
+            try
+            {
+                var user = await _userRepository.GetByIdAsync(id);
+                if (user == null)
+                    throw new UserNotFoundException(); // Implementa esta excepción según tu lógica de manejo de errores
+
+                return _mapper.Map<GetUser>(user);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+       
+
 
         public async Task<bool> UpdateAsync(UpdateUser model)
         {
@@ -116,6 +134,8 @@ namespace Siged.Application.Users.Services
 
         }
 
+
+
         public async Task<bool> DeleteAsync(int id)
         {
             try
@@ -138,5 +158,7 @@ namespace Siged.Application.Users.Services
         }
 
     }
+
+
 
 }
