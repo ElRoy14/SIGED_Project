@@ -56,7 +56,7 @@ namespace Siged.Application.Users.Services
 
                 var userCreated = await _userRepository.CreateAsync(_mapper.Map<UserInfo>(model));
 
-                var userException = userCreated.UserId == (int)UserCreationOption.DoNotCreate ? throw new UserNotCreatedException() : userCreated;
+                var userException = userCreated.UserId == (int)DataCreationOption.DoNotCreate ? throw new UserNotCreatedException() : userCreated;
 
                 var query = await _userRepository.VerifyDataExistenceAsync(u => u.UserId == userCreated.UserId);
                 userCreated = query
