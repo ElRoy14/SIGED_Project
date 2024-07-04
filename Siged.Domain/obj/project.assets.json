@@ -3461,23 +3461,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\royli\\.nuget\\packages\\": {},
+    "C:\\Users\\royrodriguez\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Siged.Domain.csproj",
+      "projectUniqueName": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj",
       "projectName": "Siged.Domain",
-      "projectPath": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Siged.Domain.csproj",
-      "packagesPath": "C:\\Users\\royli\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\obj\\",
+      "projectPath": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj",
+      "packagesPath": "C:\\Users\\royrodriguez\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\royli\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\royrodriguez\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3486,7 +3486,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
