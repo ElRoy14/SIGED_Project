@@ -1,66 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\",
+  "WorkspaceRootPath": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.api\\controllers\\attendancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|solutionrelative:siged.api\\controllers\\attendancecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|c:\\users\\royrodriguez\\desktop\\qc\\siged\\siged_project\\siged.api\\controllers\\tasksemployeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|solutionrelative:siged.api\\controllers\\tasksemployeecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\attendances\\services\\attendanceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\attendances\\services\\attendanceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\authentication\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\authentication\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A0BA1AA9-52E7-4A79-AE18-C386B2A3EE17}|Siged.Infrastructure\\Siged.Infrastructure.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.infrastructure\\repositorys\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A0BA1AA9-52E7-4A79-AE18-C386B2A3EE17}|Siged.Infrastructure\\Siged.Infrastructure.csproj|solutionrelative:siged.infrastructure\\repositorys\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.api\\views\\attendance\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|solutionrelative:siged.api\\views\\attendance\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A0BA1AA9-52E7-4A79-AE18-C386B2A3EE17}|Siged.Infrastructure\\Siged.Infrastructure.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.infrastructure\\context\\dbsigedcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A0BA1AA9-52E7-4A79-AE18-C386B2A3EE17}|Siged.Infrastructure\\Siged.Infrastructure.csproj|solutionrelative:siged.infrastructure\\context\\dbsigedcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.domain\\entities\\tasksemployee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|solutionrelative:siged.domain\\entities\\tasksemployee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\attendances\\interfaces\\iattendanceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\attendances\\interfaces\\iattendanceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\attendances\\dtos\\getattendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\attendances\\dtos\\getattendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\attendances\\automappers\\automapperprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\attendances\\automappers\\automapperprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\users\\automappers\\automapperprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\users\\automappers\\automapperprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\users\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royrodriguez\\desktop\\qc\\siged\\siged_project\\siged.application\\users\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\users\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.domain\\entities\\attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|solutionrelative:siged.domain\\entities\\attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|c:\\users\\royrodriguez\\desktop\\qc\\siged\\siged_project\\siged.domain\\entities\\tasksemployee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|solutionrelative:siged.domain\\entities\\tasksemployee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.domain\\entities\\userinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F442377D-01CB-4B48-BD87-B14B95BCE953}|Siged.Domain\\Siged.Domain.csproj|solutionrelative:siged.domain\\entities\\userinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|c:\\users\\royli\\onedrive\\escritorio\\siged_project_sol\\siged.application\\users\\dtos\\createuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5D3BDBF0-ED59-45F2-A0A9-43B22696C03A}|Siged.Application\\Siged.Application.csproj|solutionrelative:siged.application\\users\\dtos\\createuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|c:\\users\\royrodriguez\\desktop\\qc\\siged\\siged_project\\siged.api\\views\\tasksemployee\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5A1FA4D3-58FF-4C8E-A694-21EE23A1B161}|Siged.API\\Siged.API.csproj|solutionrelative:siged.api\\views\\tasksemployee\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,194 +26,70 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 3,
           "Children": [
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Authentication\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Authentication\\Services\\AuthService.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Authentication\\Services\\AuthService.cs",
-              "RelativeToolTip": "Siged.Application\\Authentication\\Services\\AuthService.cs",
-              "ViewState": "AQIAAEUAAAAAAAAAAAAAAFAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-04T03:15:40.787Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.API\\Views\\Attendance\\Index.cshtml",
-              "RelativeDocumentMoniker": "Siged.API\\Views\\Attendance\\Index.cshtml",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.API\\Views\\Attendance\\Index.cshtml",
-              "RelativeToolTip": "Siged.API\\Views\\Attendance\\Index.cshtml",
-              "ViewState": "AQIAAEwAAAAAAAAAAAAAAFcAAAA0AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-04T02:43:07.936Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "TasksEmployee.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Entities\\TasksEmployee.cs",
-              "RelativeDocumentMoniker": "Siged.Domain\\Entities\\TasksEmployee.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Entities\\TasksEmployee.cs",
-              "RelativeToolTip": "Siged.Domain\\Entities\\TasksEmployee.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAAAAAAoAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T15:28:19.598Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "DbSigedContext.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Infrastructure\\Context\\DbSigedContext.cs",
-              "RelativeDocumentMoniker": "Siged.Infrastructure\\Context\\DbSigedContext.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Infrastructure\\Context\\DbSigedContext.cs",
-              "RelativeToolTip": "Siged.Infrastructure\\Context\\DbSigedContext.cs",
-              "ViewState": "AQIAAE8AAAAAAAAAAAAAAFYAAABKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T14:33:44.71Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "GetAttendance.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\DTOs\\GetAttendance.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Attendances\\DTOs\\GetAttendance.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\DTOs\\GetAttendance.cs",
-              "RelativeToolTip": "Siged.Application\\Attendances\\DTOs\\GetAttendance.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAQwA4AAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T13:43:08.667Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "AutoMapperProfile.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Users\\AutoMappers\\AutoMapperProfile.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Users\\AutoMappers\\AutoMapperProfile.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Users\\AutoMappers\\AutoMapperProfile.cs",
-              "RelativeToolTip": "Siged.Application\\Users\\AutoMappers\\AutoMapperProfile.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAwAAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T13:38:48.767Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Attendance.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Entities\\Attendance.cs",
-              "RelativeDocumentMoniker": "Siged.Domain\\Entities\\Attendance.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Entities\\Attendance.cs",
-              "RelativeToolTip": "Siged.Domain\\Entities\\Attendance.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T13:34:42.203Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "CreateUser.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Users\\DTOs\\CreateUser.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Users\\DTOs\\CreateUser.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Users\\DTOs\\CreateUser.cs",
-              "RelativeToolTip": "Siged.Application\\Users\\DTOs\\CreateUser.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T13:33:37.302Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "UserInfo.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Entities\\UserInfo.cs",
-              "RelativeDocumentMoniker": "Siged.Domain\\Entities\\UserInfo.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Domain\\Entities\\UserInfo.cs",
-              "RelativeToolTip": "Siged.Domain\\Entities\\UserInfo.cs",
-              "ViewState": "AQIAABwAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T13:33:05.581Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AutoMapperProfile.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\AutoMappers\\AutoMapperProfile.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Attendances\\AutoMappers\\AutoMapperProfile.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\AutoMappers\\AutoMapperProfile.cs",
-              "RelativeToolTip": "Siged.Application\\Attendances\\AutoMappers\\AutoMapperProfile.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABoAAABOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:58:40.228Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IAttendanceService.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\Interfaces\\IAttendanceService.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Attendances\\Interfaces\\IAttendanceService.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\Interfaces\\IAttendanceService.cs",
-              "RelativeToolTip": "Siged.Application\\Attendances\\Interfaces\\IAttendanceService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAA4AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:58:24.463Z"
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AttendanceController.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.API\\Controllers\\AttendanceController.cs",
-              "RelativeDocumentMoniker": "Siged.API\\Controllers\\AttendanceController.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.API\\Controllers\\AttendanceController.cs",
-              "RelativeToolTip": "Siged.API\\Controllers\\AttendanceController.cs",
-              "ViewState": "AQIAADQAAAAAAAAAAAAAAD0AAAAqAAAA",
+              "Title": "TasksEmployeeController.cs",
+              "DocumentMoniker": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.API\\Controllers\\TasksEmployeeController.cs",
+              "RelativeDocumentMoniker": "Siged.API\\Controllers\\TasksEmployeeController.cs",
+              "ToolTip": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.API\\Controllers\\TasksEmployeeController.cs",
+              "RelativeToolTip": "Siged.API\\Controllers\\TasksEmployeeController.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAA6wAkAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:48:24.176Z",
+              "WhenOpened": "2024-07-04T14:52:34.512Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AttendanceService.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\Services\\AttendanceService.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Attendances\\Services\\AttendanceService.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Attendances\\Services\\AttendanceService.cs",
-              "RelativeToolTip": "Siged.Application\\Attendances\\Services\\AttendanceService.cs",
-              "ViewState": "AQIAABkAAAAAAAAAAAAAAB8AAAANAAAA",
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Application\\Users\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Siged.Application\\Users\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Application\\Users\\Services\\UserService.cs",
+              "RelativeToolTip": "Siged.Application\\Users\\Services\\UserService.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAA1wJYAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:37:31.678Z",
+              "WhenOpened": "2024-07-03T14:57:06.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TasksEmployee.cs",
+              "DocumentMoniker": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Domain\\Entities\\TasksEmployee.cs",
+              "RelativeDocumentMoniker": "Siged.Domain\\Entities\\TasksEmployee.cs",
+              "ToolTip": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.Domain\\Entities\\TasksEmployee.cs",
+              "RelativeToolTip": "Siged.Domain\\Entities\\TasksEmployee.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwBMAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-03T14:16:30.041Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "GenericRepository.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Infrastructure\\Repositorys\\GenericRepository.cs",
-              "RelativeDocumentMoniker": "Siged.Infrastructure\\Repositorys\\GenericRepository.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Infrastructure\\Repositorys\\GenericRepository.cs",
-              "RelativeToolTip": "Siged.Infrastructure\\Repositorys\\GenericRepository.cs",
-              "ViewState": "AQIAACkAAAAAAAAAAAAAADAAAAA5AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:36:36.179Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Users\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "Siged.Application\\Users\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\royli\\OneDrive\\Escritorio\\SIGED_Project_Sol\\Siged.Application\\Users\\Services\\UserService.cs",
-              "RelativeToolTip": "Siged.Application\\Users\\Services\\UserService.cs",
-              "ViewState": "AQIAACsAAAAAAAAAAAAAADQAAABVAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:35:43.165Z"
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.API\\Views\\TasksEmployee\\Index.cshtml",
+              "RelativeDocumentMoniker": "Siged.API\\Views\\TasksEmployee\\Index.cshtml",
+              "ToolTip": "C:\\Users\\royrodriguez\\Desktop\\QC\\Siged\\SIGED_Project\\Siged.API\\Views\\TasksEmployee\\Index.cshtml",
+              "RelativeToolTip": "Siged.API\\Views\\TasksEmployee\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-03T14:16:13.022Z"
             }
           ]
         }
