@@ -1,6 +1,6 @@
 ﻿namespace Siged.Domain.Enums
 {
-    public enum UserCreationOption
+    public enum DataCreationOption
     {
         DoNotCreate = 0
     }

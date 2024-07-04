@@ -1,337 +1,448 @@
-﻿<!-- HTML actualizado para la página de usuarios -->
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewData["Title"] = "Lista de Usuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ajusta la ruta según tu estructura de proyecto
 }
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Users</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <style>
-        .table thead th {
-            background-color: #343a40;
-            color: #fff;
-        }
+<div class="container">
+    <h1>Listado de Usuarios</h1>
+        <!-- Campo de búsqueda -->
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar en la tabla...">
+    <!-- Botón Registrar Usuario -->
+    <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Registrar Usuario</button>
 
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .btn-custom {
-            margin-right: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between mb-4">
-            <h3>Usuarios</h3>
-            <div>
-                <input type="text" class="form-control" id="searchUser" placeholder="Search Users" style="display:inline-block; width: auto;">
-                <button class="btn btn-primary btn-custom" id="btn-register">Registrar</button>
-            </div>
-        </div>
-        <div id="userList" class="table-responsive"></div>
+    <div id="userList">
+        <!-- Aquí se cargará dinámicamente la tabla de usuarios -->
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Cargo</th>
+                    <th>Departamento</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se insertarán dinámicamente las filas de usuarios -->
+            </tbody>
+        </table>
     </div>
 
-    <!-- Modal for Editing/Creating User -->
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Modal Agregar Usuario -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <!-- Cambiado a modal-lg para mayor ancho -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editUserModalLabel">Editar usuario</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="addUserModalLabel">Registrar Nuevo Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editUserForm">
-                        <div class="mb-3">
-                            <label for="editIdentificationCard" class="form-label">Cedula</label>
-                            <input type="text" class="form-control" id="editIdentificationCard" name="identificationCard" required>
+                    <!-- Formulario para agregar usuario -->
+                    <form id="addUserForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="fullName">Nombre Completo</label>
+                                <input type="text" class="form-control" id="fullName" name="fullName" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="identificationCard">Cedula</label>
+                                <input type="text" class="form-control" id="identificationCard" name="identificationCard" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editFullName" class="form-label">Nombres</label>
-                            <input type="text" class="form-control" id="editFullName" name="fullName" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="phoneNumber">Telefono</label>
+                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="email">Correo</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editPhoneNumber" class="form-label">Telefono</label>
-                            <input type="text" class="form-control" id="editPhoneNumber" name="phoneNumber" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="userPassword">Contraseña</label>
+                                <input type="password" class="form-control" id="userPassword" name="userPassword" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="rolId">Rol</label>
+                                <select class="form-control" id="rolId" name="rolId" required>
+                                    <option value="">Seleccione un Rol</option>
+                                    @foreach (var rol in ViewBag.Roles)
+                                    {
+                                        <option value="@rol.RolId">@rol.NameRol</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="editEmail" name="email" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="jobTitleId">Cargo</label>
+                                <select class="form-control" id="jobTitleId" name="jobTitleId" required>
+                                    <option value="">Seleccione un Cargo</option>
+                                    @foreach (var jobTitle in ViewBag.JobTitles)
+                                    {
+                                        <option value="@jobTitle.JobTitleId">@jobTitle.JobTitleName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="departmentId">Departamento</label>
+                                <select class="form-control" id="departmentId" name="departmentId" required>
+                                    <option value="">Seleccione un Departamento</option>
+                                    @foreach (var department in ViewBag.Departments)
+                                    {
+                                        <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editUserPassword" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="editUserPassword" name="userPassword" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="isActive">Estado</label>
+                                <select class="form-control" id="isActive" name="isActive" required>
+                                    <option value="1">Activo</option>
+                                    <option value="0">No Activo</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editRolId" class="form-label">Rol</label>
-                            <select class="form-control" id="editRolId" name="rolId" required>
-                                <option>Select Role</option>
-                                @foreach (var rol in ViewBag.Roles)
-                                {
-                                    <option value="@rol.RolId">@rol.NameRol</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="editJobTitleId" class="form-label">Cargo</label>
-                            <select class="form-control" id="editJobTitleId" name="jobTitleId" required>
-                                <option>Select Job Title</option>
-                                @foreach (var jobTitle in ViewBag.JobTitles)
-                                {
-                                    <option value="@jobTitle.JobTitleId">@jobTitle.JobTitleName</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDepartmentId" class="form-label">Departamento</label>
-                            <select class="form-control" id="editDepartmentId" name="departmentId" required>
-                                <option>Select Department</option>
-                                @foreach (var department in ViewBag.Departments)
-                                {
-                                    <option value="@department.DepartmentId">@department.DepartmentName</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editSalaryId" class="form-label">Sueldo</label>
-                            <select class="form-control" id="editSalaryId" name="salaryId" required>
-                                <option>Select Salary</option>
-                                @foreach (var salary in ViewBag.Salarys)
-                                {
-                                    <option value="@salary.SalaryId">@salary.Amount</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editIsActive" class="form-label">Activo</label>
-                            <select class="form-control" id="editIsActive" name="isActive" required>
-                                <option value="1">Activo</option>
-                                <option value="0">No Activo</option>
-                            </select>
-                        </div>
-                        <input type="hidden" id="editUserId" name="userId">
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" id="saveUserChanges">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveUser">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Delete Confirmation -->
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Modal Editar Usuario -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmar para eliminar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="editUserModalLabel">Editar Usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-                    Estas seguro que quieres eliminar este usuario?
-                    <input type="hidden" id="deleteUserId">
+                    <!-- Formulario para editar usuario -->
+                    <form id="editUserForm">
+                        <input type="hidden" id="editUserId" name="userId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editFullName">Nombre Completo</label>
+                                <input type="text" class="form-control" id="editFullName" name="fullName" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editIdentificationCard">Cedula</label>
+                                <input type="text" class="form-control" id="editIdentificationCard" name="identificationCard" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editPhoneNumber">Telefono</label>
+                                <input type="text" class="form-control" id="editPhoneNumber" name="phoneNumber" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editEmail">Correo</label>
+                                <input type="email" class="form-control" id="editEmail" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editUserPassword">Contraseña</label>
+                                <input type="password" class="form-control" id="editUserPassword" name="userPassword" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editRolId">Rol</label>
+                                <select class="form-control" id="editRolId" name="rolId" required>
+                                    <option value="">Seleccione un Rol</option>
+                                    @foreach (var rol in ViewBag.Roles)
+                                    {
+                                        <option value="@rol.RolId">@rol.NameRol</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editJobTitleId">Cargo</label>
+                                <select class="form-control" id="editJobTitleId" name="jobTitleId" required>
+                                    <option value="">Seleccione un Cargo</option>
+                                    @foreach (var jobTitle in ViewBag.JobTitles)
+                                    {
+                                        <option value="@jobTitle.JobTitleId">@jobTitle.JobTitleName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editDepartmentId">Departamento</label>
+                                <select class="form-control" id="editDepartmentId" name="departmentId" required>
+                                    <option value="">Seleccione un Departamento</option>
+                                    @foreach (var department in ViewBag.Departments)
+                                    {
+                                        <option value="@department.DepartmentId">@department.DepartmentName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editIsActive">Estado</label>
+                                <select class="form-control" id="editIsActive" name="isActive" required>
+                                    <option value="1">Activo</option>
+                                    <option value="0">No Activo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDelete">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdateUser">Actualizar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</div>
+
+
+
+@section Scripts {
     <script>
-        $(document).ready(function () {
-            var token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/home/login';
-                return;
-            }
-
-            $('#btn-register').click(function () {
-                $('#editUserModalLabel').text('Register User');
-                $('#editUserForm')[0].reset();
-                $('#editUserId').val('');
-                $('#editUserModal').modal('show');
-            });
-
-            $(document).on('click', '.btn-edit', function () {
-                $('#editUserModalLabel').text('Edit User');
-                var userId = $(this).data('userid');
-                var identificationCard = $('#identificationCard_' + userId).text();
-                var fullName = $('#fullName_' + userId).text();
-                var phoneNumber = $('#phoneNumber_' + userId).text();
-                var email = $('#email_' + userId).text();
-                var userPassword = ''; // No password displayed
-                var rolId = $('#rolDescription_' + userId).data('id');
-                var jobTitleId = $('#jobTitleDescription_' + userId).data('id');
-                var departmentId = $('#departmentDescription_' + userId).data('id');
-                var salaryId = $('#salaryDescription_' + userId).data('id');
-                var isActive = $('#isActive_' + userId).text();
-
-                $('#editIdentificationCard').val(identificationCard);
-                $('#editFullName').val(fullName);
-                $('#editPhoneNumber').val(phoneNumber);
-                $('#editEmail').val(email);
-                $('#editUserPassword').val(userPassword);
-                $('#editRolId').val(rolId);
-                $('#editJobTitleId').val(jobTitleId);
-                $('#editDepartmentId').val(departmentId);
-                $('#editSalaryId').val(salaryId);
-                $('#editIsActive').val(isActive);
-                $('#editUserId').val(userId);
-
-                $('#editUserModal').modal('show');
-            });
-
-            $('#saveUserChanges').click(function () {
-                var userId = $('#editUserId').val();
-                var identificationCard = $('#editIdentificationCard').val();
-                var fullName = $('#editFullName').val();
-                var phoneNumber = $('#editPhoneNumber').val();
-                var email = $('#editEmail').val();
-                var userPassword = $('#editUserPassword').val();
-                var rolId = $('#editRolId').val();
-                var jobTitleId = $('#editJobTitleId').val();
-                var departmentId = $('#editDepartmentId').val();
-                var salaryId = $('#editSalaryId').val();
-                var isActive = $('#editIsActive').val();
-
-                var userData = {
-                    identificationCard: identificationCard,
-                    fullName: fullName,
-                    phoneNumber: phoneNumber,
-                    email: email,
-                    userPassword: userPassword,
-                    rolId: rolId,
-                    jobTitleId: jobTitleId,
-                    departmentId: departmentId,
-                    salaryId: salaryId,
-                    isActive: isActive
-                };
-
-                var url = userId ? '/api/User/UpdateUser' : '/api/User/register';
-                var method = userId ? 'PUT' : 'POST';
-                if (userId) {
-                    userData.userId = userId;
+        // Función para cargar usuarios mediante AJAX
+        function loadUsers() {
+            $.ajax({
+                url: '/User/GetUsers',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        var users = response.value;
+                        var userListHtml = '';
+                        users.forEach(function (user) {
+                            var isActiveText = user.isActive === 1 ? 'Activo' : 'No Activo';
+                            userListHtml += '<tr>' +
+                                '<td>' + user.userId + '</td>' +
+                                '<td>' + user.identificationCard + '</td>' +
+                                '<td>' + user.fullName + '</td>' +
+                                '<td>' + user.phoneNumber + '</td>' +
+                                '<td>' + user.email + '</td>' +
+                                '<td>' + user.rolDescription + '</td>' +
+                                '<td>' + user.jobTitleDescription + '</td>' +
+                                '<td>' + user.departmentDescription + '</td>' +
+                                '<td>' + isActiveText + '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userid="' + user.userId + '">Editar</button>' +
+                                '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-userid="' + user.userId + '">Eliminar</button>' +
+                                '</td>' +
+                                '</tr>';
+                        });
+                        $('#userList tbody').html(userListHtml); // Inserta las filas de usuarios en la tabla
+                    } else {
+                        $('#userList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
                 }
+            });
+        }
 
-                $.ajax({
-                    url: url,
-                    type: method,
-                    contentType: 'application/json',
-                    data: JSON.stringify(userData),
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function (response) {
-                        if (response.status) {
-                            $('#editUserModal').modal('hide');
-                            loadUsers();
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
+        // Evento para buscar en la tabla
+        $('#searchInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#userList tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        
+
+        // Función para obtener datos de usuario por ID
+        function getUserById(userId) {
+            $.ajax({
+                url: '/User/GetUserById?id=' + userId,
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var user = response.value;
+                        $('#editUserId').val(user.userId);
+                        $('#editFullName').val(user.fullName);
+                        $('#editIdentificationCard').val(user.identificationCard);
+                        $('#editPhoneNumber').val(user.phoneNumber);
+                        $('#editEmail').val(user.email);
+                        $('#editUserPassword').val('');
+                        $('#editRolId').val(user.rolId);
+                        $('#editJobTitleId').val(user.jobTitleId);
+                        $('#editDepartmentId').val(user.departmentId);
+                        $('#editIsActive').val(user.isActive);
+                        $('#editUserModal').modal('show');
+                    } else {
+                        alert('Error: ' + response.message);
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
+        }
 
-            $(document).on('click', '.btn-delete', function () {
-                var userId = $(this).data('userid');
-                $('#deleteUserId').val(userId);
-                $('#deleteConfirmationModal').modal('show');
-            });
-
-            $('#confirmDelete').click(function () {
-                var userId = $('#deleteUserId').val();
-
-                $.ajax({
-                    url: '/api/User/DeleteUser/' + userId,
-                    type: 'DELETE',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function (response) {
-                        if (response.status) {
-                            $('#deleteConfirmationModal').modal('hide');
-                            loadUsers();
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
+        // Función para registrar un nuevo usuario mediante AJAX
+        function registerUser(user) {
+            $.ajax({
+                url: '/User/Register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(user),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        $('#successMessage').html('<div class="alert alert-success">Usuario registrado con éxito.</div>');
+                        // Limpiar campos del formulario
+                        $('#addUserForm')[0].reset();
+                        // Actualizar la lista de usuarios después de registrar
+                        loadUsers();
+                        $('#addUserModal').modal('hide'); // Ocultar el modal después de registrar
+                    } else {
+                        alert('Error al registrar usuario: ' + response.message);
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
+        }
 
-            $('#searchUser').on('input', function () {
-                var searchValue = $(this).val().toLowerCase();
-                filterUsers(searchValue);
+
+        // Al hacer clic en Guardar en el modal de agregar usuario
+        $('#btnSaveUser').click(function () {
+            var user = {
+                fullName: $('#fullName').val(),
+                identificationCard: $('#identificationCard').val(),
+                phoneNumber: $('#phoneNumber').val(),
+                email: $('#email').val(),
+                userPassword: $('#userPassword').val(),
+                rolId: $('#rolId').val(),
+                jobTitleId: $('#jobTitleId').val(),
+                departmentId: $('#departmentId').val(),
+                isActive: $('#isActive').val()
+            };
+            registerUser(user);
+        });
+
+
+
+        // Función para actualizar usuario
+        function updateUser(user) {
+            $.ajax({
+                url: '/User/EditUser',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(user),
+                success: function (response) {
+                    if (response.status) {
+                        $('#successMessage').html('<div class="alert alert-success">Usuario actualizado con éxito.</div>');
+                        loadUsers();
+                        $('#editUserModal').modal('hide');
+                    } else {
+                        alert('Error al actualizar usuario: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
+        }
 
-            function filterUsers(searchValue) {
-                $('#userList tbody tr').each(function () {
-                    var rowText = $(this).text().toLowerCase();
-                    $(this).toggle(rowText.indexOf(searchValue) !== -1);
-                });
+        // Al hacer clic en el botón de Guardar en el modal de Agregar Usuario
+        $('#btnSaveUser').click(function () {
+            var user = {
+                fullName: $('#fullName').val(),
+                identificationCard: $('#identificationCard').val(),
+                phoneNumber: $('#phoneNumber').val(),
+                email: $('#email').val(),
+                userPassword: $('#userPassword').val(),
+                rolId: $('#rolId').val(),
+                jobTitleId: $('#jobTitleId').val(),
+                departmentId: $('#departmentId').val(),
+                isActive: $('#isActive').val()
+            };
+            addUser(user);
+        });
+
+        // Al hacer clic en el botón de editar usuario en la tabla
+        $('#userList').on('click', '.btn-edit', function () {
+            var userId = $(this).data('userid');
+            getUserById(userId);
+        });
+
+        // Al hacer clic en el botón de Actualizar en el modal de editar usuario
+        $('#btnUpdateUser').click(function () {
+            var user = {
+                userId: $('#editUserId').val(),
+                fullName: $('#editFullName').val(),
+                identificationCard: $('#editIdentificationCard').val(),
+                phoneNumber: $('#editPhoneNumber').val(),
+                email: $('#editEmail').val(),
+                userPassword: $('#editUserPassword').val(),
+                rolId: $('#editRolId').val(),
+                jobTitleId: $('#editJobTitleId').val(),
+                departmentId: $('#editDepartmentId').val(),
+                isActive: $('#editIsActive').val()
+            };
+            updateUser(user);
+        });
+        // Función para eliminar un usuario mediante AJAX
+        function deleteUser(userId) {
+            $.ajax({
+                url: '/User/DeleteUser?id=' + userId,
+                type: 'DELETE',
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        $('#successMessage').html('<div class="alert alert-success">Usuario eliminado con éxito.</div>');
+                        // Actualizar la lista de usuarios después de eliminar
+                        loadUsers();
+                    } else {
+                        alert('Error al eliminar usuario: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+
+        // Al hacer clic en el botón de eliminar usuario
+        $('#userList').on('click', '.btn-delete', function () {
+            var userId = $(this).data('userid');
+            // Confirmar antes de eliminar
+            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+                deleteUser(userId);
             }
+        });
 
-            function loadUsers() {
-                $.ajax({
-                    url: '/api/User/GetAllUsers',
-                    type: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function (response) {
-                        if (response.status) {
-                            var users = response.value;
-                            var userListHtml = '<table class="table table-bordered table-hover"><thead><tr><th>ID</th><th>Cedula</th><th>Nombre</th><th>Telefono</th><th>Correo</th><th>Rol</th><th>Cargo</th><th>Departamento</th><th>Salario</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
-                            users.forEach(function (user) {
-                                var isActiveText = user.isActive === 1 ? 'Activo' : 'No Activo';
-                                userListHtml += '<tr>' +
-                                    '<td>' + user.userId + '</td>' +
-                                    '<td id="identificationCard_' + user.userId + '">' + user.identificationCard + '</td>' +
-                                    '<td id="fullName_' + user.userId + '">' + user.fullName + '</td>' +
-                                    '<td id="phoneNumber_' + user.userId + '">' + user.phoneNumber + '</td>' +
-                                    '<td id="email_' + user.userId + '">' + user.email + '</td>' +
-                                    '<td id="rolDescription_' + user.userId + '" data-id="' + user.rolId + '">' + user.rolDescription + '</td>' +
-                                    '<td id="jobTitleDescription_' + user.userId + '" data-id="' + user.jobTitleId + '">' + user.jobTitleDescription + '</td>' +
-                                    '<td id="departmentDescription_' + user.userId + '" data-id="' + user.departmentId + '">' + user.departmentDescription + '</td>' +
-                                    '<td id="salaryDescription_' + user.userId + '" data-id="' + user.salaryId + '">' + user.salaryDescription + '</td>' +
-                                    '<td id="isActive_' + user.userId + '">' + isActiveText + '</td>' +
-                                    '<td>' +
-                                    '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userid="' + user.userId + '">Editar</button>' +
-                                    '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-userid="' + user.userId + '">Eliminar</button>' +
-                                    '</td>' +
-                                    '</tr>';
-                            });
-                            userListHtml += '</tbody></table>';
-                            $('#userList').html(userListHtml);
-                        } else {
-                            $('#userList').html('<div class="alert alert-danger">' + response.message + '</div>');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-
+        // Cargar usuarios al cargar la página
+        $(document).ready(function () {
             loadUsers();
         });
+       
     </script>
-</body>
-</html>
+}

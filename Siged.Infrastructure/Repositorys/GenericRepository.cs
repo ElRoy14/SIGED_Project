@@ -60,6 +60,19 @@ namespace Siged.Infrastructure.Repositorys
             }
 
         }
+        public async Task<TModel> GetByIdAsync(int id)
+        {
+            try
+            {
+                TModel model = await _dbContext.Set<TModel>().FindAsync(id);
+                return model;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
         public async Task<bool> DeleteAsync(TModel model)
         {
