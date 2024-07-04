@@ -84,7 +84,7 @@ public partial class DbSigedContext : DbContext
             entity.ToTable("Attendance");
 
             entity.Property(e => e.AttendanceDate)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(CONVERT(VARCHAR(30), GETDATE(), 103))")
                 .HasColumnType("datetime");
             entity.Property(e => e.CheckIn).HasColumnName("Check_in");
             entity.Property(e => e.CheckOut).HasColumnName("Check_out");

@@ -24,7 +24,7 @@ namespace Siged.Application.Attendances.AutoMappers
             CreateMap<GetAttendance, Attendance>()
                 .ForMember(destination =>
                     destination.User,
-                    options => options.Ignore());
+                    options => options.MapFrom(origin => origin.User.FullName));
 
         }
 

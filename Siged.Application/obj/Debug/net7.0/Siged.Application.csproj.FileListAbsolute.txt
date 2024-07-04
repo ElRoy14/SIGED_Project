@@ -1,0 +1,16 @@
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\bin\Debug\net7.0\Siged.Application.deps.json
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\bin\Debug\net7.0\Siged.Application.dll
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\bin\Debug\net7.0\Siged.Application.pdb
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\bin\Debug\net7.0\Siged.Domain.dll
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\bin\Debug\net7.0\Siged.Domain.pdb
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.csproj.AssemblyReference.cache
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.AssemblyInfoInputs.cache
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.AssemblyInfo.cs
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.csproj.CoreCompileInputs.cache
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.sourcelink.json
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Ap.48A127F1.Up2Date
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.dll
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\refint\Siged.Application.dll
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\Siged.Application.pdb
+C:\Users\royli\OneDrive\Escritorio\SIGED_Project_Sol\Siged.Application\obj\Debug\net7.0\ref\Siged.Application.dll

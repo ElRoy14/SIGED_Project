@@ -59,6 +59,8 @@ namespace Siged.API.Controllers
 
             try
             {
+                attendance.UserDescription = User.Identity.Name;
+
                 response.status = true;
                 response.value = await _attendanceService.CheckIn(attendance);
                 response.message = "Check In successful";
@@ -80,6 +82,9 @@ namespace Siged.API.Controllers
 
             try
             {
+                attendance.UserDescription = User.Identity.Name;
+                //attendance.UserId = User.Identity.NameIdentifier;
+
                 response.status = true;
                 response.value = await _attendanceService.CheckOut(attendance);
                 response.message = "Check Out Successful";

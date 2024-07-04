@@ -2,6 +2,7 @@
 using Siged.Application.Attendances.Exceptions;
 using Siged.Application.Attendances.Interfaces;
 using Siged.Domain.Interfaces;
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,18 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Siged.Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Siged.Application.Attendances
 {
     public class AttendanceService : IAttendanceService
     {
-        private readonly IAttendanceRepository<GetAttendance> _attendanceRepository;
+        private readonly IGenericRepository<Attendance> _attendanceRepository;
         private readonly IMapper _mapper;
 
-        public AttendanceService(IAttendanceRepository<GetAttendance> attendanceRepository, IMapper mapper)
+        public AttendanceService(IGenericRepository<Attendance> genericRepository, IMapper mapper)
         {
-            _attendanceRepository = attendanceRepository;
+            _attendanceRepository = genericRepository;
             _mapper = mapper;
         }
 
@@ -28,13 +30,14 @@ namespace Siged.Application.Attendances
         {
             try
             {
-                attendance.UserDescription = "Roy";
-                attendance.AttendanceDate = DateTime.Now;
                 attendance.CheckIn = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-                attendance.CheckOut = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-                attendance.HoursWorked = 8;
 
-                var checkIn = await _attendanceRepository.CheckIn(attendance);
+                var checkIn = await _attendanceRepository.CreateAsync(_mapper.Map<Attendance>(attendance));
+
+                var query = await _attendanceRepository.VerifyDataExistenceAsync(c => c.AttendanceId == checkIn.AttendanceId);
+                checkIn = query
+                    .Include(attendance => attendance.User).First();
+
                 return _mapper.Map<CreateCheckIn>(checkIn);
             }
             catch
@@ -43,16 +46,22 @@ namespace Siged.Application.Attendances
             }
         }
 
-        public Task<GetAttendance> GetAttendanceByIdAsync(int id)
+        public async Task<GetAttendance> GetAttendanceByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var attendance = await _attendanceRepository.GetEverythingAsync(a => a.AttendanceId == id);
+            return _mapper.Map<GetAttendance>(attendance);
         }
 
         public async Task<CheckOut> CheckOut(GetAttendance attendance)
         {
             try
             {
-                var checkOut = await _attendanceRepository.CheckOut(attendance);
+                //attendance = _attendanceRepository.GetEverythingAsync(a => a.)
+
+                attendance.CheckOut = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+                var checkOut = await _attendanceRepository.UpdateAsync(_mapper.Map<Attendance>(attendance));
+
                 return _mapper.Map<CheckOut>(checkOut);
             }
             catch
@@ -64,8 +73,8 @@ namespace Siged.Application.Attendances
         public async Task<List<GetAttendance>> GetAllAttendanceAsync()
         {
             try
-            {
-                var attendances = await _attendanceRepository.GetAllAttendanceAsync();
+            { 
+                var attendances = await _attendanceRepository.VerifyDataExistenceAsync();
                 var attendance = attendances.
                                  Include(user => user.UserId).ToList();
                 return _mapper.Map<List<GetAttendance>>(attendance);

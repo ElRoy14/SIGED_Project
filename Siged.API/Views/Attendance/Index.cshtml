@@ -30,7 +30,7 @@
                     <td><input type="text" class="form-control" id="userName" value="@User.Identity.Name"/></td>
                     <td><input type="text" class="form-control" id="entryTime" /></td>
                     <td><input type="text" class="form-control" id="exitTime" /></td>
-                    <td><button href="/Attendance/CheckOut">Check Out</button></td>
+                    <td><button type="button" id="btnCheckOut">Check Out</button></td>
                 </tr>
             </table>
             </form>
@@ -51,11 +51,45 @@
                 console.log(document.getElementById("date").value);
                 console.log(document.getElementById("entryTime").value);
 
-                document.addEventListener("click", function(){
+                document.getElementById('btnCheckIn').addEventListener("click", function(){
 
                     var username = document.getElementById("userName").value;
                     var date = document.getElementById("date").value;
                     var entryTime = document.getElementById("entryTime").value;
+
+                    var attendance = {
+                        UserDescription: username,
+                    }
+                    console.log(attendance);
+
+                    $.ajax({
+                        url: "/Attendance/checkIn",
+                        type: "POST",
+                        contentType: 'application/json',
+                        data: {attendance: attendance},
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                console.log(response.status);
+                                console.log(response.message)
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+
+                })
+
+                document.getElementById('btnCheckOut').addEventListener("click", function(){
+
+                    var username = document.getElementById("userName").value;
+                    var date = document.getElementById("date").value;
+                    var entryTime = document.getElementById("exitTime").value;
 
                     var attendance = {
                         UserDescription: username,
