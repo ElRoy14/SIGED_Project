@@ -3,6 +3,8 @@ using Siged.Application.Attendances;
 using Siged.Application.Attendances.Interfaces;
 using Siged.Application.Authentication.Interfaces;
 using Siged.Application.Authentication.Services;
+using Siged.Application.Customers.Interfaces;
+using Siged.Application.Customers.Servicices;
 using Siged.Application.Departments.Interfaces;
 using Siged.Application.Departments.Services;
 using Siged.Application.JobTitles.Interfaces;
@@ -30,7 +32,10 @@ namespace Siged.Application
                 .AddScoped<IAuthService, AuthService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IAttendanceService, AttendanceService>()
-                .AddScoped<IMenuService, MenuService>();
+                .AddScoped<IMenuService, MenuService>()
+                .AddScoped<ICustomerService, CustomerService>();
+
+
 
         }
 

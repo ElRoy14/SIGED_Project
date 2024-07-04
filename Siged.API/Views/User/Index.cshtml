@@ -5,7 +5,8 @@
 
 <div class="container">
     <h1>Listado de Usuarios</h1>
-
+        <!-- Campo de búsqueda -->
+    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar en la tabla...">
     <!-- Botón Registrar Usuario -->
     <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Registrar Usuario</button>
 
@@ -214,7 +215,11 @@
         </div>
     </div>
 
+
+
 </div>
+
+
 
 @section Scripts {
     <script>
@@ -256,6 +261,16 @@
                 }
             });
         }
+
+        // Evento para buscar en la tabla
+        $('#searchInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#userList tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        
 
         // Función para obtener datos de usuario por ID
         function getUserById(userId) {
@@ -424,10 +439,10 @@
             }
         });
 
-
         // Cargar usuarios al cargar la página
         $(document).ready(function () {
             loadUsers();
         });
+       
     </script>
 }

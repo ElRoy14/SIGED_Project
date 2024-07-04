@@ -63,7 +63,7 @@ namespace Siged.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditUser([FromBody] UpdateCustomer user)
+        public async Task<IActionResult> EditCustomer([FromBody] UpdateCustomer user)
         {
             var response = new Response<bool>();
             try
@@ -108,7 +108,7 @@ namespace Siged.API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteCustomr(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var response = new Response<bool>();
             try
