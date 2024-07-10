@@ -42,6 +42,35 @@ namespace Siged.Application.TaskEmployees.Services
             }
         }
 
+        public async Task<GetTask> GetTaskById(int id)
+        {
+            try
+            {
+                var task = await _taskRepository.GetByIdAsync(id);
+                return _mapper.Map<GetTask>(task);
+            }
+            catch
+            {
+                throw new GetTaskFailedException();
+            }
+        }
+
+        public async Task<List<GetTask>> GetTaskByNameAsync(string name)
+        {
+            try
+            {
+                var taskQuery = await _taskRepository.VerifyDataExistenceAsync(c => c.NameTask == name);
+                var listTasks = taskQuery
+                                .Include(status => status.TaskStatus)
+                                .Include(user => user.User).ToList();
+                return _mapper.Map<List<GetTask>>(listTasks);
+            }
+            catch
+            {
+                throw new GetTaskFailedException();
+            }
+        }
+
         public async Task<GetTask> CreateTask(CreateTask model)
         {
             try

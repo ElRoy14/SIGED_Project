@@ -10,6 +10,8 @@ namespace Siged.Application.TaskEmployees.Interfaces
 {
     public interface ITaskEmployeeService
     {
+        public Task<List<GetTask>> GetTaskByNameAsync(string name);
+        public Task<GetTask> GetTaskById(int id);
         Task<List<GetTask>> GetAllTaskAsync();
         Task<GetTask> CreateTask (CreateTask model);
         Task<bool> UpdateAsync(UpdateTask model);
