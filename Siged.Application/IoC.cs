@@ -15,6 +15,8 @@ using Siged.Application.Roles.Interfaces;
 using Siged.Application.Roles.Services;
 using Siged.Application.Salarys.Interfaces;
 using Siged.Application.Salarys.Services;
+using Siged.Application.Suppliers.Interfaces;
+using Siged.Application.Suppliers.Services;
 using Siged.Application.Users.Interfaces;
 using Siged.Application.Users.Services;
 
@@ -33,7 +35,8 @@ namespace Siged.Application
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IAttendanceService, AttendanceService>()
                 .AddScoped<IMenuService, MenuService>()
-                .AddScoped<ICustomerService, CustomerService>();
+                .AddScoped<ICustomerService, CustomerService>()
+                .AddScoped<ISupplierService, SupplierService>();
 
 
 
