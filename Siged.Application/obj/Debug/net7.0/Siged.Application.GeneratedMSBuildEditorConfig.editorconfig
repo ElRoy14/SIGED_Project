@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Siged.Application
-build_property.ProjectDir = C:\Users\royrodriguez\Desktop\QC\Siged\SIGED_Project\Siged.Application\
+build_property.ProjectDir = C:\Users\Luis\Desktop\sigeddev\SIGED_Project\Siged.Application\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

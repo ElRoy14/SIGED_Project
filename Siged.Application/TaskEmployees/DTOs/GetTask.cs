@@ -8,9 +8,10 @@ namespace Siged.Application.TaskEmployees.DTOs
 {
     public class GetTask
     {
+       
         public int TaskId { get; set; }
-        public string? TaskName { get; set; }
-        public DateTime? StartDate { get; set; }
+        public string? NameTask { get; set; }
+        public string? StartDate { get; set; }
         public string? DueDate { get; set; }
         public int UserId { get; set; }
         public string? UserDescription { get; set; }

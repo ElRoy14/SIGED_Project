@@ -21,6 +21,18 @@ using Siged.Application.Suppliers.Interfaces;
 using Siged.Application.Suppliers.Services;
 using Siged.Application.Users.Interfaces;
 using Siged.Application.Users.Services;
+using Siged.Application.Tax.Interfaces;
+using Siged.Application.Tax.Services;
+using Siged.Application.Payrolls.Interfaces;
+using Siged.Application.Payrolls.Services;
+using Siged.Application.Goals.Services;
+using Siged.Application.Goals.Interfaces;
+using Siged.Application.Evaluators.Interfaces;
+using Siged.Application.Evaluators.Services;
+using Siged.Application.PerformanceEvaluations.Interfaces;
+using Siged.Application.PerformanceEvaluations.Services;
+using Siged.Application.TaskStatusEmployees.Interfaces;
+using Siged.Application.TaskStatusEmployees.Services;
 
 namespace Siged.Application
 {
@@ -37,7 +49,15 @@ namespace Siged.Application
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IAttendanceService, AttendanceService>()
                 .AddScoped<IMenuService, MenuService>()
-                .AddScoped<ICustomerService, CustomerService>();
+                .AddScoped<ICustomerService, CustomerService>()
+                .AddScoped<ISupplierService, SupplierService>()
+                .AddScoped<ITaxesService, TaxesService>()
+                .AddScoped<IPayrollService, PayrollService>()
+                .AddScoped<IGoalsService, GoalsService>()
+                .AddScoped<IEvaluatorsService, EvaluatorsService>()
+                .AddScoped<IPerformanceEvaluationService, PerformanceEvalutionService>()
+                .AddScoped<ITaskStatusEmployeeService, TaskStatusEmployeeService>()
+                .AddScoped<ITaskEmployeeService, TaskEmployeeService>();
 
 
 
