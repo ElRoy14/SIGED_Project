@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Siged.Application.Authentication.Exceptions;
 using Siged.Application.TaskEmployees.DTOs;
 using Siged.Application.TaskEmployees.Exceptions;
 using Siged.Application.TaskEmployees.Interfaces;
+using Siged.Application.TaskEmployees.Validators;
 using Siged.Application.Users.Exceptions;
+using Siged.Application.Users.Validators;
 using Siged.Domain;
+using Siged.Domain.Enums;
 using Siged.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -32,8 +36,9 @@ namespace Siged.Application.TaskEmployees.Services
             {
                 var taskQuery = await _taskRepository.VerifyDataExistenceAsync();
                 var listTasks = taskQuery
-                                .Include(status => status.TaskStatus)
-                                .Include(user => user.User).ToList();
+                                .Include(status => status.User)
+                                .Include(user => user.TaskStatus).ToList();
+
                 return _mapper.Map<List<GetTask>>(listTasks);
             }
             catch 
@@ -42,15 +47,101 @@ namespace Siged.Application.TaskEmployees.Services
             }
         }
 
+        private async Task<List<GetTask>> GetTaslByStatusAsync(TaskStatusEmployeeOption status)
+        {
+            try
+            {
+                var invoiceQuery = await _taskRepository
+                    .VerifyDataExistenceAsync(task => task.TaskStatusId == (int)status);
+
+                var invoicesWithInclude = invoiceQuery
+                    .Include(invoice => invoice.User)
+                    .Include(invoice => invoice.TaskStatus)
+                    .ToList();
+
+                return _mapper.Map<List<GetTask>>(invoicesWithInclude);
+            }
+            catch
+            {
+                throw new GetTaskFailedException();
+            }
+
+        }
+
+        public async Task<List<GetTask>> GetAllPendingTaskAsync()
+        {
+            return await GetTaslByStatusAsync(TaskStatusEmployeeOption.Pending);
+        }
+
+        public async Task<List<GetTask>> GetAllTaskListDoneAsync()
+        {
+            return await GetTaslByStatusAsync(TaskStatusEmployeeOption.Done);
+        }
+
+
+        private async Task<List<GetTask>> GetTaskByUserAsync(int userId, TaskStatusEmployeeOption stateId)
+        {
+            try
+            {
+                var assignedInvoices = await _taskRepository
+                    .VerifyDataExistenceAsync(invoice => invoice.UserId == userId && invoice.TaskStatusId == (int)stateId);
+
+                string noInvoicesFound = assignedInvoices == null || !assignedInvoices.Any() ? throw new GetTaskFailedByUserException() : null;
+
+                var invoicesWithInclude = assignedInvoices
+                    .Include(user => user.User)
+                    .Include(user => user.TaskStatus);
+
+                var invoiceList = await invoicesWithInclude.ToListAsync();
+
+                return _mapper.Map<List<GetTask>>(invoiceList);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<List<GetTask>> GetPendingTaskByEmployee(int userId)
+        {
+            return await GetTaskByUserAsync(userId, TaskStatusEmployeeOption.Pending);
+        }
+
+        public async Task<List<GetTask>> GetTaskDoneByEmployee(int userId)
+        {
+            return await GetTaskByUserAsync(userId, TaskStatusEmployeeOption.Done);
+        }
+
+
+
         public async Task<GetTask> CreateTask(CreateTask model)
         {
             try
             {
-                var taskCreated = await _taskRepository.CreateAsync(_mapper.Map<TasksEmployee>(model));
+                var createUserValidator = new CreateTaskValidators();
+                var validationResult = createUserValidator.Validate(model);
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                    throw new TaskCanceledException($"{string.Join(", ", errors)}");
+                }
+
+                var stateInfo = _mapper.Map<TasksEmployee>(model);
+
+                stateInfo.TaskStatusId = (int)TaskStatusEmployeeOption.Pending;
+
+                var taskCreated = await _taskRepository.CreateAsync(stateInfo);
+
+                var taskException = taskCreated.TaskId == (int)DataCreationOption.DoNotCreate ? throw new TaskNotCreatedException() : taskCreated;
+                
                 var query = await _taskRepository.VerifyDataExistenceAsync(t => t.TaskId == taskCreated.TaskId );
+                
                 taskCreated = query
-                                .Include(taskStatus => taskStatus.TaskStatus)
-                                .Include(user => user.User).First();
+                                .Include(taskStatus => taskStatus.User)
+                                .Include(user => user.TaskStatus).First();
+
                 return _mapper.Map<GetTask>(taskCreated);
                                 
             }
@@ -58,40 +149,98 @@ namespace Siged.Application.TaskEmployees.Services
             {
                 throw new TaskNotCreatedException();
             }
+
         }
 
         public async Task<bool> UpdateAsync(UpdateTask model)
         {
-            var taskModel = _mapper.Map<TasksEmployee>(model);
+            try
+            {
+                var validator = new UpdateTaskValidators();
+                var validationResult = await validator.ValidateAsync(model);
 
-            var taskFound = await _taskRepository.GetEverythingAsync(u => u.TaskId == taskModel.TaskId);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                    throw new TaskCanceledException(string.Join(", ", errors));
+                }
 
-            var taskToUpdate = taskFound ?? throw new TaskNotFoundException();
+                var taskModel = _mapper.Map<TasksEmployee>(model);
 
-            taskToUpdate.TaskId = taskModel.TaskId;
-            taskToUpdate.TaskStatusId = taskModel.TaskStatusId;
-            taskToUpdate.NameTask = taskModel.NameTask;
-            taskToUpdate.StartDate = taskModel.StartDate;
-            taskToUpdate.DueDate = taskModel.DueDate;
+                var taskFound = await _taskRepository.GetEverythingAsync(u => u.TaskId == taskModel.TaskId);
 
-            bool response = await _taskRepository.UpdateAsync(taskToUpdate);
+                var taskToUpdate = taskFound ?? throw new TaskNotFoundException();
 
-            bool isUpdateSuccessful = !response ? throw new TaskUpdateFailedException() : response;
+                taskToUpdate.TaskId = taskModel.TaskId;
+                taskToUpdate.NameTask = taskModel.NameTask;
+                taskToUpdate.DueDate = taskModel.DueDate;
+                taskToUpdate.UserId = taskModel.UserId;
 
-            return response;
+                bool response = await _taskRepository.UpdateAsync(taskToUpdate);
+
+                bool isUpdateSuccessful = !response ? throw new TaskUpdateFailedException() : response;
+
+                    return response;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateStateAsync(UpdateStateTask model)
+        {
+            try
+            {
+                var validator = new UpdateStateValidator();
+                var validationResult = await validator.ValidateAsync(model);
+
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+                    throw new TaskCanceledException(string.Join(", ", errors));
+                }
+
+                var invoiceModel = _mapper.Map<TasksEmployee>(model);
+
+                var invoiceFound = await _taskRepository.GetEverythingAsync(u => u.TaskId == invoiceModel.TaskId);
+
+                var invoiceToUpdate = invoiceFound ?? throw new TaskNotFoundException();
+
+                invoiceToUpdate.TaskStatusId = invoiceModel.TaskStatusId;
+
+                bool response = await _taskRepository.UpdateAsync(invoiceFound);
+
+                bool isUpdateSuccessful = !response ? throw new TaskUpdateFailedException() : response;
+
+                return response;
+
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var taskFound = await _taskRepository.GetEverythingAsync(u => u.TaskId == id);
+            try
+            {
+                var taskFound = await _taskRepository.GetEverythingAsync(u => u.TaskId == id);
 
-            var taskDelete = taskFound ?? throw new TaskNotFoundException();
+                var taskDelete = taskFound ?? throw new TaskNotFoundException();
 
-            bool response = await _taskRepository.DeleteAsync(taskFound);
+                bool response = await _taskRepository.DeleteAsync(taskFound);
 
-            var isDeleteSuccessful = response ? response : throw new DeleteTaskFailedException();
+                var isDeleteSuccessful = response ? response : throw new DeleteTaskFailedException();
 
-            return response;
+                    return response;
+            }
+            catch
+            {
+                throw new TaskNotFoundException();
+            }
         }
 
         

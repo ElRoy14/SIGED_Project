@@ -15,7 +15,8 @@ namespace Siged.Application.Suppliers.Validators
 
             RuleFor(supplier => supplier.IdentificationCard)
                .NotEmpty().WithMessage("La cédula es requerida")
-               .Matches(@"^[0-9]*$").WithMessage("La cédula no acepta letras, solo números");
+               .Matches(@"^[0-9]*$").WithMessage("La cédula no acepta letras, solo números")
+               .MaximumLength(11).WithMessage("La cédula no puede exceder los 11 caracteres");
 
             RuleFor(supplier => supplier.PhoneNumber)
                 .NotEmpty().WithMessage("El teléfono es requerido")

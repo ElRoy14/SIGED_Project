@@ -9,8 +9,8 @@ namespace Siged.Application.Users.Validators
         {
 
             RuleFor(user => user.IdentificationCard)
-    .NotEmpty().WithMessage("La cédula es requerida")
-    .Matches(@"^[0-9]*$").WithMessage("La cédula no acepta letras, solo números");
+                .NotEmpty().WithMessage("La cédula es requerida")
+                .Matches(@"^[0-9]*$").WithMessage("La cédula no acepta letras, solo números");
 
             RuleFor(user => user.PhoneNumber)
                 .NotEmpty().WithMessage("El teléfono es requerido")

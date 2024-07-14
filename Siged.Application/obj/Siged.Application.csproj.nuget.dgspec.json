@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Application\\Siged.Application.csproj": {}
+    "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Application\\Siged.Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Application\\Siged.Application.csproj": {
+    "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Application\\Siged.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Application\\Siged.Application.csproj",
+        "projectUniqueName": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Application\\Siged.Application.csproj",
         "projectName": "Siged.Application",
-        "projectPath": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Application\\Siged.Application.csproj",
-        "packagesPath": "C:\\Users\\18295\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Application\\obj\\",
+        "projectPath": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Application\\Siged.Application.csproj",
+        "packagesPath": "C:\\Users\\Luis\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\18295\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Luis\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -33,8 +33,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj": {
-                "projectPath": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj"
+              "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj": {
+                "projectPath": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj"
               }
             }
           }
@@ -43,6 +43,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -90,24 +95,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj": {
+    "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj",
         "projectName": "Siged.Domain",
-        "projectPath": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj",
-        "packagesPath": "C:\\Users\\18295\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\18295\\Desktop\\SIGED_Project\\Siged.Domain\\obj\\",
+        "projectPath": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Domain\\Siged.Domain.csproj",
+        "packagesPath": "C:\\Users\\Luis\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Luis\\Desktop\\sigeddev\\SIGED_Project\\Siged.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\18295\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Luis\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -129,6 +134,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -162,7 +172,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }
