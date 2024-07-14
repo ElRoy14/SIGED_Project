@@ -1,6 +1,220 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista de Nóminas";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container">
+    <h1>Listado de Nóminas</h1>
 
-<h1>Prueba Nomina</h1>
+    <!-- Botón para abrir el modal de registro -->
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#registerModal">
+        Registrar Nómina
+    </button>
+
+    <!-- Modal de registro de nóminas -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Registrar Nómina</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario de registro de nóminas dentro del modal -->
+                    <form id="payrollForm">
+                        <div class="form-group">
+                            <label for="userId">User ID:</label>
+                            <select id="userId" name="userId" class="form-control">
+                                <option value="">Seleccione un usuario</option>
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.UserId">@user.FullName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taxId">Tax ID:</label>
+                            <select id="taxId" name="taxId" class="form-control">
+                                <option value="">Seleccione un impuesto</option>
+                                @foreach (var tax in ViewBag.Taxes)
+                                {
+                                    <option value="@tax.TaxId">@tax.NetSalary</option>
+                                }
+                            </select>
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de nóminas -->
+    <div id="payrollList">
+        <table id="payrollTable" class="table table-bordered table-hover">
+            <!-- Encabezados de la tabla aquí -->
+            <thead>
+                <tr>
+
+
+                    <th>Nombre de Usuario</th>
+                    <th>Fecha de Pago</th>
+
+                    <th>Salario</th>
+                    <th>Porcentaje de Impuesto</th>
+                    <th>Salario Neto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de nóminas se insertarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <script>
+        // Función para cargar nóminas vía AJAX
+        function loadPayrolls() {
+            $.ajax({
+                url: '/Payroll/GetAllPayroll',
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var payrolls = response.value;
+                        var payrollListHtml = '';
+                        payrolls.forEach(function (payroll) {
+                            payrollListHtml += '<tr>' +
+
+
+                                '<td>' + payroll.userName + '</td>' +
+                                '<td>' + payroll.paymentDate + '</td>' +
+
+                                '<td>' + payroll.salaryAmountUser + '</td>' +
+                                '<td>' + payroll.taxPercentage + '</td>' +
+                                '<td>' + payroll.netSalary + '</td>' +
+                                '</tr>';
+                        });
+                        $('#payrollTable tbody').html(payrollListHtml); // Insertar filas de nóminas en la tabla
+
+                        // Inicializar DataTable
+                        $('#payrollTable').DataTable({
+                            "paging": true,
+                            "lengthChange": false,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false,
+                            "responsive": true,
+                            "language": {
+                                "paginate": {
+                                    "first": "Primero",
+                                    "last": "Último",
+                                    "next": "Siguiente",
+                                    "previous": "Anterior"
+                                },
+                                "search": "Buscar:",
+                                "info": "Mostrando _START_ a _END_ de _TOTAL_ nóminas",
+                                "infoEmpty": "Mostrando 0 a 0 de 0 nóminas",
+                                "infoFiltered": "(filtrado de _MAX_ nóminas en total)",
+                                "zeroRecords": "No se encontraron resultados"
+                            }
+                        });
+                    } else {
+                        console.log('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + xhr.responseText);
+                }
+            });
+        }
+
+        // Cargar nóminas al cargar la página
+        $(document).ready(function () {
+            loadPayrolls();
+        });
+
+        // Manejar el envío del formulario de registro de nóminas desde el modal
+        $('#payrollForm').submit(function (event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+
+            var formData = {
+                userId: $('#userId').val(),
+                taxId: $('#taxId').val(),
+                paymentDate: $('#paymentDate').val()
+            };
+
+            $.ajax({
+                url: '/Payroll/Register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.status) {
+                        $('#registerModal').modal('hide'); // Ocultar el modal después del registro exitoso
+                        alert('Nómina registrada exitosamente.');
+                        loadPayrolls(); // Recargar la tabla de nóminas después del registro
+                    } else {
+                        alert('Error al registrar la nómina: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + xhr.responseText);
+                }
+            });
+        });
+    </script>
+}
+
+
+<style>
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+</style>

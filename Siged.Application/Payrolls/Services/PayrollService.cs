@@ -19,6 +19,7 @@ using Siged.Application.Payrolls.Validators;
 using Siged.Application.Payrolls.Exceptions;
 using FluentValidation;
 using Siged.Application.Authentication.Exceptions;
+using Siged.Application.Customers.DTOs;
 
 namespace Siged.Application.Payrolls.Services
 {
@@ -138,6 +139,25 @@ namespace Siged.Application.Payrolls.Services
                 throw;
             }
         }
+
+
+        public async Task<GetPayroll> GetPayrollByIdAsync(int id)
+        {
+
+            try
+            {
+                var user = await _payrollRepository.GetByIdAsync(id);
+                if (user == null)
+                    throw new UserNotFoundException(); // Implementa esta excepción según tu lógica de manejo de errores
+
+                return _mapper.Map<GetPayroll>(user);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
         public async Task<bool> DeleteAsync(int id)
         {

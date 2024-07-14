@@ -1,4 +1,5 @@
-﻿using Siged.Application.Payrolls.DTOs;
+﻿using Siged.Application.Customers.DTOs;
+using Siged.Application.Payrolls.DTOs;
 using Siged.Application.Tax.DTOs;
 using Siged.Application.Users.DTOs;
 using System;
@@ -16,6 +17,8 @@ namespace Siged.Application.Payrolls.Interfaces
         Task<GetPayroll> Register(CreatePayroll model);
         Task<bool> UpdateAsync(UpdatePayroll model);
         Task<bool> DeleteAsync(int id);
+
+        Task<GetPayroll> GetPayrollByIdAsync(int id);
     }
 
 }
