@@ -4,21 +4,22 @@
 }
 
 <div class="container">
+   <div class="container">
     <h1>Listado de Usuarios</h1>
-        <!-- Campo de búsqueda -->
+    <!-- Campo de búsqueda -->
     <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar en la tabla...">
     <!-- Botón Registrar Usuario -->
     <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addUserModal">Registrar Usuario</button>
 
-    <div id="userList">
-        <!-- Aquí se cargará dinámicamente la tabla de usuarios -->
-        <table class="table table-bordered table-hover">
+    <div id="userList" class="table-responsive">
+        <!-- Tabla de usuarios -->
+        <table id="usersTable" class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Cedula</th>
+                    <th>Cédula</th>
                     <th>Nombre</th>
-                    <th>Telefono</th>
+                    <th>Teléfono</th>
                     <th>Correo</th>
                     <th>Rol</th>
                     <th>Cargo</th>
@@ -28,11 +29,13 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Aquí se insertarán dinámicamente las filas de usuarios -->
+                <!-- Las filas de usuarios se insertarán dinámicamente aquí -->
             </tbody>
         </table>
     </div>
+</div>
 
+  
     <!-- Modal Agregar Usuario -->
     <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -215,6 +218,25 @@
         </div>
     </div>
 
+    <!-- Modal de mensajes -->
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Mensaje del Sistema</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="messageContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>
@@ -222,14 +244,27 @@
 
 
 @section Scripts {
+
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+
     <script>
-        // Función para cargar usuarios mediante AJAX
+       
+        // Evento para buscar en la tabla
+        $('#searchInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#userList tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+        // Funciones y configuraciones JavaScript
+        // Función para cargar usuarios y configurar DataTables
         function loadUsers() {
             $.ajax({
                 url: '/User/GetUsers',
                 type: 'GET',
                 success: function (response) {
-                    console.log(response); // Log the response to check for errors
                     if (response.status) {
                         var users = response.value;
                         var userListHtml = '';
@@ -246,14 +281,16 @@
                                 '<td>' + user.departmentDescription + '</td>' +
                                 '<td>' + isActiveText + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userid="' + user.userId + '">Editar</button>' +
-                                '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-userid="' + user.userId + '">Eliminar</button>' +
+                                '<button class="btn btn-info btn-sm mr-1" onclick="editUser(' + user.userId + ')">Editar</button>' +
+                                '<button class="btn btn-danger btn-sm" onclick="deleteUser(' + user.userId + ')">Eliminar</button>' +
                                 '</td>' +
                                 '</tr>';
                         });
-                        $('#userList tbody').html(userListHtml); // Inserta las filas de usuarios en la tabla
+                        $('#usersTable tbody').html(userListHtml);
+                        // Configuración de DataTables
+                        $('#usersTable').DataTable();
                     } else {
-                        $('#userList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        alert('Error al cargar usuarios: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -262,37 +299,34 @@
             });
         }
 
-        // Evento para buscar en la tabla
-        $('#searchInput').on('keyup', function () {
-            var value = $(this).val().toLowerCase();
-            $('#userList tbody tr').filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-            });
+        // Función para cargar roles, cargos y departamentos al cargar la página
+        $(document).ready(function () {
+            loadUsers();
         });
 
-        
-
-        // Función para obtener datos de usuario por ID
-        function getUserById(userId) {
+        // Función para editar usuario
+        function editUser(userId) {
             $.ajax({
                 url: '/User/GetUserById?id=' + userId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
                         var user = response.value;
+                        // Llenar formulario de edición con datos del usuario
                         $('#editUserId').val(user.userId);
                         $('#editFullName').val(user.fullName);
                         $('#editIdentificationCard').val(user.identificationCard);
                         $('#editPhoneNumber').val(user.phoneNumber);
                         $('#editEmail').val(user.email);
-                        $('#editUserPassword').val('');
+                        $('#editUserPassword').val(user.userPassword);
                         $('#editRolId').val(user.rolId);
                         $('#editJobTitleId').val(user.jobTitleId);
                         $('#editDepartmentId').val(user.departmentId);
                         $('#editIsActive').val(user.isActive);
+                        // Mostrar modal de editar usuario
                         $('#editUserModal').modal('show');
                     } else {
-                        alert('Error: ' + response.message);
+                        alert('Error al obtener usuario: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -301,32 +335,21 @@
             });
         }
 
-        // Función para registrar un nuevo usuario mediante AJAX
-        function registerUser(user) {
-            $.ajax({
-                url: '/User/Register',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(user),
-                success: function (response) {
-                    console.log(response); // Log the response to check for errors
-                    if (response.status) {
-                        // Mostrar mensaje de éxito
-                        $('#successMessage').html('<div class="alert alert-success">Usuario registrado con éxito.</div>');
-                        // Limpiar campos del formulario
-                        $('#addUserForm')[0].reset();
-                        // Actualizar la lista de usuarios después de registrar
-                        loadUsers();
-                        $('#addUserModal').modal('hide'); // Ocultar el modal después de registrar
-                    } else {
-                        alert('Error al registrar usuario: ' + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+
+        // Función para buscar en la tabla de usuarios
+        $(document).ready(function () {
+            $('#searchInput').on('keyup', function () {
+                var value = $(this).val().toLowerCase();
+                $('#usersTable tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
             });
-        }
+        });
+        
+
+        // Función para obtener datos de usuario por ID
+      
+
 
 
         // Al hacer clic en Guardar en el modal de agregar usuario
@@ -347,6 +370,34 @@
 
 
 
+        // Función para registrar un nuevo usuario mediante AJAX
+        function registerUser(user) {
+            $.ajax({
+                url: '/User/Register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(user),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        showMessage('Usuario registrado con éxito.', true);
+                        // Limpiar campos del formulario
+                        $('#addUserForm')[0].reset();
+                        // Actualizar la lista de usuarios después de registrar
+                        loadUsers();
+                        $('#addUserModal').modal('hide'); // Ocultar el modal después de registrar
+                    } else {
+                        alert('Error al registrar usuario: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    showMessage('Error al registrar usuario.', false);
+                }
+            });
+        }
+
         // Función para actualizar usuario
         function updateUser(user) {
             $.ajax({
@@ -356,7 +407,7 @@
                 data: JSON.stringify(user),
                 success: function (response) {
                     if (response.status) {
-                        $('#successMessage').html('<div class="alert alert-success">Usuario actualizado con éxito.</div>');
+                        showMessage('Usuario actualizado con éxito.', true);
                         loadUsers();
                         $('#editUserModal').modal('hide');
                     } else {
@@ -365,8 +416,53 @@
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
+                    showMessage('Error al actualizar usuario.', false);
                 }
             });
+        }
+        // Función para mostrar mensajes en el modal
+        function showMessage(message, isSuccess) {
+            var modal = $('#messageModal');
+            var modalContent = modal.find('.modal-content');
+            var modalBody = modal.find('.modal-body');
+            var messageDiv = modalBody.find('#messageContent');
+
+            // Limpiar clases y contenido previos
+            modalContent.removeClass('modal-success modal-error');
+            messageDiv.empty();
+
+            // Configurar mensaje y clase de modal
+            messageDiv.text(message);
+            if (isSuccess) {
+                modalContent.addClass('modal-success');
+            } else {
+                modalContent.addClass('modal-error');
+            }
+
+            // Mostrar el modal
+            modal.modal('show');
+        }
+
+        // Función para eliminar usuario
+        function deleteUser(userId) {
+            if (confirm('¿Estás seguro de eliminar este usuario?')) {
+                $.ajax({
+                    url: '/User/DeleteUser?id=' + userId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.status) {
+                            showMessage('Usuario eliminado exitosamente.', true);
+                            loadUsers(); // Recargar lista de usuarios después de eliminar
+                        } else {
+                            alert('Error al eliminar usuario: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        showMessage('Error al eliminar usuario.', false);
+                    }
+                });
+            }
         }
 
         // Al hacer clic en el botón de Guardar en el modal de Agregar Usuario
@@ -407,27 +503,7 @@
             };
             updateUser(user);
         });
-        // Función para eliminar un usuario mediante AJAX
-        function deleteUser(userId) {
-            $.ajax({
-                url: '/User/DeleteUser?id=' + userId,
-                type: 'DELETE',
-                success: function (response) {
-                    console.log(response); // Log the response to check for errors
-                    if (response.status) {
-                        // Mostrar mensaje de éxito
-                        $('#successMessage').html('<div class="alert alert-success">Usuario eliminado con éxito.</div>');
-                        // Actualizar la lista de usuarios después de eliminar
-                        loadUsers();
-                    } else {
-                        alert('Error al eliminar usuario: ' + response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        }
+       
 
 
         // Al hacer clic en el botón de eliminar usuario
@@ -439,10 +515,76 @@
             }
         });
 
-        // Cargar usuarios al cargar la página
-        $(document).ready(function () {
-            loadUsers();
-        });
+       
        
     </script>
 }
+
+
+<style>
+    /* Estilos para el mensaje de éxito */
+    .modal-success .modal-content {
+        border-color: #4CAF50; /* Color del borde */
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.6); /* Sombra */
+    }
+
+    .modal-success .modal-header {
+        background-color: #4CAF50; /* Color de fondo del encabezado */
+        color: white; /* Color del texto */
+    }
+
+    /* Estilos para el mensaje de error */
+    .modal-error .modal-content {
+        border-color: #F44336; /* Color del borde */
+        box-shadow: 0 0 20px rgba(244, 67, 54, 0.6); /* Sombra */
+    }
+
+    .modal-error .modal-header {
+        background-color: #F44336; /* Color de fondo del encabezado */
+        color: white; /* Color del texto */
+    }
+
+
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+
+  
+</style>

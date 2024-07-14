@@ -14,7 +14,7 @@
 
     <div id="customerList">
         <!-- Tabla de clientes -->
-        <table class="table table-bordered table-hover">
+        <table id="customerTable" class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>Cedula</th>
@@ -109,29 +109,32 @@
         </div>
     </div>
 
-    <!-- Modal para Mostrar Mensajes -->
-    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="messageModalLabel">Mensaje</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="messageModalBody">
-                    <!-- El contenido del mensaje se insertará dinámicamente aquí -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
+   <!-- Modal para Mostrar Mensajes -->
+<div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Mensaje</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="messageModalBody">
+                <!-- El contenido del mensaje se insertará dinámicamente aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
-
 </div>
 
+
+</div>
 @section Scripts {
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
     <script>
         // Función para mostrar mensajes en el modal de mensajes
         function showMessage(message, isError = false) {
@@ -155,27 +158,61 @@
                         var customers = response.value;
                         var customerListHtml = '';
                         customers.forEach(function (customer) {
-                            customerListHtml += '<tr>' +
+                            customerListHtml += '<tr data-customerid="' + customer.customerId + '">' +
                                 '<td>' + customer.identificationCard + '</td>' +
                                 '<td>' + customer.fullName + '</td>' +
                                 '<td>' + customer.phoneNumber + '</td>' +
                                 '<td>' + customer.email + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-customerid="' + customer.customerId + '">Editar</button>' +
-                                '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-customerid="' + customer.customerId + '">Eliminar</button>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit">Editar</button> ' +
+                                '<button class="btn btn-sm btn-danger btn-custom btn-delete">Eliminar</button>' +
                                 '</td>' +
                                 '</tr>';
                         });
-                        $('#customerList tbody').html(customerListHtml); // Insertar filas de clientes en la tabla
+                        $('#customerTable tbody').html(customerListHtml); // Insertar filas de clientes en la tabla
+
+                        // Si DataTables ya está inicializado, destruirlo primero para evitar reinicialización
+                        if ($.fn.DataTable.isDataTable('#customerTable')) {
+                            $('#customerTable').DataTable().destroy();
+                        }
+
+                        // Inicializar DataTable
+                        $('#customerTable').DataTable({
+                            "paging": true,
+                            "lengthChange": false,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false,
+                            "responsive": true,
+                            "language": {
+                                "paginate": {
+                                    "first": "Primero",
+                                    "last": "Último",
+                                    "next": "Siguiente",
+                                    "previous": "Anterior"
+                                },
+                                "search": "Buscar:",
+                                "info": "Mostrando _START_ a _END_ de _TOTAL_ clientes",
+                                "infoEmpty": "Mostrando 0 a 0 de 0 clientes",
+                                "infoFiltered": "(filtrado de _MAX_ clientes en total)",
+                                "zeroRecords": "No se encontraron resultados"
+                            }
+                        });
                     } else {
-                        showMessage('Error: ' + response.message, true);
+                        console.log('Error: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
-                    showMessage('Error: ' + xhr.responseText, true);
+                    console.log('Error: ' + xhr.responseText);
                 }
             });
         }
+
+        // Cargar clientes al cargar la página
+        $(document).ready(function () {
+            loadCustomers();
+        });
 
         // Función para obtener datos de un cliente por ID
         function getCustomerById(customerId) {
@@ -213,7 +250,7 @@
                         $('#addCustomerModal').modal('hide');
                         clearForm('addCustomerForm');
                         showMessage('Cliente registrado exitosamente.');
-                        loadCustomers();
+                        loadCustomers(); // Recargar la tabla después de registrar
                     } else {
                         showMessage('Error: ' + response.message, true);
                     }
@@ -236,7 +273,15 @@
                         $('#editCustomerModal').modal('hide');
                         clearForm('editCustomerForm');
                         showMessage('Cliente actualizado exitosamente.');
-                        loadCustomers();
+
+                        // Actualizar la fila en la tabla con los datos actualizados
+                        var $row = $('#customerTable').find('tr[data-customerid="' + customer.customerId + '"]');
+                        $row.find('td:eq(0)').text(customer.identificationCard);
+                        $row.find('td:eq(1)').text(customer.fullName);
+                        $row.find('td:eq(2)').text(customer.phoneNumber);
+                        $row.find('td:eq(3)').text(customer.email);
+
+                        // No es necesario recargar toda la tabla DataTables aquí, solo actualizar la fila modificada
                     } else {
                         showMessage('Error: ' + response.message, true);
                     }
@@ -255,7 +300,11 @@
                 success: function (response) {
                     if (response.status) {
                         showMessage('Cliente eliminado exitosamente.');
-                        loadCustomers();
+
+                        // Eliminar la fila de la tabla
+                        $('#customerTable').find('tr[data-customerid="' + customerId + '"]').remove();
+
+                        // No es necesario recargar toda la tabla DataTables aquí, solo eliminar la fila eliminada
                     } else {
                         showMessage('Error: ' + response.message, true);
                     }
@@ -291,13 +340,13 @@
 
         // Evento para abrir modal de edición con datos del cliente
         $(document).on('click', '.btn-edit', function () {
-            var customerId = $(this).data('customerid');
+            var customerId = $(this).closest('tr').data('customerid');
             getCustomerById(customerId);
         });
 
         // Evento para eliminar un cliente
         $(document).on('click', '.btn-delete', function () {
-            var customerId = $(this).data('customerid');
+            var customerId = $(this).closest('tr').data('customerid');
             if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
                 deleteCustomer(customerId);
             }
@@ -306,14 +355,56 @@
         // Evento para buscar en la tabla
         $('#searchInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
-            $('#customerList tbody tr').filter(function () {
+            $('#customerTable tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
 
-        // Cargar clientes al cargar la página
-        $(document).ready(function () {
-            loadCustomers();
-        });
     </script>
 }
+
+
+<style>
+
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+</style>
+
