@@ -1,4 +1,4 @@
-﻿
+﻿@model Siged.Domain.Attendance;
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -7,3 +7,27 @@
 }
 
 <h1>Vista Check In</h1>
+<html lang="es">
+    <head>
+
+    </head>
+    <body>
+    <form asp-action="CheckIn" method="post">
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Hora Entrada</th>
+            </tr>
+            <tr>
+                <td><input asp-for="User" type="text" class="form-control" id="userName" value="@User.Identity.Name" /></td>
+                <td><input asp-for="AttendanceDate" type="text" class="form-control" id="date" /></td>
+                <td><input asp-for="CheckIn" type="text" class="form-control" id="entryTime" /></td>
+            </tr>
+        </table>
+        <div class="text-center">
+            <a class="btn btn-danger" asp-controller="Attendance" asp-action="Index">Cancelar</a>
+        </div>
+    </form>
+    </body>
+</html>

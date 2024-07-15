@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Siged.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f44dc9602872988e2039941d4e62c39bc3907897")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3582d2a14e3ca842eac653bb1ec9dbb71a674618")]
 [assembly: System.Reflection.AssemblyProductAttribute("Siged.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Siged.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

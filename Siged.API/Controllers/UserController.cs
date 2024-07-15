@@ -33,6 +33,7 @@ namespace Siged.API.Controllers
 
         public IActionResult Index()
         {
+            
             ViewBag.Roles = _rolService.GetAllRolesAsync().Result;
             ViewBag.Departments = _departmentService.GetAllDepartmentsAsync().Result;
             ViewBag.JobTitles = _jobTitleService.GetAllJobTitleAsync().Result;
