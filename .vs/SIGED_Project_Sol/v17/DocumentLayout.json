@@ -82,8 +82,7 @@
               "RelativeToolTip": "Siged.Application\\Authentication\\Services\\AuthService.cs",
               "ViewState": "AQIAAEUAAAAAAAAAAAAAAFAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-04T03:15:40.787Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-04T03:15:40.787Z"
             },
             {
               "$type": "Document",
@@ -95,8 +94,7 @@
               "RelativeToolTip": "Siged.API\\Views\\Attendance\\Index.cshtml",
               "ViewState": "AQIAAEwAAAAAAAAAAAAAAFcAAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-04T02:43:07.936Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-04T02:43:07.936Z"
             },
             {
               "$type": "Document",
@@ -108,8 +106,7 @@
               "RelativeToolTip": "Siged.Domain\\Entities\\TasksEmployee.cs",
               "ViewState": "AQIAAAIAAAAAAAAAAAAAAAoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T15:28:19.598Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-02T15:28:19.598Z"
             },
             {
               "$type": "Document",
@@ -121,8 +118,7 @@
               "RelativeToolTip": "Siged.Infrastructure\\Context\\DbSigedContext.cs",
               "ViewState": "AQIAAE8AAAAAAAAAAAAAAFYAAABKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T14:33:44.71Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-02T14:33:44.71Z"
             },
             {
               "$type": "Document",
@@ -231,8 +227,7 @@
               "RelativeToolTip": "Siged.Application\\Attendances\\Services\\AttendanceService.cs",
               "ViewState": "AQIAABkAAAAAAAAAAAAAAB8AAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:37:31.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-02T12:37:31.678Z"
             },
             {
               "$type": "Document",
@@ -244,8 +239,7 @@
               "RelativeToolTip": "Siged.Infrastructure\\Repositorys\\GenericRepository.cs",
               "ViewState": "AQIAACkAAAAAAAAAAAAAADAAAAA5AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-02T12:36:36.179Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-02T12:36:36.179Z"
             },
             {
               "$type": "Document",
