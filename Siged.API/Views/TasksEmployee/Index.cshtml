@@ -39,7 +39,7 @@
             </div>
 
             <div class="modal-body" id="createTaskModal" tabindex="-1"> <!-- Modal para Editar Tarea-->
-                <form asp-action="Create" method="post">
+                <form asp-action="Register" method="post">
                     @if (User.Identity.IsAuthenticated)
                     {
                         <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
@@ -64,12 +64,10 @@
 
                 <div class="col-md-3">
                     <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
-                    <select class="form-control" name="taskStatusId" required>
+                    <select asp-for="TaskStatusId" class="form-control" name="taskStatusId" required>
                         <option>Select Status</option>
-                        @foreach (var status in ViewBag.Status)
-                        {
-                            <option value="@status.TaskStatusId">@status.TaskStatus</option>
-                        }
+                        <option value="1">Pending</option>
+                        <option value="2">Done</option>
                     </select>
                 </div>
                 <div class="modal-footer">
@@ -80,7 +78,7 @@
             </div>
 
         <div class="modal-body" id="editTaskModal" tabindex="-1"> <!-- Modal para Editar Tarea-->
-            <form asp-action="Edit" method="post">
+            <form asp-action="EditTask" method="post">
                 <input asp-for="TaskId" type="hidden" id="editTaskId"/>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -93,29 +91,13 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                    <input asp-for="StartDate" id="editStartDate" class="form-control" />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
                     <label for="DueDate" class="control-label">Fecha de Finalización</label>
                     <input asp-for="DueDate" id="editDueDate" class="form-control" />
                     <span asp-validation-for="DueDate" class="text-danger"></span>
                 </div>
 
-                <div class="col-md-3">
-                    <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
-                    <select class="form-control" id="editStatusTask" required>
-                        <option>Select Status</option>
-                        @foreach (var status in ViewBag.Status)
-                        {
-                            <option value="@status.TaskStatusId">@status.TaskStatus</option>
-                        }
-                    </select>
-                </div>
                 <div class="modal-footer">
-                    <input type="submit" value="Guardar" class="btn btn-success" />
+                    <input type="submit" value="Modificar" class="btn btn-success" />
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </form>
@@ -134,11 +116,11 @@
         console.log(document.getElementById("taskDate").value);
 
         document.addEventListener("DOMContentLoaded", function (event) {
-            loadUsers();
+            loadTasks();
         });
 
         // Función para cargar tareas mediante AJAX
-        function loadUsers() {
+        function loadTasks() {
             $.ajax({
                 url: '/TaskEmployee/GetTasksByName',
                 type: 'GET',
@@ -156,7 +138,6 @@
                                 '<td>' + task.UserDescription + '</td>' +
                                 '<td>' + task.StatusDescription + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-taskId="' + task.taskId + '">Editar</button>' +
                                 '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-taskId="' + task.taskId + '">Eliminar</button>' +
                                 '</td>' +
                                 '</tr>';
@@ -172,27 +153,36 @@
             });
         }
 
-        function getTaskById(taskId) {
-            $.ajax({
-                url: '/TaskEmployee/GetTaskById?id=' + taskId,
-                type: 'GET',
-                success: function (response) {
-                    if (response.status) {
-                        var user = response.value;
-                        $('#editTaskId').val(task.TaskId);
-                        $('#editNameTask').val(task.NameTask);
-                        $('#editDueDate').val(task.DueDate);
-                        $('#editTaskStatus').val(task.TaskStatus);
-                        $('#editTaskModal').modal('show');
-                    } else {
-                        alert('Error: ' + response.message);
+        // Función para eliminar usuario
+        function deleteTask(taskId) {
+            if (confirm('¿Estás seguro de eliminar este usuario?')) {
+                $.ajax({
+                    url: '/User/DeleteTask?id=' + taskId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.status) {
+                            showMessage('Usuario eliminado exitosamente.', true);
+                            loadTasks(); // Recargar lista de usuarios después de eliminar
+                        } else {
+                            alert('Error al eliminar usuario: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        showMessage('Error al eliminar usuario.', false);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+                });
+            }
         }
+
+        // Al hacer clic en el botón de eliminar usuario
+        $('#taskList').on('click', '.btn-delete', function () {
+            var taskId = $(this).data('TaskId');
+            // Confirmar antes de eliminar
+            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+                deleteTask(taskId);
+            }
+        });
 
         // Evento para buscar en la tabla
         $('#searchInput').on('keyup', function () {
@@ -200,12 +190,6 @@
             $('#taskList tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
-        });
-
-        // Al hacer clic en el botón de editar usuario en la tabla
-        $('#taskList').on('click', '.btn-edit', function () {
-            var taskId = $(this).data('taskId');
-            getTaskById(taskId);
         });
 
         </script>
