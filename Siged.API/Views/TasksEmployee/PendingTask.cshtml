@@ -1,6 +1,149 @@
-﻿@{
+﻿@model Siged.Domain.TasksEmployee;
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Prueba tareas pendientes</h1>
+
+<html lang="es">
+    <head>
+
+    </head>
+    <body>
+    <div id="taskList">
+        <!-- Aquí se cargará dinámicamente la tabla de tareas -->
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Tarea</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Finalización</th>
+                    <th>Empleado</th>
+                    <th>Estatus</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se insertarán dinámicamente las filas de las tareas -->
+            </tbody>
+        </table>
+
+        <div class="modal-body" id="editPendingTaskModal" tabindex="-1">
+            <!-- Modal para Editar Tarea Pendiente-->
+            <form asp-action="EditTaskState" method="post">
+                <input asp-for="TaskId" type="hidden" id="TaskId" />
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
+                }
+
+                <div class="col-md-3">
+                    <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                    <input id="NameTask" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
+                    <input id="taskDate" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="DueDate" class="control-label">Fecha de Finalización</label>
+                    <input  id="DueDate" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
+                    <select asp-for="TaskStatusId" class="form-control" name="TaskStatusId" id="TaskStatusId" required>
+                        <option>Select Status</option>
+                        <option value="1">Pending</option>
+                        <option value="2">Done</option>
+                    </select>
+                    <input asp-for="TaskStatus" id="TaskStatusId" class="form-control" />
+                    <span asp-validation-for="TaskStatus" class="text-danger"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="submit" value="Modificar" class="btn btn-success" />
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            loadTasks();
+        });
+
+        // Función para cargar tareas mediante AJAX
+        function loadTasks() {
+
+
+
+            $.ajax({
+
+                url: '/TaskEmployee/GetAllPendingTask',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        var tasks = response.value;
+                        var taskListHtml = '';
+                        tasks.forEach(function (task) {
+                            taskListHtml += '<tr>' +
+                                '<td>' + task.TaskId + '</td>' +
+                                '<td>' + task.NameTask + '</td>' +
+                                '<td>' + task.StartDate + '</td>' +
+                                '<td>' + task.DueDate + '</td>' +
+                                '<td>' + task.UserDescription + '</td>' +
+                                '<td>' + task.TaskStatusId + '</td>' +
+                                '<td>' + task.StatusDescription + '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-taskId="' + task.taskId + '">Editar</button>' +
+                                '</td>' +
+                                '</tr>';
+                        });
+                        $('#taskList tbody').html(taskListHtml); // Inserta las filas de usuarios en la tabla
+                    } else {
+                        $('#taskList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+        // Al hacer clic en el botón de editar tareausuario en la tabla
+        $('#taskList').on('click', '.btn-edit', function () {
+            var taskId = $(this).data('taskId');
+            getPendingTaskById(taskId);
+        });
+
+        function getPendingTaskById(taskId) {
+            $.ajax({
+                url: '/TaskEmployee/GetPendingTaskById?userId=' + taskId,
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var user = response.value;
+                        $('#TaskId').val(task.TaskId);
+                        $('#TaskStatusId').val(task.TaskStatusId);
+                        $('#editPendingTaskModal').modal('show');
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+    </script>
+    </body>
+</html>
