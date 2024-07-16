@@ -17,7 +17,7 @@
         <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar en la tabla...">
 
         <!-- Botón Agregar Tarea -->
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createTaskModal">Agregar Tarea</button>
+        <button class="btn btn-primary mb-3" id="btnAddTask">Agregar Tarea</button>
 
             <div id="taskList">
                 <!-- Aquí se cargará dinámicamente la tabla de tareas -->
@@ -38,46 +38,54 @@
                 </table>
             </div>
 
-            <div class="modal-body" id="createTaskModal" tabindex="-1"> <!-- Modal para Editar Tarea-->
-                <form asp-action="Register" method="post">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                    }
-                    <div class="col-md-3">
-                        <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                        <input asp-for="NameTask" class="form-control" />
-                        <span asp-validation-for="NameTask" class="text-danger"></span>
+        <div class="modal fade" id="createTaskModal" aria-hidden="true" tabindex="-1">
+                <!-- Modal para Editar Tarea-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addUserModalLabel">Registrar Nuevo Usuario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div class="modal-body">
+                        <form id="createTaskForm">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
+                            }
+                            <div class="col-md-3">
+                                <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                                <input id="nameTask" class="form-control" />
+                            </div>
 
-                <div class="col-md-3">
-                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                    <input asp-for="StartDate" id="taskDate" class="form-control" />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
+                            <div class="col-md-3">
+                                <label for="StartDate" class="control-label">Fecha de Inicio</label>
+                                <input id="taskDate" class="form-control" />
+                            </div>
 
-                <div class="col-md-3">
-                    <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                    <input asp-for="DueDate" class="form-control" />
-                    <span asp-validation-for="DueDate" class="text-danger"></span>
-                </div>
+                            <div class="col-md-3">
+                                <label for="DueDate" class="control-label">Fecha de Finalización</label>
+                                <input id="dueDate" class="form-control" />
+                            </div>
 
-                <div class="col-md-3">
-                    <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
-                    <select asp-for="TaskStatusId" class="form-control" name="taskStatusId" required>
-                        <option>Select Status</option>
-                        <option value="1">Pending</option>
-                        <option value="2">Done</option>
-                    </select>
+                            <div class="col-md-3">
+                                <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
+                                <select id="taskStatusId" class="form-control" name="taskStatusId" required>
+                                    <option>Select Status</option>
+                                    <option value="1">Pending</option>
+                                    <option value="2">Done</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" value="Guardar" class="btn btn-success" />
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Guardar" class="btn btn-success" />
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                </div>
-                </form>
             </div>
 
-        <div class="modal-body" id="editTaskModal" tabindex="-1"> <!-- Modal para Editar Tarea-->
+        <div class="modal-body" id="editTaskModal" hidden tabindex="-1"> <!-- Modal para Editar Tarea-->
             <form asp-action="EditTask" method="post">
                 <input asp-for="TaskId" type="hidden" id="editTaskId"/>
                 @if (User.Identity.IsAuthenticated)
@@ -122,21 +130,22 @@
         // Función para cargar tareas mediante AJAX
         function loadTasks() {
             $.ajax({
-                url: '/TaskEmployee/GetTasksByName',
+                url: '/TasksEmployee/GetAllTask',
                 type: 'GET',
                 success: function (response) {
-                    console.log(response); // Log the response to check for errors
+                    console.log(response.value[0].nameTask) // Log the response to check for errors
+                    console.log(response)
                     if (response.status) {
                         var tasks = response.value;
                         var taskListHtml = '';
                         tasks.forEach(function (task) {
                             taskListHtml += '<tr>' +
-                                '<td>' + task.TaskId + '</td>' +
-                                '<td>' + task.NameTask + '</td>' +
-                                '<td>' + task.StartDate + '</td>' +
-                                '<td>' + task.DueDate + '</td>' +
-                                '<td>' + task.UserDescription + '</td>' +
-                                '<td>' + task.StatusDescription + '</td>' +
+                                '<td>' + task.taskId + '</td>' +
+                                '<td>' + task.nameTask + '</td>' +
+                                '<td>' + task.startDate + '</td>' +
+                                '<td>' + task.dueDate + '</td>' +
+                                '<td>' + task.userDescription + '</td>' +
+                                '<td>' + task.taskStatusDescription + '</td>' +
                                 '<td>' +
                                 '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-taskId="' + task.taskId + '">Eliminar</button>' +
                                 '</td>' +
@@ -149,6 +158,49 @@
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
+                }
+            });
+        }
+
+        $('#btnSaveTask').click(function () {
+            var task = {
+                nameTask: $('#NameTask').val(),
+                startDate: $('#StartDate').val(),
+                dueDate: $('#DueDate').val(),
+                taskStatusId: $('#taskStatusId').val(),
+                userPassword: $('#userPassword').val(),
+                rolId: $('#rolId').val(),
+                jobTitleId: $('#jobTitleId').val(),
+                departmentId: $('#departmentId').val(),
+                isActive: $('#isActive').val()
+            };
+            registerTask(task);
+        });
+
+        function Register(task)
+        {
+            $.ajax({
+                url: '/TasksEmployee/Register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(task),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        showMessage('Tarea registrada con éxito.', true);
+                        // Limpiar campos del formulario
+                        $('#addUserForm')[0].reset();
+                        // Actualizar la lista de usuarios después de registrar
+                        loadTask();
+                        $('#createTaskModal').modal('hide'); // Ocultar el modal después de registrar
+                    } else {
+                        alert('Error al registrar usuario: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    showMessage('Error al registrar usuario.', false);
                 }
             });
         }
@@ -183,6 +235,10 @@
                 deleteTask(taskId);
             }
         });
+
+            $("#btnAddTask").on('click', function () {
+                $("#createTaskModal").modal('show')
+            });
 
         // Evento para buscar en la tabla
         $('#searchInput').on('keyup', function () {

@@ -30,7 +30,7 @@
             </tbody>
         </table>
 
-        <div class="modal-body" id="editPendingTaskModal" tabindex="-1">
+        <div class="modal-body" id="editPendingTaskModal" hidden tabindex="-1">
             <!-- Modal para Editar Tarea Pendiente-->
             <form asp-action="EditTaskState" method="post">
                 <input asp-for="TaskId" type="hidden" id="TaskId" />
@@ -86,7 +86,7 @@
 
             $.ajax({
 
-                url: '/TaskEmployee/GetAllPendingTask',
+                url: '/TasksEmployee/GetAllPendingTask',
                 type: 'GET',
                 success: function (response) {
                     console.log(response); // Log the response to check for errors
@@ -119,14 +119,14 @@
         }
 
         // Al hacer clic en el botón de editar tareausuario en la tabla
-        $('#taskList').on('click', '.btn-edit', function () {
+        document.getElementById('taskList').addEventListener('click', '.btn-edit', function () {
             var taskId = $(this).data('taskId');
             getPendingTaskById(taskId);
         });
 
         function getPendingTaskById(taskId) {
             $.ajax({
-                url: '/TaskEmployee/GetPendingTaskById?userId=' + taskId,
+                url: '/TasksEmployee/GetPendingTaskById?userId=' + taskId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
