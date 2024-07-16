@@ -42,7 +42,7 @@
                 <!-- Modal para Editar Tarea-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModalLabel">Registrar Nuevo Usuario</h5>
+                        <h5 class="modal-title" id="createTaskModalLabel">Crear Nueva Tarea</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -59,25 +59,28 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                                <input id="taskDate" class="form-control" />
-                            </div>
-
-                            <div class="col-md-3">
                                 <label for="DueDate" class="control-label">Fecha de Finalización</label>
                                 <input id="dueDate" class="form-control" />
                             </div>
 
-                            <div class="col-md-3">
-                                <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
-                                <select id="taskStatusId" class="form-control" name="taskStatusId" required>
-                                    <option>Select Status</option>
-                                    <option value="1">Pending</option>
-                                    <option value="2">Done</option>
+                            <div class="form-group col-md-6">
+                                <label for="TaskStatusDescription" class="control-label">Estatus de la Tarea</label>
+                                <input type="date" id="taskStatusDescription" value="Pendiente" class="form-control" />
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="userId">Cargo</label>
+                                <select class="form-control" id="userId" name="userId" required>
+                                    <option value="">Seleccione un Cargo</option>
+                                    @foreach (var user in ViewBag.Users)
+                                    {
+                                        <option value="@user.UserId">@user.FullName</option>
+                                    }
                                 </select>
                             </div>
+
                             <div class="modal-footer">
-                                <input type="submit" value="Guardar" class="btn btn-success" />
+                                <input type="button" value="Guardar"id="btnSaveTask" class="btn btn-success" />
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                         </form>
@@ -85,30 +88,39 @@
                 </div>
             </div>
 
-        <div class="modal-body" id="editTaskModal" hidden tabindex="-1"> <!-- Modal para Editar Tarea-->
-            <form asp-action="EditTask" method="post">
-                <input asp-for="TaskId" type="hidden" id="editTaskId"/>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                }
-                <div class="col-md-3">
-                    <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                    <input asp-for="NameTask" id="editNameTask" class="form-control" />
-                    <span asp-validation-for="NameTask" class="text-danger"></span>
+        <div class="modal fade" id="editTaskModal" hidden tabindex="-1">
+            <!-- Modal para Editar Tarea-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Editar Tarea</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <div class="modal-body">
+                    <form id="editTaskForm" method="post">
+                        <input type="hidden" id="editTaskId"/>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
+                        }
+                        <div class="col-md-3">
+                            <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                            <input id="editNameTask" class="form-control" />
+                        </div>
 
-                <div class="col-md-3">
-                    <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                    <input asp-for="DueDate" id="editDueDate" class="form-control" />
-                    <span asp-validation-for="DueDate" class="text-danger"></span>
-                </div>
+                        <div class="col-md-3">
+                            <label for="DueDate" class="control-label">Fecha de Finalización</label>
+                            <input id="editDueDate" class="form-control" />
+                        </div>
 
-                <div class="modal-footer">
-                    <input type="submit" value="Modificar" class="btn btn-success" />
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="modal-footer">
+                            <input type="button" value="Modificar" id="btnModifyTask" class="btn btn-success" />
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
 
         </main>
@@ -147,6 +159,7 @@
                                 '<td>' + task.userDescription + '</td>' +
                                 '<td>' + task.taskStatusDescription + '</td>' +
                                 '<td>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-taskId="' + task.taskId + '">Editar</button>' +
                                 '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-taskId="' + task.taskId + '">Eliminar</button>' +
                                 '</td>' +
                                 '</tr>';
@@ -162,19 +175,14 @@
             });
         }
 
+        //Evento para registrar tarea
         $('#btnSaveTask').click(function () {
             var task = {
                 nameTask: $('#NameTask').val(),
-                startDate: $('#StartDate').val(),
                 dueDate: $('#DueDate').val(),
-                taskStatusId: $('#taskStatusId').val(),
-                userPassword: $('#userPassword').val(),
-                rolId: $('#rolId').val(),
-                jobTitleId: $('#jobTitleId').val(),
-                departmentId: $('#departmentId').val(),
-                isActive: $('#isActive').val()
+                userId: $('#userId').val(),
             };
-            registerTask(task);
+            Register(task);
         });
 
         function Register(task)
@@ -191,7 +199,7 @@
                         showMessage('Tarea registrada con éxito.', true);
                         // Limpiar campos del formulario
                         $('#addUserForm')[0].reset();
-                        // Actualizar la lista de usuarios después de registrar
+                        // Actualizar la lista de tareas después de registrar
                         loadTask();
                         $('#createTaskModal').modal('hide'); // Ocultar el modal después de registrar
                     } else {
@@ -200,45 +208,110 @@
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
-                    showMessage('Error al registrar usuario.', false);
+                    showMessage('Error al registrar tarea.', false);
+                }
+            });
+        }
+
+        //Evento para modificar tarea
+        $('#btnModifyTask').click(function () {
+            var task = {
+                nameTask: $('#NameTask').val(),
+                dueDate: $('#DueDate').val(),
+                userId: $('#userId').val(),
+            };
+            Register(task);
+        });
+
+        function update(task) {
+            $.ajax({
+                url: '/TasksEmployee/EditTask',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(task),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        showMessage('Tarea modificada con éxito.', true);
+                        // Limpiar campos del formulario
+                        $('#editTaskForm')[0].reset();
+                        // Actualizar la lista de tareas después de registrar
+                        loadTask();
+                        $('#editTaskModal').modal('hide'); // Ocultar el modal después de editar
+                    } else {
+                        alert('Error al registrar tarea: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    showMessage('Error al modificar la tarea.', false);
                 }
             });
         }
 
         // Función para eliminar usuario
         function deleteTask(taskId) {
-            if (confirm('¿Estás seguro de eliminar este usuario?')) {
+            if (confirm('¿Estás seguro de eliminar este tarea?')) {
                 $.ajax({
                     url: '/User/DeleteTask?id=' + taskId,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.status) {
-                            showMessage('Usuario eliminado exitosamente.', true);
-                            loadTasks(); // Recargar lista de usuarios después de eliminar
+                            showMessage('Tarea eliminado exitosamente.', true);
+                            loadTasks(); // Recargar lista de tareas después de eliminar
                         } else {
-                            alert('Error al eliminar usuario: ' + response.message);
+                            alert('Error al eliminar tarea: ' + response.message);
                         }
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);
-                        showMessage('Error al eliminar usuario.', false);
+                        showMessage('Error al eliminar tarea.', false);
                     }
                 });
             }
+        }
+
+        // Función para editar tarea
+        function getTaskById(taskId) {
+            $.ajax({
+                url: '/TasksEmployee/GetPendingTaskById?userId=' + taskId,
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var user = response.value;
+                        $('#editTaskId').val(task.TaskId);
+                        $('#TaskStatusId').val(task.TaskStatusId);
+                        $('#editTaskModal').modal('show');
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
         }
 
         // Al hacer clic en el botón de eliminar usuario
         $('#taskList').on('click', '.btn-delete', function () {
             var taskId = $(this).data('TaskId');
             // Confirmar antes de eliminar
-            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
                 deleteTask(taskId);
             }
         });
 
-            $("#btnAddTask").on('click', function () {
-                $("#createTaskModal").modal('show')
-            });
+        // Al hacer clic en el botón de editar tarea
+        $('#taskList').on('click', '.btn-delete', function () {
+            var taskId = $(this).data('TaskId');
+            getTaskById(taskId);
+        });
+
+        //<!--Evento para abrir modal para registrar una tarea-->
+        $("#btnAddTask").on('click', function () {
+            $("#createTaskModal").modal('show')
+        });
 
         // Evento para buscar en la tabla
         $('#searchInput').on('keyup', function () {

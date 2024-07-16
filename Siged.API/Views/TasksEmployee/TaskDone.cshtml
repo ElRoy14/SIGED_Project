@@ -29,46 +29,54 @@
             </tbody>
         </table>
 
-        <div class="modal-body" id="editDoneTaskModal" tabindex="-1">
-            <!-- Modal para Editar Tarea Pendiente-->
-            <form asp-action="EditTaskState" method="post">
-                <input asp-for="TaskId" type="hidden" id="TaskId" />
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                }
-
-                <div class="col-md-3">
-                    <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                    <input id="NameTask" class="form-control" />
+        <div class="modal fade" id="editDoneTaskModal" hidden tabindex="-1">
+            <!-- Modal para Editar Tarea Hecha-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editDoneTaskModalLabel">Editar Tarea Hecha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <div class="class=" modal-body"">
+                    <form id="editTaskStateForm" method="post">
+                        <input asp-for="TaskId" type="hidden" id="TaskId" />
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
+                        }
 
-                <div class="col-md-3">
-                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                    <input id="taskDate" class="form-control" />
-                </div>
+                        <div class="col-md-3">
+                            <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                            <input id="NameTask" class="form-control" />
+                        </div>
 
-                <div class="col-md-3">
-                    <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                    <input id="DueDate" class="form-control" />
-                </div>
+                        <div class="col-md-3">
+                            <label for="StartDate" class="control-label">Fecha de Inicio</label>
+                            <input id="taskDate" class="form-control" />
+                        </div>
 
-                <div class="col-md-3">
-                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                    <select asp-for="TaskStatusId" class="form-control" name="TaskStatusId" id="TaskStatusId" required>
-                        <option>Select Status</option>
-                        <option value="1">Pending</option>
-                        <option value="2">Done</option>
-                    </select>
-                    <input asp-for="TaskStatus" id="TaskStatusId" class="form-control" />
-                    <span asp-validation-for="TaskStatus" class="text-danger"></span>
-                </div>
+                        <div class="col-md-3">
+                            <label for="DueDate" class="control-label">Fecha de Finalización</label>
+                            <input id="DueDate" class="form-control" />
+                        </div>
 
-                <div class="modal-footer">
-                    <input type="submit" value="Modificar" class="btn btn-success" />
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="col-md-3">
+                            <label for="StartDate" class="control-label">Fecha de Inicio</label>
+                            <select class="form-control" name="TaskStatusId" id="TaskStatusId" required>
+                                <option>Select Status</option>
+                                <option value="1">Pending</option>
+                                <option value="2">Done</option>
+                            </select>
+                        </div>
+
+                        <div class="modal-footer">
+                            <input type="button" id="modifyTaskState" value="Modificar" class="btn btn-success" />
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
 
     </div>
@@ -132,13 +140,48 @@
                         var user = response.value;
                         $('#TaskId').val(task.TaskId);
                         $('#TaskStatusId').val(task.TaskStatusId);
-                        $('#editPendingTaskModal').modal('show');
+                        $('#editDoneTaskModal').modal('show');
                     } else {
                         alert('Error: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
+                }
+            });
+        }
+
+        document.getElementById('modifyTaskState').addEventListener('click', function () {
+            var task = {
+                taskId: $('#TaskId').val(),
+                taskStatusId: $('#TaskStatusId').val(task.TaskStatusId),
+            }
+            UpdateTaskState(task);
+        });
+
+        function UpdateTaskState(task) {
+            $.ajax({
+                url: '/TasksEmployee/EditTaskState',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(task),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        showMessage('Tarea modificada con éxito.', true);
+                        // Limpiar campos del formulario
+                        $('#editTaskStateForm')[0].reset();
+                        // Actualizar la lista de tareas después de registrar
+                        loadTask();
+                        $('#editTaskModal').modal('hide'); // Ocultar el modal después de editar
+                    } else {
+                        alert('Error al registrar tarea: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    showMessage('Error al modificar la tarea.', false);
                 }
             });
         }

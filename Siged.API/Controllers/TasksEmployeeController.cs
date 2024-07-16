@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
 using Siged.Application.TaskEmployees.DTOs;
 using Siged.Application.TaskEmployees.Interfaces;
+using Siged.Application.Users.Interfaces;
 
 namespace Siged.API.Controllers
 {
@@ -11,6 +12,8 @@ namespace Siged.API.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.Users = _userService.GetAllUserAsync();
+
             return View();
         }
 
@@ -30,10 +33,12 @@ namespace Siged.API.Controllers
         }
 
         private readonly ITaskEmployeeService _taskEmployeeService;
+        private readonly IUserService _userService;
 
-        public TasksEmployeeController(ITaskEmployeeService taskEmployeeService)
+        public TasksEmployeeController(ITaskEmployeeService taskEmployeeService, IUserService userService)
         {
             _taskEmployeeService = taskEmployeeService;
+            _userService = userService;
         }
 
         [HttpGet]
