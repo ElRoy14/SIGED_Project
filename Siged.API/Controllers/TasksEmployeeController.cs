@@ -4,6 +4,7 @@ using Siged.API.Utility;
 using Siged.Application.TaskEmployees.DTOs;
 using Siged.Application.TaskEmployees.Interfaces;
 using Siged.Application.Users.Interfaces;
+using System.Security.Claims;
 
 namespace Siged.API.Controllers
 {
@@ -12,23 +13,31 @@ namespace Siged.API.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.Users = _userService.GetAllUserAsync();
-
+            ViewBag.Users = _userService.GetAllUserAsync().Result;
+        
             return View();
         }
 
         public IActionResult TaskListDone()
         {
+            ViewBag.Users = _userService.GetAllUserAsync().Result;
+
             return View();
         }
 
         public IActionResult PendingTask()
         {
+            ViewBag.UserId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                                        .Select(c => c.Value).SingleOrDefault();
+
             return View();
         }
 
         public IActionResult TaskDone()
         {
+            ViewBag.UserId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                                        .Select(c => c.Value).SingleOrDefault();
+
             return View();
         }
 

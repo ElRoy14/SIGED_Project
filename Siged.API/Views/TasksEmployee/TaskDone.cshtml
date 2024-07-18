@@ -29,71 +29,60 @@
             </tbody>
         </table>
 
-        <div class="modal fade" id="editDoneTaskModal" hidden tabindex="-1">
-            <!-- Modal para Editar Tarea Hecha-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editDoneTaskModalLabel">Editar Tarea Hecha</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="class=" modal-body"">
-                    <form id="editTaskStateForm" method="post">
-                        <input asp-for="TaskId" type="hidden" id="TaskId" />
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                        }
+        <div class="modal fade" id="editDoneTaskModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDoneTaskModalLabel">Editar Tarea Hecha</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editTaskStateForm" method="post">
+                            <input type="hidden" id="TaskId" />
+                            <input type="hidden" id="UserId" value="@ViewBag.UserId" />
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
+                            }
 
-                        <div class="col-md-3">
-                            <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                            <input id="NameTask" class="form-control" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                            <input id="taskDate" class="form-control" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                            <input id="DueDate" class="form-control" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                            <select class="form-control" name="TaskStatusId" id="TaskStatusId" required>
-                                <option>Select Status</option>
-                                <option value="1">Pending</option>
-                                <option value="2">Done</option>
-                            </select>
-                        </div>
-
-                        <div class="modal-footer">
-                            <input type="button" id="modifyTaskState" value="Modificar" class="btn btn-success" />
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
+                            <div class="form-group col-md-12">
+                                <label for="TaskStatusId" class="control-label">Estatus de la Tarea</label>
+                                <select class="form-control" name="TaskStatusId" id="TaskStatusId" required>
+                                    <option value="">Seleccione el Estatus</option>
+                                    <option value="1">Pendiente</option>
+                                    <option value="2">Hecha</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" id="modifyTaskState" value="Modificar" class="btn btn-success" />
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
-            loadTasks();
+            var userId = $("#UserId").val();
+            loadTasks(userId);
         });
 
         // Función para cargar tareas mediante AJAX
-        function loadTasks() {
+        function loadTasks(userId) {
 
 
 
             $.ajax({
 
-                url: '/TaskEmployee/GetAllTaskListDone',
+                url: '/TasksEmployee/GetDoneTaskByUser?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     console.log(response); // Log the response to check for errors
@@ -102,15 +91,14 @@
                         var taskListHtml = '';
                         tasks.forEach(function (task) {
                             taskListHtml += '<tr>' +
-                                '<td>' + task.TaskId + '</td>' +
-                                '<td>' + task.NameTask + '</td>' +
-                                '<td>' + task.StartDate + '</td>' +
-                                '<td>' + task.DueDate + '</td>' +
-                                '<td>' + task.UserDescription + '</td>' +
-                                '<td>' + task.TaskStatusId + '</td>' +
-                                '<td>' + task.StatusDescription + '</td>' +
+                                '<td>' + task.taskId + '</td>' +
+                                '<td>' + task.nameTask + '</td>' +
+                                '<td>' + task.startDate + '</td>' +
+                                '<td>' + task.dueDate + '</td>' +
+                                '<td>' + task.userDescription + '</td>' +
+                                '<td>' + task.taskStatusDescription + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-taskId="' + task.taskId + '">Editar</button>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userId="' + task.userId + '" data-taskStatusId=' + task.taskStatusId + '>Editar</button>' +
                                 '</td>' +
                                 '</tr>';
                         });
@@ -127,19 +115,19 @@
 
         // Al hacer clic en el botón de editar tareausuario en la tabla
         $('#taskList').on('click', '.btn-edit', function () {
-            var taskId = $(this).data('taskId');
-            getPendingTaskById(taskId);
+            var userId = $(this).data('userid');
+            getDoneTaskById(userId);
         });
 
-        function getPendingTaskById(taskId) {
+        function getDoneTaskById(userId) {
             $.ajax({
-                url: '/TaskEmployee/GetDoneTaskByUser?userId=' + taskId,
+                url: '/TasksEmployee/GetDoneTaskByUser?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
-                        var user = response.value;
-                        $('#TaskId').val(task.TaskId);
-                        $('#TaskStatusId').val(task.TaskStatusId);
+                        var task = response.value[0];
+                        document.getElementById('TaskId').value = task.taskId;
+                        document.getElementById('TaskStatusId').value = task.taskStatusId;
                         $('#editDoneTaskModal').modal('show');
                     } else {
                         alert('Error: ' + response.message);
@@ -151,10 +139,10 @@
             });
         }
 
-        document.getElementById('modifyTaskState').addEventListener('click', function () {
+        $('#modifyTaskState').on('click', function () {
             var task = {
                 taskId: $('#TaskId').val(),
-                taskStatusId: $('#TaskStatusId').val(task.TaskStatusId),
+                taskStatusId: $('#TaskStatusId').val(),
             }
             UpdateTaskState(task);
         });
@@ -162,26 +150,26 @@
         function UpdateTaskState(task) {
             $.ajax({
                 url: '/TasksEmployee/EditTaskState',
-                type: 'POST',
+                type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(task),
                 success: function (response) {
                     console.log(response); // Log the response to check for errors
                     if (response.status) {
                         // Mostrar mensaje de éxito
-                        showMessage('Tarea modificada con éxito.', true);
+                        alert('Tarea modificada con éxito.', true);
                         // Limpiar campos del formulario
                         $('#editTaskStateForm')[0].reset();
                         // Actualizar la lista de tareas después de registrar
-                        loadTask();
-                        $('#editTaskModal').modal('hide'); // Ocultar el modal después de editar
+                        loadTasks();
+                        $('#editDoneTaskModal').modal('hide'); // Ocultar el modal después de editar
                     } else {
                         alert('Error al registrar tarea: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
-                    showMessage('Error al modificar la tarea.', false);
+                    alert('Error al modificar la tarea.', false);
                 }
             });
         }
