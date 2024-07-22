@@ -227,7 +227,7 @@ namespace Siged.API.Controllers
             try
             {
                 response.status = true;
-                response.value = await _taskEmployeeService.DeleteAsync(id);
+                response.value = await _taskEmployeeService.DeleteAsync(id); 
                 response.message = "Task information successfully deleted";
             }
             catch (Exception ex)
