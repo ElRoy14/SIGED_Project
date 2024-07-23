@@ -17,7 +17,7 @@
         <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar en la tabla...">
 
         <!-- Botón Agregar Tarea -->
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createTaskModal">Agregar Tarea</button>
+        <button class="btn btn-primary mb-3" id="btnAddTask">Agregar Tarea</button>
 
             <div id="taskList">
                 <!-- Aquí se cargará dinámicamente la tabla de tareas -->
@@ -38,87 +38,100 @@
                 </table>
             </div>
 
-            <div class="modal-body" id="createTaskModal" tabindex="-1"> <!-- Modal para Editar Tarea-->
-                <form asp-action="Create" method="post">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                    }
-                    <div class="col-md-3">
-                        <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                        <input asp-for="NameTask" class="form-control" />
-                        <span asp-validation-for="NameTask" class="text-danger"></span>
+            <div class="modal fade" id="createTaskModal" aria-hidden="true" tabindex="-1">
+                <!-- Modal para Editar Tarea-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createTaskModalLabel">Crear Nueva Tarea</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+                    <div class="modal-body">
+                        <form id="createTaskForm">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
+                            }
+                            <div class="col-md-3">
+                                <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                                <input id="nameTask" class="form-control" />
+                            </div>
 
-                <div class="col-md-3">
-                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                    <input asp-for="StartDate" id="taskDate" class="form-control" />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
+                            <div class="col-md-3">
+                                <label for="DueDate" class="control-label">Fecha de Finalización</label>
+                                <input id="dueDate" class="form-control" />
+                            </div>
 
-                <div class="col-md-3">
-                    <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                    <input asp-for="DueDate" class="form-control" />
-                    <span asp-validation-for="DueDate" class="text-danger"></span>
-                </div>
+                            <div class="form-group col-md-6">
+                                <label for="TaskStatusDescription" class="control-label">Estatus de la Tarea</label>
+                                <input id="taskStatusDescription" value="Pendiente" class="form-control" readonly/>
+                            </div>
 
-                <div class="col-md-3">
-                    <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
-                    <select class="form-control" name="taskStatusId" required>
-                        <option>Select Status</option>
-                        @foreach (var status in ViewBag.Status)
-                        {
-                            <option value="@status.TaskStatusId">@status.TaskStatus</option>
-                        }
-                    </select>
+                            <div class="form-group col-md-6">
+                                <label for="userId">Asignar Tarea a Empleado</label>
+                                <select class="form-control" id="userId" name="userId" required>
+                                    <option value="">Seleccione un Empleado</option>
+                                    @foreach (var user in ViewBag.Users)
+                                    {
+                                        <option value="@user.UserId">@user.FullName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="modal-footer">
+                                <input type="button" value="Guardar"id="btnSaveTask" class="btn btn-success" />
+                            <button type="button" class="btn btn-danger" id="closeCreateModal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Guardar" class="btn btn-success" />
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                </div>
-                </form>
             </div>
 
-        <div class="modal-body" id="editTaskModal" tabindex="-1"> <!-- Modal para Editar Tarea-->
-            <form asp-action="Edit" method="post">
-                <input asp-for="TaskId" type="hidden" id="editTaskId"/>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                }
-                <div class="col-md-3">
-                    <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                    <input asp-for="NameTask" id="editNameTask" class="form-control" />
-                    <span asp-validation-for="NameTask" class="text-danger"></span>
+        <div class="modal fade" id="editTaskModal" aria-hidden="true" tabindex="-1">
+            <!-- Modal para Editar Tarea-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Editar Tarea</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-
-                <div class="col-md-3">
-                    <label for="StartDate" class="control-label">Fecha de Inicio</label>
-                    <input asp-for="StartDate" id="editStartDate" class="form-control" />
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                    <input asp-for="DueDate" id="editDueDate" class="form-control" />
-                    <span asp-validation-for="DueDate" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="TaskStatus" class="control-label">Estatus de la Tarea</label>
-                    <select class="form-control" id="editStatusTask" required>
-                        <option>Select Status</option>
-                        @foreach (var status in ViewBag.Status)
+                <div class="modal-body">
+                    <form id="editTaskForm" method="post">
+                        <input type="hidden" id="editTaskId"/>
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            <option value="@status.TaskStatusId">@status.TaskStatus</option>
+                            <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
                         }
-                    </select>
+                        <div class="col-md-3">
+                            <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                            <input id="editNameTask" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="DueDate" class="control-label">Fecha de Finalización</label>
+                            <input id="editDueDate" class="form-control" />
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="userId">Asignar Tarea a Empleado</label>
+                            <select class="form-control" id="editUserId" name="userId" required>
+                                <option value="">Seleccione un Empleado</option>
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <option value="@user.UserId">@user.FullName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="modal-footer">
+                            <input type="button" value="Modificar" id="btnModifyTask" class="btn btn-success" />
+                            <button type="button" class="btn btn-danger" id="closeEditModal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <input type="submit" value="Guardar" class="btn btn-success" />
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                </div>
-            </form>
+            </div>
         </div>
 
         </main>
@@ -128,37 +141,33 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script>
 
-        var fecha = new Date();
-
-        document.getElementById("taskDate").value = fecha.getFullYear() + "-" + fecha.getMonth() + "-" + fecha.getDay() + " " + fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
-        console.log(document.getElementById("taskDate").value);
-
         document.addEventListener("DOMContentLoaded", function (event) {
-            loadUsers();
+            loadTasks();
         });
 
         // Función para cargar tareas mediante AJAX
-        function loadUsers() {
+        function loadTasks() {
             $.ajax({
-                url: '/TaskEmployee/GetTasksByName',
+                url: '/TasksEmployee/GetAllTask',
                 type: 'GET',
                 success: function (response) {
-                    console.log(response); // Log the response to check for errors
+                    console.log(response.value[0].nameTask) // Log the response to check for errors
+                    console.log(response)
                     if (response.status) {
                         var tasks = response.value;
                         var taskListHtml = '';
                         tasks.forEach(function (task) {
                             taskListHtml += '<tr>' +
-                                '<td>' + task.TaskId + '</td>' +
-                                '<td>' + task.NameTask + '</td>' +
-                                '<td>' + task.StartDate + '</td>' +
-                                '<td>' + task.DueDate + '</td>' +
-                                '<td>' + task.UserDescription + '</td>' +
-                                '<td>' + task.StatusDescription + '</td>' +
+                                '<td>' + task.taskId + '</td>' +
+                                '<td>' + task.nameTask + '</td>' +
+                                '<td>' + task.startDate + '</td>' +
+                                '<td>' + task.dueDate + '</td>' +
+                                '<td>' + task.userDescription + '</td>' +
+                                '<td>' + task.taskStatusDescription + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-taskId="' + task.taskId + '">Editar</button>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userId="' + task.userId + '">Editar</button>' +
                                 '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-taskId="' + task.taskId + '">Eliminar</button>' +
-                                '</td>' +
+                                '</td>' 
                                 '</tr>';
                         });
                         $('#taskList tbody').html(taskListHtml); // Inserta las filas de usuarios en la tabla
@@ -172,17 +181,117 @@
             });
         }
 
-        function getTaskById(taskId) {
+        //Evento para registrar tarea
+        $('#btnSaveTask').click(function () {
+            var task = {
+                nameTask: $('#nameTask').val(),
+                dueDate: $('#dueDate').val(),
+                userId: $('#userId').val(),
+            };
+            Register(task);
+        });
+
+        function Register(task)
+        {
             $.ajax({
-                url: '/TaskEmployee/GetTaskById?id=' + taskId,
+                url: '/TasksEmployee/Register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(task),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        alert('Tarea registrada con éxito.', true);
+                        // Limpiar campos del formulario
+                        $('#createTaskForm')[0].reset();
+                        $('#createTaskModal').modal('hide'); // Ocultar el modal después de registrar
+                        // Actualizar la lista de tareas después de registra
+                        loadTasks();
+                    } else {
+                        alert('Error al registrar usuario: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Error al registrar tarea.', false);
+                }
+            });
+        }
+
+        //Evento para modificar tarea
+        $('#btnModifyTask').click(function () {
+            var task = {
+                taskId: $('#editTaskId').val(),
+                nameTask: $('#editNameTask').val(),
+                dueDate: $('#editDueDate').val(),
+                userId: $('#editUserId').val(),
+            };
+            Update(task);
+        });
+
+        function Update(task) {
+            console.log(task);
+            $.ajax({
+                url: '/TasksEmployee/EditTask',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(task),
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        // Mostrar mensaje de éxito
+                        alert('Tarea modificada con éxito.', true);
+                        // Limpiar campos del formulario
+                        $('#editTaskForm')[0].reset();
+                        // Actualizar la lista de tareas después de registrar
+                        loadTasks();
+                        $('#editTaskModal').modal('hide'); // Ocultar el modal después de editar
+                    } else {
+                        alert('Error al registrar tarea: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Error al modificar la tarea.', false);
+                }
+            });
+        }
+
+        // Función para eliminar usuario
+        function deleteTask(taskId) {
+            if (confirm('¿Estás seguro de eliminar este tarea?')) {
+                $.ajax({
+                    url: '/TasksEmployee/DeleteTask?id=' + taskId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.status) {
+                            alert('Tarea eliminado exitosamente.', true);
+                            loadTasks(); // Recargar lista de tareas después de eliminar
+                        } else {
+                            alert('Error al eliminar tarea: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('Error al eliminar tarea.', false);
+                    }
+                });
+            }
+        }
+
+        // Función para editar tarea
+        function getTaskById(userId) {
+            $.ajax({
+                url: '/TasksEmployee/GetPendingTaskByUser?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
-                        var user = response.value;
-                        $('#editTaskId').val(task.TaskId);
-                        $('#editNameTask').val(task.NameTask);
-                        $('#editDueDate').val(task.DueDate);
-                        $('#editTaskStatus').val(task.TaskStatus);
+                        var task = response.value[0];
+                        document.getElementById('editTaskId').value = task.taskId;
+                        document.getElementById('editNameTask').value = task.nameTask;
+                        document.getElementById('editDueDate').value = task.dueDate;
+                        document.getElementById('editUserId').value = task.userId;
                         $('#editTaskModal').modal('show');
                     } else {
                         alert('Error: ' + response.message);
@@ -194,6 +303,28 @@
             });
         }
 
+        // Al hacer clic en el botón de eliminar usuario
+        $('#taskList').on('click', '.btn-delete', function () {
+            var taskId = $(this).data('taskid');
+            // Confirmar antes de eliminar
+            console.log(taskId);
+            if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+                deleteTask(taskId);
+            }
+        });
+
+        // Al hacer clic en el botón de editar tarea
+        $('#taskList').on('click', '.btn-edit', function () {
+            console.log($(this).data('userid'))
+            var userId = $(this).data('userid');
+            getTaskById(userId);
+        });
+
+        //<!--Evento para abrir modal para registrar una tarea-->
+        $("#btnAddTask").on('click', function () {
+            $("#createTaskModal").modal('show')
+        });
+
         // Evento para buscar en la tabla
         $('#searchInput').on('keyup', function () {
             var value = $(this).val().toLowerCase();
@@ -202,10 +333,12 @@
             });
         });
 
-        // Al hacer clic en el botón de editar usuario en la tabla
-        $('#taskList').on('click', '.btn-edit', function () {
-            var taskId = $(this).data('taskId');
-            getTaskById(taskId);
+        $('#closeEditModal').on('click', function () {
+            $('#editTaskModal').modal('hide');
+        });
+
+        $('#closeCreateModal').on('click', function () {
+            $('#createTaskModal').modal('hide');
         });
 
         </script>

@@ -1,6 +1,79 @@
-﻿@{
+﻿@model Siged.Domain.TasksEmployee;
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Prueba tareas hechas</h1>
+<html lang="es">
+<head>
+
+</head>
+<body>
+    <div id="taskList">
+        <!-- Aquí se cargará dinámicamente la tabla de tareas -->
+        <input type="hidden" id="TaskId" />
+        <input type="hidden" id="UserId" value="@ViewBag.UserId" />
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Tarea</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Finalización</th>
+                    <th>Empleado</th>
+                    <th>Estatus</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se insertarán dinámicamente las filas de las tareas -->
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var userId = $("#UserId").val();
+            loadTasks(userId);
+        });
+
+        // Función para cargar tareas mediante AJAX
+        function loadTasks(userId) {
+
+            $.ajax({
+
+                url: '/TasksEmployee/GetDoneTaskByUser?userId=' + userId,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        var tasks = response.value;
+                        var taskListHtml = '';
+                        tasks.forEach(function (task) {
+                            taskListHtml += '<tr>' +
+                                '<td>' + task.taskId + '</td>' +
+                                '<td>' + task.nameTask + '</td>' +
+                                '<td>' + task.startDate + '</td>' +
+                                '<td>' + task.dueDate + '</td>' +
+                                '<td>' + task.userDescription + '</td>' +
+                                '<td>' + task.taskStatusDescription + '</td>' +
+                                '</tr>';
+                        });
+                        $('#taskList tbody').html(taskListHtml); // Inserta las filas de usuarios en la tabla
+                    } else {
+                        $('#taskList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

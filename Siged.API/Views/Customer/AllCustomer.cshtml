@@ -1,8 +1,134 @@
-﻿
-@{
-    ViewData["Title"] = "AllCustomer";
+﻿@{
+    ViewData["Title"] = "Lista de Clientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AllCustomer</h1>
+<div class="container">
+    <h1>Listado de Clientes</h1>
 
+    <div id="customerList">
+        <!-- Tabla de clientes -->
+        <table id="customerTable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Cedula</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Correo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de clientes se insertarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+
+    <script>
+        // Función para cargar clientes vía AJAX
+        function loadCustomers() {
+            $.ajax({
+                url: '/Customer/GetCustomr',
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var customers = response.value;
+                        var customerListHtml = '';
+                        customers.forEach(function (customer) {
+                            customerListHtml += '<tr>' +
+                                '<td>' + customer.identificationCard + '</td>' +
+                                '<td>' + customer.fullName + '</td>' +
+                                '<td>' + customer.phoneNumber + '</td>' +
+                                '<td>' + customer.email + '</td>' +
+                                '</tr>';
+                        });
+                        $('#customerTable tbody').html(customerListHtml); // Insertar filas de clientes en la tabla
+
+                        // Inicializar DataTable
+                        $('#customerTable').DataTable({
+                            "paging": true,
+                            "lengthChange": false,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false,
+                            "responsive": true,
+                            "language": {
+                                "paginate": {
+                                    "first": "Primero",
+                                    "last": "Último",
+                                    "next": "Siguiente",
+                                    "previous": "Anterior"
+                                },
+                                "search": "Buscar:",
+                                "info": "Mostrando _START_ a _END_ de _TOTAL_ clientes",
+                                "infoEmpty": "Mostrando 0 a 0 de 0 clientes",
+                                "infoFiltered": "(filtrado de _MAX_ clientes en total)",
+                                "zeroRecords": "No se encontraron resultados"
+                            }
+                        });
+                    } else {
+                        console.log('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + xhr.responseText);
+                }
+            });
+        }
+
+        // Cargar clientes al cargar la página
+        $(document).ready(function () {
+            loadCustomers();
+        });
+    </script>
+}
+
+<style>
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+</style>

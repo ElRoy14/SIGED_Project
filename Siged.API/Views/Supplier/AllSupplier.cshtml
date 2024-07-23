@@ -3,4 +3,115 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba lista de todos los proveedores</h1>
+<div class="container">
+    <h2 class="text-center">Listado de Proveedores</h2>
+
+    <!-- Campo de búsqueda -->
+    <input type="text" id="searchInput" class="form-control mb-4" placeholder="Buscar en la tabla...">
+
+    <div id="supplierList">
+        <!-- Tabla de proveedores -->
+        <table id="supplierTable" class="table table-bordered table-hover table-striped">
+            <thead style="background-color: #accff3;">
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de proveedores se insertarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+
+    <script>
+        // Función para cargar proveedores vía AJAX
+        function loadSuppliers() {
+            $.ajax({
+                url: '/Supplier/GetSupplier',
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var suppliers = response.value;
+                        var supplierListHtml = '';
+                        suppliers.forEach(function (supplier) {
+                            supplierListHtml += '<tr>' +
+                                '<td>' + supplier.identificationCard + '</td>' +
+                                '<td>' + supplier.fullName + '</td>' +
+                                '<td>' + supplier.phoneNumber + '</td>' +
+                                '<td>' + supplier.email + '</td>' +
+                                '</tr>';
+                        });
+                        $('#supplierTable tbody').html(supplierListHtml); // Insertar filas de proveedores en la tabla
+                        $('#supplierTable').DataTable(); // Inicializar DataTables
+                    } else {
+                        console.error('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error: ' + xhr.responseText);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadSuppliers(); // Cargar proveedores al cargar la página
+
+            // Filtrar tabla
+            $('#searchInput').keyup(function () {
+                var value = $(this).val().toLowerCase();
+                $('#supplierTable').DataTable().search(value).draw(); // Usar DataTables para filtrar
+            });
+        });
+    </script>
+}

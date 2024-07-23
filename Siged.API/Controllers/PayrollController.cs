@@ -1,27 +1,38 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
+using Siged.Application.Customers.DTOs;
 using Siged.Application.Payrolls.DTOs;
 using Siged.Application.Payrolls.Interfaces;
 using Siged.Application.Roles.Interfaces;
 using Siged.Application.Salarys.DTOs;
+using Siged.Application.Tax.Interfaces;
 using Siged.Application.Users.DTOs;
+using Siged.Application.Users.Interfaces;
 
 namespace Siged.API.Controllers
 {
     [Authorize]
     public class PayrollController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         private readonly IPayrollService _payrollService;
+        private readonly IUserService _userService;
+        private readonly ITaxesService _taxService;
 
-        public PayrollController(IPayrollService payrollService)
+        public PayrollController(IPayrollService payrollService, IUserService userService, ITaxesService taxService)
         {
             _payrollService = payrollService;
+            _userService = userService;
+            _taxService = taxService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            ViewBag.Users = await _userService.GetAllUserAsync();
+            ViewBag.Taxes = await _taxService.GetAllTaxesAsync();
+            ViewBag.Payrolls = await _payrollService.GetAllPayrollsAsync();
+
+            return View();
         }
 
 
@@ -66,6 +77,28 @@ namespace Siged.API.Controllers
             return Ok(response);
 
         }
+        [HttpDelete]
+        public async Task<IActionResult> DeletePayroll(int id)
+        {
+            var response = new Response<bool>();
+
+            try
+            {
+                response.status = true;
+                response.value = await _payrollService.DeleteAsync(id);
+                response.message = "User information successfully deleted";
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+
+        }
+
+
 
         [HttpPut]
         public async Task<IActionResult> EditPayroll([FromBody] UpdatePayroll payroll)
@@ -88,16 +121,26 @@ namespace Siged.API.Controllers
 
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeletePayroll(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetPayrollById(int id)
         {
-            var response = new Response<bool>();
+            var response = new Response<GetPayroll>();
 
             try
             {
-                response.status = true;
-                response.value = await _payrollService.DeleteAsync(id);
-                response.message = "User information successfully deleted";
+                var payroll = await _payrollService.GetPayrollByIdAsync(id);
+
+                if (payroll != null)
+                {
+                    response.status = true;
+                    response.value = payroll;
+                    response.message = "Payroll found";
+                }
+                else
+                {
+                    response.status = false;
+                    response.message = $"Payroll with id {id} not found";
+                }
             }
             catch (Exception ex)
             {
@@ -106,7 +149,6 @@ namespace Siged.API.Controllers
             }
 
             return Ok(response);
-
         }
 
     }
