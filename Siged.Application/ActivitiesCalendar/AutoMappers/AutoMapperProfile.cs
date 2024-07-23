@@ -25,7 +25,16 @@ namespace Siged.Application.ActivitiesCalendar.AutoMappers
                 dest.DueDate,
                 opt => opt.MapFrom(src => src.DueDate));
 
-            CreateMap<GetTask, Event>().ReverseMap();
+            CreateMap<Event, GetTask>()
+                .ForMember(dest =>
+                dest.NameTask,
+                opt => opt.Ignore())
+                .ForMember(dest =>
+                dest.StartDate,
+                opt => opt.Ignore())
+                .ForMember(dest =>
+                dest.DueDate,
+                opt => opt.Ignore());
 
         }
     }

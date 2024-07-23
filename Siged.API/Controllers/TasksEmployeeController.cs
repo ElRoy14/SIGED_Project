@@ -178,6 +178,27 @@ namespace Siged.API.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTaskById(int taskId)
+        {
+            var response = new Response<GetTask>();
+
+            try
+            {
+                response.status = true;
+                response.value = await _taskEmployeeService.GetTaskById(taskId);
+                response.message = "Successful task";
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+
+        }
+
         [HttpPut]
         public async Task<IActionResult> EditTask([FromBody] UpdateTask task)
         {
