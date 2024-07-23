@@ -15,10 +15,10 @@ namespace Siged.Application.ActivitiesCalendar.Services
 {
     public class ActivitiesCalendarService : IActivitiesCalendarService
     {
-        private readonly IGenericRepository<TasksEmployee> _taskRepository;
+        private readonly IGenericRepository<GetTask> _taskRepository;
         private readonly IMapper _mapper;
 
-        public ActivitiesCalendarService(IGenericRepository<TasksEmployee> taskRepository, IMapper mapper)
+        public ActivitiesCalendarService(IGenericRepository<GetTask> taskRepository, IMapper mapper)
         {
             _taskRepository = taskRepository;
             _mapper = mapper;

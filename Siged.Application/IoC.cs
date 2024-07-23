@@ -33,6 +33,8 @@ using Siged.Application.PerformanceEvaluations.Interfaces;
 using Siged.Application.PerformanceEvaluations.Services;
 using Siged.Application.TaskStatusEmployees.Interfaces;
 using Siged.Application.TaskStatusEmployees.Services;
+using Siged.Application.ActivitiesCalendar.Interfaces;
+using Siged.Application.ActivitiesCalendar.Services;
 
 namespace Siged.Application
 {
@@ -57,9 +59,8 @@ namespace Siged.Application
                 .AddScoped<IEvaluatorsService, EvaluatorsService>()
                 .AddScoped<IPerformanceEvaluationService, PerformanceEvalutionService>()
                 .AddScoped<ITaskStatusEmployeeService, TaskStatusEmployeeService>()
-                .AddScoped<ITaskEmployeeService, TaskEmployeeService>();
-
-
+                .AddScoped<ITaskEmployeeService, TaskEmployeeService>()
+                 .AddScoped<IActivitiesCalendarService, ActivitiesCalendarService>(); 
 
         }
 
