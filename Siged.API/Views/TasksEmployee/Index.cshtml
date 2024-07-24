@@ -90,46 +90,41 @@
 
         <div class="modal fade" id="editTaskModal" aria-hidden="true" tabindex="-1">
             <!-- Modal para Editar Tarea-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editTaskModalLabel">Editar Tarea</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editTaskForm" method="post">
-                        <input type="hidden" id="editTaskId"/>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
-                        }
-                        <div class="col-md-3">
-                            <label for="NameTask" class="control-label">Nombre de la Tarea</label>
-                            <input id="editNameTask" class="form-control" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                            <input id="editDueDate" class="form-control" />
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label for="userId">Asignar Tarea a Empleado</label>
-                            <select class="form-control" id="editUserId" name="userId" required>
-                                <option value="">Seleccione un Empleado</option>
-                                @foreach (var user in ViewBag.Users)
-                                {
-                                    <option value="@user.UserId">@user.FullName</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="modal-footer">
-                            <input type="button" value="Modificar" id="btnModifyTask" class="btn btn-success" />
-                            <button type="button" class="btn btn-danger" id="closeEditModal">Cancelar</button>
-                        </div>
-                    </form>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTaskModalLabel">Editar Tarea</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editTaskForm" method="post">
+                            <input type="hidden" id="editTaskId" />
+                            <div class="form-group col-md-6">
+                                <label for="editNameTask" class="control-label">Nombre de la Tarea</label>
+                                <input id="editNameTask" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editDueDate" class="control-label">Fecha de Finalización</label>
+                                <input id="editDueDate" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editUserId">Asignar Tarea a Empleado</label>
+                                <select class="form-control" id="editUserId" name="editUserId" required>
+                                    <option value="">Seleccione un Empleado</option>
+                                    @foreach (var user in ViewBag.Users)
+                                    {
+                                        <option value="@user.UserId">@user.FullName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" value="Modificar" id="btnModifyTask" class="btn btn-success" />
+                                <button type="button" class="btn btn-danger" id="closeEditModal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -227,6 +222,7 @@
                 dueDate: $('#editDueDate').val(),
                 userId: $('#editUserId').val(),
             };
+            console.log('Datos a enviar:', task);
             Update(task);
         });
 
@@ -240,15 +236,12 @@
                 success: function (response) {
                     console.log(response); // Log the response to check for errors
                     if (response.status) {
-                        // Mostrar mensaje de éxito
                         alert('Tarea modificada con éxito.', true);
-                        // Limpiar campos del formulario
                         $('#editTaskForm')[0].reset();
-                        // Actualizar la lista de tareas después de registrar
                         loadTasks();
-                        $('#editTaskModal').modal('hide'); // Ocultar el modal después de editar
+                        $('#editTaskModal').modal('hide');
                     } else {
-                        alert('Error al registrar tarea: ' + response.message);
+                        alert('Error al modificar la tarea: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -281,17 +274,17 @@
         }
 
         // Función para editar tarea
-        function getTaskById(userId) {
+        function getPendingTasksByUser(userId) {
             $.ajax({
                 url: '/TasksEmployee/GetPendingTaskByUser?userId=' + userId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
-                        var task = response.value[0];
-                        document.getElementById('editTaskId').value = task.taskId;
-                        document.getElementById('editNameTask').value = task.nameTask;
-                        document.getElementById('editDueDate').value = task.dueDate;
-                        document.getElementById('editUserId').value = task.userId;
+                        var task = response.value[0]; // Suponemos que solo hay una tarea pendiente por usuario
+                        $('#editTaskId').val(task.taskId);
+                        $('#editNameTask').val(task.nameTask);
+                        $('#editDueDate').val(task.dueDate);
+                        $('#editUserId').val(task.userId);
                         $('#editTaskModal').modal('show');
                     } else {
                         alert('Error: ' + response.message);
@@ -315,9 +308,8 @@
 
         // Al hacer clic en el botón de editar tarea
         $('#taskList').on('click', '.btn-edit', function () {
-            console.log($(this).data('userid'))
             var userId = $(this).data('userid');
-            getTaskById(userId);
+            getPendingTasksByUser(userId);
         });
 
         //<!--Evento para abrir modal para registrar una tarea-->
@@ -333,6 +325,7 @@
             });
         });
 
+        // Cerrar el modal de edición
         $('#closeEditModal').on('click', function () {
             $('#editTaskModal').modal('hide');
         });
