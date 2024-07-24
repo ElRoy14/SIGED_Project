@@ -158,7 +158,7 @@
                                 '<td>' + task.userDescription + '</td>' +
                                 '<td>' + task.taskStatusDescription + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userId="' + task.userId + '">Editar</button>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userId="' + task.userId + '" data-taskId="' + task.taskId + '">Editar</button>' +
                                 '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-taskId="' + task.taskId + '">Eliminar</button>' +
                                 '</td>'
                             '</tr>';
@@ -273,13 +273,14 @@
         }
 
         // Función para editar tarea
-        function getTaskById(userId) {
+        function getTaskById(taskId) {
             $.ajax({
-                url: '/TasksEmployee/GetPendingTaskByUser?userId=' + userId,
+                url: '/TasksEmployee/GetTaskById?taskId=' + taskId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
-                        var task = response.value[0];
+                        var task = response.value;
+                        console.log(task)
                         document.getElementById('editTaskId').value = task.taskId;
                         document.getElementById('editNameTask').value = task.nameTask;
                         document.getElementById('editDueDate').value = task.dueDate;
@@ -307,9 +308,9 @@
 
         // Al hacer clic en el botón de editar tarea
         $('#taskList').on('click', '.btn-edit', function () {
-            console.log($(this).data('userid'))
-            var userId = $(this).data('userid');
-            getTaskById(userId);
+            console.log($(this).data('taskid'))
+            var taskId = $(this).data('taskid');
+            getTaskById(taskId);
         });
 
         //<!--Evento para abrir modal para registrar una tarea-->

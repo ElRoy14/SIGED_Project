@@ -9,6 +9,7 @@ namespace Siged.Application.TaskEmployees.Interfaces
         Task<List<GetTask>> GetAllTaskListDoneAsync();
         Task<List<GetTask>> GetPendingTaskByEmployee(int userId);
         Task<List<GetTask>> GetTaskDoneByEmployee(int userId);
+        Task<GetTask> GetTaskById(int id);
         Task<GetTask> CreateTask (CreateTask model);
         Task<bool> UpdateAsync(UpdateTask model);
         Task<bool> UpdateStateAsync(UpdateStateTask model);
