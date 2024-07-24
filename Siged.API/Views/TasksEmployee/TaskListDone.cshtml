@@ -273,9 +273,9 @@
         }
 
         // Función para editar tarea
-        function getTaskById(userId) {
+        function getTaskById(taskId) {
             $.ajax({
-                url: '/TasksEmployee/GetPendingTaskByUser?userId=' + userId,
+                url: '/TasksEmployee/GetTaskById?taskId=' + taskId,
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
@@ -307,9 +307,9 @@
 
         // Al hacer clic en el botón de editar tarea
         $('#taskList').on('click', '.btn-edit', function () {
-            console.log($(this).data('userid'))
-            var userId = $(this).data('userid');
-            getTaskById(userId);
+            console.log($(this).data('taskid'))
+            var taskId = $(this).data('taskid');
+            getTaskById(taskId);
         });
 
         //<!--Evento para abrir modal para registrar una tarea-->

@@ -4,6 +4,7 @@ using Siged.Application.ActivitiesCalendar.Interfaces;
 using Siged.Application.TaskEmployees.DTOs;
 using Siged.Domain;
 using Siged.Domain.Entities;
+using Siged.Domain.Enums;
 using Siged.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Siged.Application.ActivitiesCalendar.Services
             try
             {
                 var evento = await _taskRepository
-                    .VerifyDataExistenceAsync(task => task.TaskStatusId == 1);
+                    .VerifyDataExistenceAsync(task => task.TaskStatusId == (int)TaskStatusEmployeeOption.Pending);
 
                 return _mapper.Map<List<Event>>(evento.ToList());
             }

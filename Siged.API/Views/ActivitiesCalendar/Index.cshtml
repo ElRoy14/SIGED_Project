@@ -38,7 +38,9 @@
                         var events = response.value;
                         console.log(events);
                         console.log(response);
-                        calendarEvents.push(events);
+                        foreach(var e in events){
+                            calendarEvents.push(e);
+                        }
                     } else {
                         $('#calendar').html('<div class="alert alert-danger">' + response.message + '</div>');
                     }

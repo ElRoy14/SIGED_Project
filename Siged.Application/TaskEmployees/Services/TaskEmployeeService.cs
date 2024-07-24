@@ -113,7 +113,20 @@ namespace Siged.Application.TaskEmployees.Services
             return await GetTaskByUserAsync(userId, TaskStatusEmployeeOption.Done);
         }
 
+        public async Task<GetTask> GetTaskById(int id)
+        {
+            try
+            {
+                var task = await _taskRepository
+                    .GetByIdAsync(id);
 
+                return _mapper.Map<GetTask>(task);
+            }
+            catch
+            {
+                throw new GetTaskFailedException();
+            }
+        }
 
         public async Task<GetTask> CreateTask(CreateTask model)
         {
@@ -243,6 +256,5 @@ namespace Siged.Application.TaskEmployees.Services
             }
         }
 
-        
     }
 }
