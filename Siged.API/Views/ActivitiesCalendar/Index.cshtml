@@ -26,30 +26,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             var initialLocaleCode = "es";
             var calendarEl = document.getElementById("calendar");
-            var calendarEvents = [];
-
-            $.ajax({
-
-                url: '/ActivitiesCalendar/GetAllEvents',
-                type: 'GET',
-                success: function (response) {
-                    console.log(response); // Log the response to check for errors
-                    if (response.status) {
-                        var events = response.value;
-                        console.log(events);
-                        console.log(response);
-                        foreach(var e in events){
-                            calendarEvents.push(e);
-                        }
-                    } else {
-                        $('#calendar').html('<div class="alert alert-danger">' + response.message + '</div>');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 themeSystem: "bootstrap5",
@@ -64,20 +40,39 @@
                 navLinks: true, // can click day/week names to navigate views
                 editable: true,
                 dayMaxEvents: true, // allow "more" link when too many events
-                events: [{
-                    title: 'example',
-                    start: '2024-07-03',
-                    end: '2024-07-05',
-                },
-                {
-                    title: 'Click for Google',
-                    start: '2024-07-15',
-                    end: '2024-07-20',
-                },]
+                events: []
             });
 
             calendar.render();
+
+            $.ajax({
+
+                url: '/ActivitiesCalendar/GetAllEvents',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response); // Log the response to check for errors
+                    if (response.status) {
+                        var events = response.value;
+                        console.log(events);
+                        var calendarEvents = [];
+                        events.forEach(function (task) {
+                            calendar.addEvent({
+                                title: task.title,
+                                start: task.start,
+                                end: task.end,
+                            })
+                        })
+                        
+                    } else {
+                        $('#calendar').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
         });
+        console.log(calendar);
     </script>
     </body>
 </html>

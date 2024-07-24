@@ -158,7 +158,7 @@
                                 '<td>' + task.userDescription + '</td>' +
                                 '<td>' + task.taskStatusDescription + '</td>' +
                                 '<td>' +
-                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userId="' + task.userId + '">Editar</button>' +
+                                '<button class="btn btn-sm btn-warning btn-custom btn-edit" data-userId="' + task.userId + '" data-taskId="' + task.taskId + '">Editar</button>' +
                                 '<button class="btn btn-sm btn-danger btn-custom btn-delete" data-taskId="' + task.taskId + '">Eliminar</button>' +
                                 '</td>'
                             '</tr>';
@@ -279,7 +279,8 @@
                 type: 'GET',
                 success: function (response) {
                     if (response.status) {
-                        var task = response.value[0];
+                        var task = response.value;
+                        console.log(task)
                         document.getElementById('editTaskId').value = task.taskId;
                         document.getElementById('editNameTask').value = task.nameTask;
                         document.getElementById('editDueDate').value = task.dueDate;

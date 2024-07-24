@@ -19,14 +19,14 @@ namespace Siged.Application.ActivitiesCalendar.AutoMappers
                 dest.Title,
                 opt => opt.MapFrom(src => $"{src.UserDescription}: {src.NameTask}"))
                 .ForMember(dest => 
-                dest.StartDate,
+                dest.Start,
                 opt => opt.MapFrom(src => src.StartDate.ToString()))
                 .ForMember(dest => 
-                dest.DueDate,
+                dest.End,
                 opt => opt.MapFrom(src => src.DueDate));
 
             CreateMap<Event, GetTask>()
-                .ForMember(dest =>
+                .ForMember(dest => 
                 dest.NameTask,
                 opt => opt.Ignore())
                 .ForMember(dest =>

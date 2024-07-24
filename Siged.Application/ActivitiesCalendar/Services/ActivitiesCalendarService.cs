@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Siged.Application.ActivitiesCalendar.Exceptions;
 using Siged.Application.ActivitiesCalendar.Interfaces;
 using Siged.Application.TaskEmployees.DTOs;
@@ -16,10 +17,10 @@ namespace Siged.Application.ActivitiesCalendar.Services
 {
     public class ActivitiesCalendarService : IActivitiesCalendarService
     {
-        private readonly IGenericRepository<GetTask> _taskRepository;
+        private readonly IGenericRepository<TasksEmployee> _taskRepository;
         private readonly IMapper _mapper;
 
-        public ActivitiesCalendarService(IGenericRepository<GetTask> taskRepository, IMapper mapper)
+        public ActivitiesCalendarService(IGenericRepository<TasksEmployee> taskRepository, IMapper mapper)
         {
             _taskRepository = taskRepository;
             _mapper = mapper;
@@ -29,10 +30,16 @@ namespace Siged.Application.ActivitiesCalendar.Services
         {
             try
             {
-                var evento = await _taskRepository
+                var taskQuery = await _taskRepository
                     .VerifyDataExistenceAsync(task => task.TaskStatusId == (int)TaskStatusEmployeeOption.Pending);
 
-                return _mapper.Map<List<Event>>(evento.ToList());
+                var listTasks = taskQuery
+                                .Include(status => status.User)
+                                .Include(user => user.TaskStatus).ToList();
+
+                var mappedEvents = _mapper.Map<List<GetTask>>(listTasks);
+
+                return _mapper.Map<List<Event>>(mappedEvents);
             }
             catch
             {
