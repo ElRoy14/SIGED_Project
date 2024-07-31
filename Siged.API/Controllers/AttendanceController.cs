@@ -73,6 +73,12 @@ namespace Siged.API.Controllers
             return View(response);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> CheckOut()
+        {
+            return View();
+        }
+
         // POST: AttendanceController1/Edit/5
         [HttpPost]
         //[ValidateAntiForgeryToken]

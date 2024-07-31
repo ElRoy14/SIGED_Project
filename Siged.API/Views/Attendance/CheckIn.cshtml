@@ -12,22 +12,118 @@
 
     </head>
     <body>
-    <form asp-action="CheckIn" method="post">
-        <table>
+    <div>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tr>
-                <th>Nombre</th>
-                <th>Fecha</th>
-                <th>Hora Entrada</th>
-            </tr>
-            <tr>
-                <td><input asp-for="User" type="text" class="form-control" id="userName" value="@User.Identity.Name" /></td>
-                <td><input asp-for="AttendanceDate" type="text" class="form-control" id="date" /></td>
-                <td><input asp-for="CheckIn" type="text" class="form-control" id="entryTime" /></td>
+                <td><input type="text" class="form-control" id="userName" value="@User.Identity.Name" readonly/></td>
+                <td><input type="text" class="form-control" id="date" readonly /></td>
+                <td><input type="text" class="form-control" id="entryTime" readonly /></td>
+                <td><button class="btn btn-primary mb-3" type="button" id="btnCheckIn">Check In</button></a></td>
             </tr>
         </table>
-        <div class="text-center">
-            <a class="btn btn-danger" asp-controller="Attendance" asp-action="Index">Cancelar</a>
-        </div>
-    </form>
+    </div>
+
+    <style>
+        body {
+            background-color: #e8f4fc;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h2 {
+            color: #004080;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .table {
+            background-color: #f9fbfd;
+        }
+
+            .table thead th {
+                background-color: #accff3; /* Soft blue tone */
+                color: #004080;
+            }
+
+            .table tbody tr:hover {
+                background-color: #d0d0d0; /* Gray color on hover */
+            }
+
+        .form-control {
+            border: 1px solid #b0cfe0;
+            border-radius: 4px;
+        }
+
+            .form-control:focus {
+                border-color: #66afe9;
+                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+    </style>
+
+    <script>
+        var fecha = new Date();
+        var anio = fecha.getFullYear();
+        var dia = fecha.getDate();
+        var _mes = fecha.getMonth();//viene con valores de 0 al 11
+        _mes = _mes + 1;//ahora lo tienes de 1 al 12
+        if (_mes < 10)//ahora le agregas un 0 para el formato date
+        { var mes = "0" + _mes; }
+        else { var mes = _mes.toString; }
+
+        document.getElementById("date").value = dia + "/" + mes + "/" + anio;
+
+        document.getElementById("entryTime").value = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+
+        console.log(fecha.getDay());
+
+        document.getElementById('btnCheckIn').addEventListener("click", function () {
+
+            var username = document.getElementById("userName").value;
+            var date = document.getElementById("date").value;
+            var entryTime = document.getElementById("entryTime").value;
+
+            var attendance = {
+                UserDescription: username,
+            }
+            console.log(attendance);
+
+            $.ajax({
+                url: "/Attendance/checkIn",
+                type: "POST",
+                contentType: 'application/json',
+                data: { attendance: attendance },
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function (response) {
+                    if (response.status) {
+                        console.log(response.status);
+                        console.log(response.message)
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        });
+
+    </script>
     </body>
 </html>

@@ -13,123 +13,125 @@
 
         </head>
         <body>
-            <form asp-action="CheckIn" method="post">
-                <table>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Hora Entrada</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td><input asp-for="User.FullName" type="text" class="form-control" id="userName" value="@User.Identity.Name"/></td>
-                    <td><input asp-for="AttendanceDate" type="text" class="form-control" id="date" /></td>
-                    <td><input asp-for="CheckIn" type="text" class="form-control" id="entryTime" /></td>
-                    <td><button type="submit" id="btnCheckIn">Check In</button></a></td>
-                </tr>
-            </table>
-            </form>
+            <!-- Botón Check In -->
+            <button class="btn btn-primary mb-3" id="btnCheckIn" >Check In</button>
+            <!-- Botón Check Out -->
+            <button class="btn btn-primary mb-3" id="btnCheckOut" >Check Out</button>
 
-            <form asp-action="CheckOut" method="post">
-                <table>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Hora Salida</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td><input asp-for="User.FullName" type="text" class="form-control" id="userName" value="@User.Identity.Name"/></td>
-                    <td><input asp-for="AttendanceDate" type="text" class="form-control" id="date" /></td>
-                    <td><input asp-for="CheckOut" type="text" class="form-control" id="exitTime" /></td>
-                    <td><button type="submit" id="btnCheckOut">Check Out</button></a></td>
-                </tr>
-            </table>
-            </form>
+            <div id="attendanceList">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Hora Entrada</th>
+                            <th>Hora Salida</th>
+                            <th>Horas Trabajadas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas de asistencias se insertarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+                
+            <style>
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+</style>
 
             <script src="~/vendor/jquery/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             <script>
-                var token = localStorage.getItem('token');
-                if (!token) {
-                    window.location.href = '/home/login';
+                
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    var token = localStorage.getItem('token');
+                    if (!token) {
+                        window.location.href = '/home/login';
+                    }
+
+                    loadAttendances();
+                });
+
+                document.getElementById('btnCheckIn').addEventListener('click', function(){
+                    window.location.href = "/Attendance/CheckIn";
+                });
+
+                document.getElementById('btnCheckOut').addEventListener('click', function(){
+                    window.location.href = "/Attendance/CheckOut";
+                });
+
+                // Función para cargar asistencias mediante AJAX
+                function loadAttendances() {
+                    $.ajax({
+                        url: '/Attendance/GetAllAttendance',
+                        type: 'GET',
+                        success: function (response) {
+                            console.log(response.value) // Log the response to check for errors
+                            console.log(response)
+                            if (response.status) {
+                                var attendances = response.value;
+                                var attendanceListHtml = '';
+                                attendances.forEach(function (attendance) {
+                                    attendanceListHtml += '<tr>' +
+                                        '<td>' + attendance.attendanceId + '</td>' +
+                                        '<td>' + attendance.userDescription + '</td>' +
+                                        '<td>' + attendance.attendanceDate + '</td>' +
+                                        '<td>' + attendance.checkIn + '</td>' +
+                                        '<td>' + attendance.checkOut + '</td>' +
+                                        '<td>' + attendance.hoursWorked + '</td>' +
+                                    '</tr>';
+                                });
+                                $('#taskList tbody').html(taskListHtml); // Inserta las filas de usuarios en la tabla
+                            } else {
+                                $('#taskList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
                 }
-
-                var fecha = new Date();
-
-                document.getElementById("date").value = fecha.getFullYear() + "-" + fecha.getMonth() + "-" + fecha.getDay() + " " + fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
-                document.getElementById("entryTime").value = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
-
-                console.log(document.getElementById("date").value);
-                console.log(document.getElementById("entryTime").value);
-
-                // document.getElementById('btnCheckIn').addEventListener("click", function(){
-
-                //     var username = document.getElementById("userName").value;
-                //     var date = document.getElementById("date").value;
-                //     var entryTime = document.getElementById("entryTime").value;
-
-                //     var attendance = {
-                //         UserDescription: username,
-                //     }
-                //     console.log(attendance);
-
-                //     $.ajax({
-                //         url: "/Attendance/checkIn",
-                //         type: "POST",
-                //         contentType: 'application/json',
-                //         data: {attendance: attendance},
-                //         headers: {
-                //             'Authorization': 'Bearer ' + token
-                //         },
-                //         success: function (response) {
-                //             if (response.status) {
-                //                 console.log(response.status);
-                //                 console.log(response.message)
-                //             } else {
-                //                 alert(response.message);
-                //             }
-                //         },
-                //         error: function (xhr, status, error) {
-                //             console.error(xhr.responseText);
-                //         }
-                //     });
-
-                // })
-
-                // document.getElementById('btnCheckOut').addEventListener("click", function(){
-
-                //     var username = document.getElementById("userName").value;
-                //     var date = document.getElementById("date").value;
-                //     var entryTime = document.getElementById("exitTime").value;
-
-                //     var attendance = {
-                //         UserDescription: username,
-                //     }
-                //     console.log(attendance);
-
-                //     $.ajax({
-                //         url: "/Attendance/checkIn",
-                //         type: "POST",
-                //         contentType: 'application/json',
-                //         data: {attendance: attendance},
-                //         headers: {
-                //             'Authorization': 'Bearer ' + token
-                //         },
-                //         success: function (response) {
-                //             if (response.status) {
-                //                 console.log(response.status);
-                //                 console.log(response.message)
-                //             } else {
-                //                 alert(response.message);
-                //             }
-                //         },
-                //         error: function (xhr, status, error) {
-                //             console.error(xhr.responseText);
-                //         }
-                //     });
-
-                // })
 
             </script>
 
