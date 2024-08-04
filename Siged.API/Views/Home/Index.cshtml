@@ -2,7 +2,177 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<html lang="es">
+    <head>
+        <!-- Bootstrap styles for calendar -->
+        <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+        <!-- Home StyleSheet-->
+        <link href="~/css/home.css" rel="stylesheet">
+    </head>
+    <body>
+        <main class="main-wrapper grid">
+            <div class="userinfo-wrapper">
+                <div>
+                    <h2>Hi, @User.Identity.Name</h2>
+                    <p>
+                        Bienvenido, a tu perfil de SIGED.
+                    </p>
+                </div>
+                <img src="~/img/character 12.svg" />
+            </div>
+
+            <div class="function-wrapper element">
+                <h3>Other Functions</h3>
+                <div class="buttons-functions">
+                    <div>
+                        <button class="btn-func" onclick="redirectStats()">STATS</button>
+                        <button class="btn-func" onclick="redirectActivities()">ACTIVIDADES</button>
+                    </div>
+                    <div>
+                        <button class="btn-func" onclick="redirectPonche()">CHECK IN/OUT</button>
+                        <button class="btn-func" onclick="redirectAppointments()">CITAS</button>
+                    </div>
+                </div>
+            </div>
+
+        <div class="activities-table element">
+                <div id="taskList">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre Tarea</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Finalización</th>
+                                <th>Empleado</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="calendar-wrapper">
+                <div id="calendar">
+
+                </div>
+            </div>
+        </main>
+
+        <!--Libs Scripts-->
+        <script src='~/js/index.global.min.js'></script>
+        <script src='~/js/bt_index.global.min.js'></script>
+        <script src='~/js/locales-all.global.min.js'></script>
+        <script src="~/vendor/jquery/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var initialLocaleCode = "es";
+                var calendarEl = document.getElementById("calendar");
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    themeSystem: "bootstrap5",
+                    headerToolbar: {
+                        left: "prevYear,prev,next,nextYear today",
+                        center: "title",
+                        right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+                    },
+                    locale: initialLocaleCode,
+                    buttonIcons: true, // show the prev/next text
+                    weekNumbers: false,
+                    navLinks: false, // can click day/week names to navigate views
+                    editable: true,
+                    dayMaxEvents: true, // allow "more" link when too many events
+                    events: []
+                });
+
+                calendar.render();
+                calendar.updateSize();
+
+                $.ajax({
+
+                    url: '/ActivitiesCalendar/GetAllEvents',
+                    type: 'GET',
+                    success: function (response) {
+                        console.log(response); // Log the response to check for errors
+                        if (response.status) {
+                            var events = response.value;
+                            console.log(events);
+                            var calendarEvents = [];
+                            events.forEach(function (task) {
+                                calendar.addEvent({
+                                    title: task.title,
+                                    start: task.start,
+                                    end: task.end,
+                                })
+                            })
+
+                        } else {
+                            $('#calendar').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+
+
+                loadTasks();
+
+            });
+
+            // Función para cargar tareas mediante AJAX
+            function loadTasks() {
+                $.ajax({
+                    url: '/TasksEmployee/GetAllTask',
+                    type: 'GET',
+                    success: function (response) {
+                        console.log(response.value[0].nameTask) // Log the response to check for errors
+                        console.log(response)
+                        if (response.status) {
+                            var tasks = response.value;
+                            var taskListHtml = '';
+                            tasks.forEach(function (task) {
+                                taskListHtml += '<tr>' +
+                                    '<td>' + task.taskId + '</td>' +
+                                    '<td>' + task.nameTask + '</td>' +
+                                    '<td>' + task.startDate + '</td>' +
+                                    '<td>' + task.dueDate + '</td>' +
+                                    '<td>' + task.userDescription + '</td>' +
+                                    '<td>' + task.taskStatusDescription + '</td>' 
+                                '</tr>';
+                            });
+                            $('#taskList tbody').html(taskListHtml); // Inserta las filas de usuarios en la tabla
+                        } else {
+                            $('#taskList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            function redirectStats() {
+                window.location.href = "/DashBoard/Index";
+            }
+
+            function redirectActivities() {
+                window.location.href = "/TasksEmployee/TaskListDone";
+            }
+
+            function redirectPonche() {
+                window.location.href = "/Attendance/Index";
+            }
+
+            function redirectAppointments() {
+                window.location.href = "/EmployeeAvailability/Index";
+            }
+        </script>
+    </body>
+</html>

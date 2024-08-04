@@ -1,6 +1,134 @@
-﻿@{
+﻿@model Siged.Domain.TasksEmployee;
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba lista tareas hechas</h1>
+<!--<h1>Prueba lista tareas hechas</h1> -->
+
+<html lang="es">
+
+<body>
+    <main>
+
+        <h1>Estado de Tareas</h1>
+
+        <!-- Campo de búsqueda -->
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar en la tabla...">
+
+        <div id="taskList">
+            <!-- Aquí se cargará dinámicamente la tabla de tareas -->
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Tarea</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Finalización</th>
+                        <th>Empleado</th>
+                        <th>Estatus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se insertarán dinámicamente las filas de las tareas -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <style>
+        body {
+            background-color: #e8f4fc;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h2 {
+            color: #004080;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .table {
+            background-color: #f9fbfd;
+        }
+
+            .table thead th {
+                background-color: #accff3; /* Soft blue tone */
+                color: #004080;
+            }
+
+            .table tbody tr:hover {
+                background-color: #d0d0d0; /* Gray color on hover */
+            }
+
+        .form-control {
+            border: 1px solid #b0cfe0;
+            border-radius: 4px;
+        }
+
+            .form-control:focus {
+                border-color: #66afe9;
+                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+    </style>
+
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            loadTasks();
+        });
+
+        // Función para cargar tareas mediante AJAX
+        function loadTasks() {
+            $.ajax({
+                url: '/TasksEmployee/GetAllTask',
+                type: 'GET',
+                success: function (response) {
+                    console.log(response.value[0].nameTask) // Log the response to check for errors
+                    console.log(response)
+                    if (response.status) {
+                        var tasks = response.value;
+                        var taskListHtml = '';
+                        tasks.forEach(function (task) {
+                            taskListHtml += '<tr>' +
+                                '<td>' + task.taskId + '</td>' +
+                                '<td>' + task.nameTask + '</td>' +
+                                '<td>' + task.startDate + '</td>' +
+                                '<td>' + task.dueDate + '</td>' +
+                                '<td>' + task.userDescription + '</td>' +
+                                '<td>' + task.taskStatusDescription + '</td>'
+                            '</tr>';
+                        });
+                        $('#taskList tbody').html(taskListHtml); // Inserta las filas de usuarios en la tabla
+                    } else {
+                        $('#taskList').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+        // Evento para buscar en la tabla
+        $('#searchInput').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#taskList tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    </script>
+
+</body>
+</html>

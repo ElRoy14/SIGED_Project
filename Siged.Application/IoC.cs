@@ -33,6 +33,18 @@ using Siged.Application.PerformanceEvaluations.Interfaces;
 using Siged.Application.PerformanceEvaluations.Services;
 using Siged.Application.TaskStatusEmployees.Interfaces;
 using Siged.Application.TaskStatusEmployees.Services;
+using Siged.Application.ServiceNames.Interfaces;
+using Siged.Application.ServiceNames.Services;
+using Siged.Application.PaymentMethods.Interfaces;
+using Siged.Application.PaymentMethods.Services;
+using Siged.Application.AppliedTaxes.Interfaces;
+using Siged.Application.AppliedTaxes.Services;
+using Siged.Application.DiscountsService.Interface;
+using Siged.Application.DiscountsService.Service;
+using Siged.Application.PaymenInvoiceStatus.Interfaces;
+using Siged.Application.PaymenInvoiceStatus.Services;
+using Siged.Application.ActivitiesCalendar.Interfaces;
+using Siged.Application.ActivitiesCalendar.Services;
 
 namespace Siged.Application
 {
@@ -57,7 +69,13 @@ namespace Siged.Application
                 .AddScoped<IEvaluatorsService, EvaluatorsService>()
                 .AddScoped<IPerformanceEvaluationService, PerformanceEvalutionService>()
                 .AddScoped<ITaskStatusEmployeeService, TaskStatusEmployeeService>()
-                .AddScoped<ITaskEmployeeService, TaskEmployeeService>();
+                .AddScoped<ITaskEmployeeService, TaskEmployeeService>()
+                .AddScoped<IServiceNamesService, ServiceNamesService>()
+                .AddScoped<IPaymentMethodService, PaymentMethodService>()
+                .AddScoped<IAppliedTaxesService, AppliedTaxesService>()
+                .AddScoped<IDiscountService, DiscountService>()
+                .AddScoped<IPaymentServiceInvoiceStatusService, PaymentServiceInvoiceStatusService>()
+                .AddScoped<IActivitiesCalendarService, ActivitiesCalendarService>();
 
 
 

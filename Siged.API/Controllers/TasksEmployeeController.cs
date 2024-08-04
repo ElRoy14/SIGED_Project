@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
 using Siged.Application.TaskEmployees.DTOs;
 using Siged.Application.TaskEmployees.Interfaces;
+using Siged.Application.Users.Interfaces;
+using System.Security.Claims;
 
 namespace Siged.API.Controllers
 {
@@ -11,29 +13,41 @@ namespace Siged.API.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.Users = _userService.GetAllUserAsync().Result;
+        
             return View();
         }
 
         public IActionResult TaskListDone()
         {
+            ViewBag.Users = _userService.GetAllUserAsync().Result;
+
             return View();
         }
 
         public IActionResult PendingTask()
         {
+            ViewBag.UserId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                                        .Select(c => c.Value).SingleOrDefault();
+
             return View();
         }
 
         public IActionResult TaskDone()
         {
+            ViewBag.UserId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
+                                        .Select(c => c.Value).SingleOrDefault();
+
             return View();
         }
 
         private readonly ITaskEmployeeService _taskEmployeeService;
+        private readonly IUserService _userService;
 
-        public TasksEmployeeController(ITaskEmployeeService taskEmployeeService)
+        public TasksEmployeeController(ITaskEmployeeService taskEmployeeService, IUserService userService)
         {
             _taskEmployeeService = taskEmployeeService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -164,6 +178,27 @@ namespace Siged.API.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTaskById(int taskId)
+        {
+            var response = new Response<GetTask>();
+
+            try
+            {
+                response.status = true;
+                response.value = await _taskEmployeeService.GetTaskById(taskId);
+                response.message = "Successful task";
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+
+        }
+
         [HttpPut]
         public async Task<IActionResult> EditTask([FromBody] UpdateTask task)
         {
@@ -213,7 +248,7 @@ namespace Siged.API.Controllers
             try
             {
                 response.status = true;
-                response.value = await _taskEmployeeService.DeleteAsync(id);
+                response.value = await _taskEmployeeService.DeleteAsync(id); 
                 response.message = "Task information successfully deleted";
             }
             catch (Exception ex)
