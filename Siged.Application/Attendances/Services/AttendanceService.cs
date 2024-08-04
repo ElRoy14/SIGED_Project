@@ -26,23 +26,40 @@ namespace Siged.Application.Attendances
             _mapper = mapper;
         }
 
-        public async Task<CreateCheckIn> CheckIn(GetAttendance attendance)
+        public async Task<GetAttendance> CheckIn(CreateCheckIn attendance)
         {
             try
             {
-                attendance.CheckIn = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+               
 
-                var checkIn = await _attendanceRepository.CreateAsync(_mapper.Map<Attendance>(attendance));
+                // Obtener la fecha y hora actuales
+                DateTime currentDate = DateTime.Now;
+                TimeSpan currentTime = new TimeSpan(currentDate.Hour, currentDate.Minute, currentDate.Second);
 
-                var query = await _attendanceRepository.VerifyDataExistenceAsync(c => c.AttendanceId == checkIn.AttendanceId);
-                checkIn = query
-                    .Include(attendance => attendance.User).First();
+                // Crear una nueva instancia de Attendance
+                var newAttendance = new Attendance
+                {
+                    UserId = attendance.UserId,
+                    AttendanceDate = currentDate,
+                    CheckIn = currentTime
+                };
 
-                return _mapper.Map<CreateCheckIn>(checkIn);
+                // Guardar el registro en la base de datos
+                var createdAttendance = await _attendanceRepository.CreateAsync(newAttendance);
+
+                // Recuperar el registro creado con detalles
+                var query = await _attendanceRepository.VerifyDataExistenceAsync(c => c.AttendanceId == createdAttendance.AttendanceId);
+                createdAttendance = query
+                    .Include(att => att.User)
+                    .First();
+
+                // Mapear y retornar el resultado
+                return _mapper.Map<GetAttendance>(createdAttendance);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CheckInFailedException();
+                // Manejar errores específicos si es necesario
+                throw;
             }
         }
 

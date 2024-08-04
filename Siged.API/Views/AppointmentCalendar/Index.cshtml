@@ -4,3 +4,75 @@
 }
 
 <h1>Prueba de agenda de calendario</h1>
+
+<html lang="es">
+    <head>
+    <!-- Bootstrap styles for this template -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+    
+    </head>
+    <body>
+        <main>
+            <div id='calendar'></div>
+        </main>
+
+    <!--Libs Scripts-->
+    <script src='~/js/index.global.min.js'></script>
+    <script src='~/js/bt_index.global.min.js'></script>
+    <script src='~/js/locales-all.global.min.js'></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var initialLocaleCode = "es";
+            var calendarEl = document.getElementById("calendar");
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                themeSystem: "bootstrap5",
+                headerToolbar: {
+                    left: "prevYear,prev,next,nextYear today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+                },
+                locale: initialLocaleCode,
+                buttonIcons: true, // show the prev/next text
+                weekNumbers: false,
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: []
+            });
+
+            calendar.render();
+
+            // $.ajax({
+
+            //     url: '/ActivitiesCalendar/GetAllEvents',
+            //     type: 'GET',
+            //     success: function (response) {
+            //         console.log(response); // Log the response to check for errors
+            //         if (response.status) {
+            //             var events = response.value;
+            //             console.log(events);
+            //             var calendarEvents = [];
+            //             events.forEach(function (task) {
+            //                 calendar.addEvent({
+            //                     title: task.title,
+            //                     start: task.start,
+            //                     end: task.end,
+            //                 })
+            //             })
+                        
+            //         } else {
+            //             $('#calendar').html('<div class="alert alert-danger">' + response.message + '</div>');
+            //         }
+            //     },
+            //     error: function (xhr, status, error) {
+            //         console.error(xhr.responseText);
+            //     }
+            // });
+        });
+        console.log(calendar);
+    </script>
+    </body>
+</html>

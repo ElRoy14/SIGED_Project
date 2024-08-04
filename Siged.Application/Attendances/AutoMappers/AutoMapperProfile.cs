@@ -21,10 +21,6 @@ namespace Siged.Application.Attendances.AutoMappers
                     destination.UserDescription,
                     options => options.MapFrom(origin => origin.User.FullName));
 
-            CreateMap<GetAttendance, Attendance>()
-                .ForMember(destination =>
-                    destination.User,
-                    options => options.MapFrom(origin => origin.User.FullName));
 
         }
 
