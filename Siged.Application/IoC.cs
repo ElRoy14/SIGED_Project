@@ -45,6 +45,8 @@ using Siged.Application.PaymenInvoiceStatus.Interfaces;
 using Siged.Application.PaymenInvoiceStatus.Services;
 using Siged.Application.ActivitiesCalendar.Interfaces;
 using Siged.Application.ActivitiesCalendar.Services;
+using Siged.Application.Email.Interface;
+using Siged.Application.Email.Service;
 
 namespace Siged.Application
 {
@@ -75,7 +77,8 @@ namespace Siged.Application
                 .AddScoped<IAppliedTaxesService, AppliedTaxesService>()
                 .AddScoped<IDiscountService, DiscountService>()
                 .AddScoped<IPaymentServiceInvoiceStatusService, PaymentServiceInvoiceStatusService>()
-                .AddScoped<IActivitiesCalendarService, ActivitiesCalendarService>();
+                .AddScoped<IActivitiesCalendarService, ActivitiesCalendarService>()
+                .AddScoped<IEmailService, EmailService>();
 
 
 
