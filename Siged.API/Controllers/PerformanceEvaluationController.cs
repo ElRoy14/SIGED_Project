@@ -1,31 +1,51 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
+using Siged.Application.Evaluators.Interfaces;
+using Siged.Application.Goals.Interfaces;
 using Siged.Application.PerformanceEvaluations.DTOs;
 using Siged.Application.PerformanceEvaluations.Interfaces;
 using Siged.Application.Salarys.DTOs;
 using Siged.Application.Users.DTOs;
+using Siged.Application.Users.Interfaces;
 
 namespace Siged.API.Controllers
 {
     [Authorize]
     public class PerformanceEvaluationController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        private readonly IPerformanceEvaluationService _performanceEvaluationService;
+        private readonly IUserService _userService;
+        private readonly IGoalsService _goalsService;
+        private readonly IEvaluatorsService _evaluatorsService;
+
+
+
 
         public IActionResult PerformanceEvaluationList()
         {
             return View();
         }
 
-        private readonly IPerformanceEvaluationService _performanceEvaluationService;
+      
 
-        public PerformanceEvaluationController(IPerformanceEvaluationService performanceEvaluationService)
+        public PerformanceEvaluationController(IPerformanceEvaluationService performanceEvaluationService, IUserService userService, IGoalsService goalsService, IEvaluatorsService evaluatorsService)
         {
             _performanceEvaluationService = performanceEvaluationService;
+            _userService = userService;
+            _goalsService = goalsService;
+            _evaluatorsService = evaluatorsService;
+
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            ViewBag.Users = await _userService.GetAllUserAsync();
+            ViewBag.Goals = await _goalsService.GetAllGoalsAsync();
+            ViewBag.performanceEvaluationService = await _performanceEvaluationService.GetAllPerformanceAsycn();
+            ViewBag.evaluatorsService = await _evaluatorsService.GetEvaluatorsAsync();
+
+            return View();
         }
 
         [HttpGet]
@@ -70,6 +90,28 @@ namespace Siged.API.Controllers
 
         }
 
+       
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletePerformance(int id)
+        {
+            var response = new Response<bool>();
+
+            try
+            {
+                response.status = true;
+                response.value = await _performanceEvaluationService.DeleteAsync(id);
+                response.message = "Performance information successfully deleted";
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+
+            return Ok(response);
+
+        }
         [HttpPut]
         public async Task<IActionResult> EditPerformance([FromBody] UpdatePerformanceEvaluation performance)
         {
@@ -91,25 +133,31 @@ namespace Siged.API.Controllers
 
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeletePerformance(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetPerformanceById(int id)
         {
-            var response = new Response<bool>();
-
+            var response = new Response<GetPerformanceEvaluation>();
             try
             {
-                response.status = true;
-                response.value = await _performanceEvaluationService.DeleteAsync(id);
-                response.message = "Performance information successfully deleted";
+                var user = await _performanceEvaluationService.GetPerformanceById(id);
+                if (user != null)
+                {
+                    response.status = true;
+                    response.value = user;
+                    response.message = "User found";
+                }
+                else
+                {
+                    response.status = false;
+                    response.message = $"User with id {id} not found";
+                }
             }
             catch (Exception ex)
             {
                 response.status = false;
                 response.message = ex.Message;
             }
-
             return Ok(response);
-
         }
 
     }
