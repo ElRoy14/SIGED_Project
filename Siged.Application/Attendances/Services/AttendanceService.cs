@@ -30,13 +30,9 @@ namespace Siged.Application.Attendances
         {
             try
             {
-               
-
-                // Obtener la fecha y hora actuales
                 DateTime currentDate = DateTime.Now;
                 TimeSpan currentTime = new TimeSpan(currentDate.Hour, currentDate.Minute, currentDate.Second);
 
-                // Crear una nueva instancia de Attendance
                 var newAttendance = new Attendance
                 {
                     UserId = attendance.UserId,
@@ -44,21 +40,17 @@ namespace Siged.Application.Attendances
                     CheckIn = currentTime
                 };
 
-                // Guardar el registro en la base de datos
                 var createdAttendance = await _attendanceRepository.CreateAsync(newAttendance);
 
-                // Recuperar el registro creado con detalles
                 var query = await _attendanceRepository.VerifyDataExistenceAsync(c => c.AttendanceId == createdAttendance.AttendanceId);
                 createdAttendance = query
                     .Include(att => att.User)
                     .First();
 
-                // Mapear y retornar el resultado
                 return _mapper.Map<GetAttendance>(createdAttendance);
             }
             catch (Exception ex)
             {
-                // Manejar errores específicos si es necesario
                 throw;
             }
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
 using Siged.Application.Customers.DTOs;
 using Siged.Application.ServicePaymentInvoices.DTOs;
@@ -6,8 +7,9 @@ using Siged.Application.ServicePaymentInvoices.Interfaces;
 
 namespace Siged.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Authorize]
     public class ServicePaymentInvoiceController : Controller
     {
         public IActionResult Index()
@@ -22,7 +24,7 @@ namespace Siged.API.Controllers
             _servicePaymentInvoiceService = servicePaymentInvoiceService;
         }
 
-        [HttpGet("GetInvoice")]
+        [HttpGet]
         public async Task<IActionResult> GetInvoice()
         {
             var response = new Response<List<GetServicePaymentInvoice>>();
@@ -40,7 +42,7 @@ namespace Siged.API.Controllers
             return Ok(response);
         }
 
-        [HttpPost("UpdateInvoice")]
+        [HttpPost]
         public async Task<IActionResult> Register([FromBody] CreateServicePaymentInvoice paymentInvoice)
         {
             var response = new Response<GetServicePaymentInvoice>();
