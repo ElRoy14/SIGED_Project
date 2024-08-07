@@ -17,6 +17,7 @@ using Siged.Domain.Enums;
 using Siged.Application.PerformanceEvaluations.Validators;
 using FluentValidation;
 using Siged.Application.Authentication.Exceptions;
+using Siged.Application.Customers.DTOs;
 
 namespace Siged.Application.PerformanceEvaluations.Services
 {
@@ -142,6 +143,25 @@ namespace Siged.Application.PerformanceEvaluations.Services
             {
                 throw new DeleteUserErrorFailedException();
             }
+        }
+
+        public async Task<GetPerformanceEvaluation> GetPerformanceById(int id)
+        {
+           
+
+                try
+                {
+                    var user = await _performanceRepository.GetByIdAsync(id);
+                    if (user == null)
+                        throw new UserNotFoundException(); // Implementa esta excepción según tu lógica de manejo de errores
+
+                    return _mapper.Map<GetPerformanceEvaluation>(user);
+                }
+                catch
+                {
+                    throw;
+                }
+            
         }
     }
 

@@ -14,22 +14,25 @@
     <body>
         <main class="main-wrapper grid">
             <div class="userinfo-wrapper">
-                <h2>Hi, @User.Identity.Name</h2>
-                <p>
-                    Bienvenido, a tu perfil de SIGED.
-                </p>
+                <div>
+                    <h2>Hi, @User.Identity.Name</h2>
+                    <p>
+                        Bienvenido, a tu perfil de SIGED.
+                    </p>
+                </div>
+                <img src="~/img/character 12.svg" />
             </div>
 
             <div class="function-wrapper element">
                 <h3>Other Functions</h3>
                 <div class="buttons-functions">
                     <div>
-                        <button class="btn-func">STATS</button>
-                        <button class="btn-func">ACTIVIDADES</button>
+                        <button class="btn-func" onclick="redirectStats()">STATS</button>
+                        <button class="btn-func" onclick="redirectActivities()">ACTIVIDADES</button>
                     </div>
                     <div>
-                        <button class="btn-func">CHECK IN/OUT</button>
-                        <button class="btn-func">CITAS</button>
+                        <button class="btn-func" onclick="redirectPonche()">CHECK IN/OUT</button>
+                        <button class="btn-func" onclick="redirectAppointments()">CITAS</button>
                     </div>
                 </div>
             </div>
@@ -155,7 +158,21 @@
                 });
             }
 
+            function redirectStats() {
+                window.location.href = "/DashBoard/Index";
+            }
 
+            function redirectActivities() {
+                window.location.href = "/TasksEmployee/TaskListDone";
+            }
+
+            function redirectPonche() {
+                window.location.href = "/Attendance/Index";
+            }
+
+            function redirectAppointments() {
+                window.location.href = "/EmployeeAvailability/Index";
+            }
         </script>
     </body>
 </html>

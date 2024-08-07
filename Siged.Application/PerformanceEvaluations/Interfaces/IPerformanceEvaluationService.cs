@@ -1,4 +1,5 @@
-﻿using Siged.Application.PerformanceEvaluations.DTOs;
+﻿using Siged.Application.Customers.DTOs;
+using Siged.Application.PerformanceEvaluations.DTOs;
 using Siged.Application.Users.DTOs;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace Siged.Application.PerformanceEvaluations.Interfaces
         Task<GetPerformanceEvaluation> Register(CreatePerformanceEvaluation model);
         Task<bool> UpdateAsync(UpdatePerformanceEvaluation model);
         Task<bool> DeleteAsync(int id);
+
+        Task<GetPerformanceEvaluation> GetPerformanceById(int id);
     }
 }

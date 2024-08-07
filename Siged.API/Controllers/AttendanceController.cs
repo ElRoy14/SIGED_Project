@@ -70,6 +70,14 @@ namespace Siged.API.Controllers
             return Ok(response);
         }
 
+<<<<<<< HEAD
+=======
+        [HttpGet]
+        public async Task<ActionResult> CheckOut()
+        {
+            return View();
+        }
+>>>>>>> 4e203ea90dcf9453f0314158aa9e8125565a0556
 
         // POST: AttendanceController1/Edit/5
         [HttpPost]

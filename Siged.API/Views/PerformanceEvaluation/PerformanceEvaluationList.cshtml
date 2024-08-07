@@ -3,4 +3,192 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba ver Evaluacion empleado</h1>
+
+<h1>Prueba Evaluación de Empleado</h1>
+
+<div class="container">
+    <h1>Listado de Evaluaciones de Desempeño</h1>
+
+
+    <!-- Tabla de evaluaciones de desempeño -->
+    <div id="performanceList">
+        <table id="performanceTable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Evaluador</th>
+                    <th>Objetivo</th>
+                    <th>Valor del Objetivo</th>
+                    <th>Usuario Evaluado</th>
+                    <th>Calificación</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas de evaluaciones se insertarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <script>
+        // Función para cargar evaluaciones de desempeño vía AJAX
+        function loadPerformances() {
+            $.ajax({
+                url: '/PerformanceEvaluation/GetAllPerformance',
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        var performances = response.value;
+                        var performanceListHtml = '';
+                        performances.forEach(function (performance) {
+                            performanceListHtml += '<tr>' +
+                                '<td>' + performance.evaluatorName + '</td>' +
+                                '<td>' + performance.goalName + '</td>' +
+                                '<td>' + performance.goalValueData + '</td>' +
+                                '<td>' + performance.userName + '</td>' +
+                                '<td>' + performance.rating + '</td>' +
+                              
+                                '</tr>';
+                        });
+                        $('#performanceTable tbody').html(performanceListHtml); // Insertar filas en la tabla
+
+                        // Inicializar DataTable
+                        $('#performanceTable').DataTable({
+                            "paging": true,
+                            "lengthChange": false,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false,
+                            "responsive": true,
+                            "language": {
+                                "paginate": {
+                                    "first": "Primero",
+                                    "last": "Último",
+                                    "next": "Siguiente",
+                                    "previous": "Anterior"
+                                },
+                                "search": "Buscar:",
+                                "info": "Mostrando _START_ a _END_ de _TOTAL_ evaluaciones",
+                                "infoEmpty": "Mostrando 0 a 0 de 0 evaluaciones",
+                                "infoFiltered": "(filtrado de _MAX_ evaluaciones en total)",
+                                "zeroRecords": "No se encontraron resultados"
+                            }
+                        });
+                    } else {
+                        console.log('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + xhr.responseText);
+                }
+            });
+        }
+
+        // Cargar evaluaciones al cargar la página
+        $(document).ready(function () {
+            loadPerformances();
+        });
+
+        // Manejar el envío del formulario de registro de evaluaciones desde el modal
+        $('#performanceForm').submit(function (event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+
+            var formData = {
+                evaluatorId: $('#evaluatorId').val(),
+                goalId: $('#goalId').val(),
+                userId: $('#userId').val(),
+                rating: $('#rating').val()
+            };
+
+            $.ajax({
+                url: '/PerformanceEvaluation/Register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.status) {
+                        $('#registerModal').modal('hide'); // Ocultar el modal después del registro exitoso
+                        alert('Evaluación de desempeño registrada exitosamente.');
+                        loadPerformances(); // Recargar la tabla de evaluaciones después del registro
+                    } else {
+                        alert('Error al registrar la evaluación: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + xhr.responseText);
+                }
+            });
+        });
+
+        // Función para eliminar una evaluación de desempeño
+        function deletePerformance(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta evaluación?')) {
+                $.ajax({
+                    url: '/PerformanceEvaluation/DeletePerformance/' + id,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.status) {
+                            alert('Evaluación eliminada exitosamente.');
+                            loadPerformances(); // Recargar la tabla después de eliminar
+                        } else {
+                            alert('Error al eliminar la evaluación: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+<style>
+
+    body {
+        background-color: #e8f4fc;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        color: #004080;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .table {
+        background-color: #f9fbfd;
+    }
+
+        .table thead th {
+            background-color: #accff3; /* Soft blue tone */
+            color: #004080;
+        }
+
+        .table tbody tr:hover {
+            background-color: #d0d0d0; /* Gray color on hover */
+        }
+
+    .form-control {
+        border: 1px solid #b0cfe0;
+        border-radius: 4px;
+    }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+</style>

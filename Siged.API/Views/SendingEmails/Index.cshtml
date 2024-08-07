@@ -2,5 +2,143 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<html lang="es">
+    <head>
 
-<h1>Prueba de envio de correo</h1>
+    </head>
+    <body>
+        <main>
+            <div class="form-container">
+                <h2>Enviar Correo a Cliente</h2>
+                <form id="sendEmailForm">
+                    <div class="form-group">
+                        <label for="mailAddresee">Destinatario</label>
+                        <select id="mailAddresee" class="form-control">
+                            <option>Elegir Destinatario</option>
+                            @foreach (var customer in ViewBag.Customers)
+                            {
+                                <option value="@customer.Email">@customer.Email</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mailSubject">Asunto</label>
+                        <select id="mailSubject" class="form-control">
+                            <option value="Confirmación de cita">Confirmación de cita</option>
+                            <option value="Aviso de Pago">Aviso de Pago</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mailBody">Cuerpo</label>
+                        <textarea id="mailBody" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="btnSendMail" class="btn btn-primary">Enviar Correo</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+
+            .form-container h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+        .form-control {
+            width: 100%;
+            height: 45px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+                outline: none;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+    </style>
+
+        <script src="~/vendor/jquery/jquery.min.js"></script>
+        <script>
+
+            $("#btnSendMail").on('click', function () {
+                var request = {
+                    addresee: $('#mailAddresee').val(),
+                    subject: $('#mailSubject').val(),
+                    body: $('#mailBody').val(),
+                };
+                SendEmail(request);
+            });
+
+            function SendEmail(request){
+                $.ajax({
+                    url: '/SendingEmails/SendEmail',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        console.log(response); // Log the response to check for errors
+                        if (response.status) {
+                            // Mostrar mensaje de éxito
+                            alert('Correo enviado con éxito.', true);
+                            // Limpiar campos del formulario
+                            $('#sendEmailForm')[0].reset();
+                        } else {
+                            alert('Error al enviar correo: ' + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert('Error al Enviar Correo.', false);
+                    }
+                });
+            }
+
+        </script>
+    </body>
+</html>

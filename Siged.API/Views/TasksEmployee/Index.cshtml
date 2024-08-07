@@ -38,8 +38,9 @@
                 </table>
             </div>
 
-            <div class="modal fade" id="createTaskModal" aria-hidden="true" tabindex="-1">
-                <!-- Modal para Editar Tarea-->
+        <!-- Modal para Asignar Tarea-->
+        <div class="modal fade" id="createTaskModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="createTaskModalLabel">Crear Nueva Tarea</h5>
@@ -53,22 +54,22 @@
                             {
                                 <input type="hidden" asp-for="User.FullName" value="@User.Identity.Name" />
                             }
-                            <div class="col-md-3">
-                                <label for="NameTask" class="control-label">Nombre de la Tarea</label>
+                            <div class="form-group">
+                                <label for="nameTask" class="control-label">Nombre de la Tarea</label>
                                 <input id="nameTask" class="form-control" />
                             </div>
 
-                            <div class="col-md-3">
-                                <label for="DueDate" class="control-label">Fecha de Finalización</label>
-                                <input id="dueDate" class="form-control" />
+                            <div class="form-group">
+                                <label for="dueDate" class="control-label">Fecha de Finalización</label>
+                                <input type="date" id="dueDate" class="form-control" />
                             </div>
 
-                            <div class="form-group col-md-6">
-                                <label for="TaskStatusDescription" class="control-label">Estatus de la Tarea</label>
-                                <input id="taskStatusDescription" value="Pendiente" class="form-control" readonly/>
+                            <div class="form-group">
+                                <label for="taskStatusDescription" class="control-label">Estatus de la Tarea</label>
+                                <input id="taskStatusDescription" value="Pendiente" class="form-control" readonly />
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group">
                                 <label for="userId">Asignar Tarea a Empleado</label>
                                 <select class="form-control" id="userId" name="userId" required>
                                     <option value="">Seleccione un Empleado</option>
@@ -80,16 +81,17 @@
                             </div>
 
                             <div class="modal-footer">
-                                <input type="button" value="Guardar"id="btnSaveTask" class="btn btn-success" />
-                            <button type="button" class="btn btn-danger" id="closeCreateModal">Cancelar</button>
+                                <input type="button" value="Guardar" id="btnSaveTask" class="btn btn-success" />
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+        </div>
 
-        <div class="modal fade" id="editTaskModal" aria-hidden="true" tabindex="-1">
-            <!-- Modal para Editar Tarea-->
+        <!-- Modal para Editar Tarea-->
+        <div class="modal fade" id="editTaskModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -100,16 +102,16 @@
                     </div>
                     <div class="modal-body">
                         <form id="editTaskForm" method="post">
-                            <input type="hidden" id="editTaskId" />
-                            <div class="form-group col-md-6">
+                            <input type="hidden" id="editTaskId" name="editTaskId" />
+                            <div class="form-group">
                                 <label for="editNameTask" class="control-label">Nombre de la Tarea</label>
-                                <input id="editNameTask" class="form-control" />
+                                <input id="editNameTask" name="editNameTask" class="form-control" />
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group">
                                 <label for="editDueDate" class="control-label">Fecha de Finalización</label>
-                                <input id="editDueDate" class="form-control" />
+                                <input type="date" id="editDueDate" name="editDueDate" class="form-control" />
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group">
                                 <label for="editUserId">Asignar Tarea a Empleado</label>
                                 <select class="form-control" id="editUserId" name="editUserId" required>
                                     <option value="">Seleccione un Empleado</option>
@@ -121,7 +123,7 @@
                             </div>
                             <div class="modal-footer">
                                 <input type="button" value="Modificar" id="btnModifyTask" class="btn btn-success" />
-                                <button type="button" class="btn btn-danger" id="closeEditModal">Cancelar</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                             </div>
                         </form>
                     </div>
@@ -129,8 +131,51 @@
             </div>
         </div>
 
+
         </main>
 
+    <style>
+        body {
+            background-color: #e8f4fc;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        h1, h2 {
+            color: #004080;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .table {
+            background-color: #f9fbfd;
+        }
+
+            .table thead th {
+                background-color: #accff3; /* Soft blue tone */
+                color: #004080;
+            }
+
+            .table tbody tr:hover {
+                background-color: #d0d0d0; /* Gray color on hover */
+            }
+
+        .form-control {
+            border: 1px solid #b0cfe0;
+            border-radius: 4px;
+        }
+
+            .form-control:focus {
+                border-color: #66afe9;
+                box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+    </style>
 
         <script src="~/vendor/jquery/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -204,7 +249,7 @@
                         // Actualizar la lista de tareas después de registra
                         loadTasks();
                     } else {
-                        alert('Error al registrar usuario: ' + response.message);
+                        alert('Error al registrar tarea: ' + response.message);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -308,12 +353,30 @@
 
         // Al hacer clic en el botón de editar tarea
         $('#taskList').on('click', '.btn-edit', function () {
+            var fecha = new Date();
+            var anio = fecha.getFullYear();
+            var dia = fecha.getDate();
+            var _mes = fecha.getMonth();//viene con valores de 0 al 11
+            _mes = _mes + 1;//ahora lo tienes de 1 al 12
+            if (_mes < 10)//ahora le agregas un 0 para el formato date
+            { var mes = "0" + _mes; }
+            else { var mes = _mes.toString; }
+            document.getElementById("editDueDate").min = anio + '-' + mes + '-' + dia;
             var userId = $(this).data('userid');
             getPendingTasksByUser(userId);
         });
 
         //<!--Evento para abrir modal para registrar una tarea-->
         $("#btnAddTask").on('click', function () {
+            var fecha = new Date();
+            var anio = fecha.getFullYear();
+            var dia = fecha.getDate();
+            var _mes = fecha.getMonth();//viene con valores de 0 al 11
+            _mes = _mes + 1;//ahora lo tienes de 1 al 12
+            if (_mes < 10)//ahora le agregas un 0 para el formato date
+            { var mes = "0" + _mes; }
+            else { var mes = _mes.toString; }
+            document.getElementById("dueDate").min = anio + '-' + mes + '-' + dia;
             $("#createTaskModal").modal('show')
         });
 
