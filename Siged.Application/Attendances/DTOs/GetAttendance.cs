@@ -12,7 +12,6 @@ namespace Siged.Application.Attendances.DTOs
     {
         public int AttendanceId { get; set; }
         public int? UserId { get; set; }
-        public UserInfo? User { get; set; }
         public string UserDescription { get; set; }
         public DateTime? AttendanceDate { get; set; }
         public TimeSpan? CheckIn { get; set; }

@@ -11,7 +11,7 @@ namespace Siged.Application.Attendances.Interfaces
     {
         Task<List<GetAttendance>> GetAllAttendanceAsync();
         Task<GetAttendance> GetAttendanceByIdAsync(int id);
-        Task<CreateCheckIn> CheckIn(GetAttendance attendance);
+        Task<GetAttendance> CheckIn(CreateCheckIn attendance);
         Task<CheckOut> CheckOut(GetAttendance attendance);
     }
 }
