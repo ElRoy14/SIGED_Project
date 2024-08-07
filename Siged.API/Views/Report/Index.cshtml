@@ -3,8 +3,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba Reporte</h1>
-
 <!-- Botón para imprimir la tabla -->
 <button id="printButton" class="btn btn-primary">Imprimir Reporte</button>
 
@@ -13,7 +11,7 @@
 <table id="invoiceTable" class="table table-striped">
     <thead>
         <tr>
-            <th>ID de Factura de Servicio</th>
+            <th>ID de Factura</th>
             <th>Usuario</th>
             <th>Número de Factura</th>
             <th>Servicio</th>
@@ -47,18 +45,18 @@
                             tableBody.empty();
                             invoices.forEach(invoice => {
                                 tableBody.append(`
-                                            <tr>
-                                                <td>${invoice.serviceInvoiceId}</td>
-                                                <td>${invoice.userDescription ?? 'N/A'}</td>
-                                                <td>${invoice.invoiceNumber ?? 'N/A'}</td>
-                                                <td>${invoice.serviceDescription ?? 'N/A'}</td>
-                                                <td>${invoice.paymentDescription ?? 'N/A'}</td>
-                                                <td>${invoice.appliedDescription ?? 'N/A'}</td>
-                                                <td>${invoice.discountsDescription ?? 'N/A'}</td>
-                                                <td>${invoice.serviceConsumedDetails ?? 'N/A'}</td>
-                                                <td>${invoice.paymentServiceInvoiceStatusDescription ?? 'N/A'}</td>
-                                            </tr>
-                                        `);
+                                                            <tr>
+                                                                <td>${invoice.serviceInvoiceId}</td>
+                                                                <td>${invoice.userDescription ?? 'N/A'}</td>
+                                                                <td>${invoice.invoiceNumber ?? 'N/A'}</td>
+                                                                <td>${invoice.serviceDescription ?? 'N/A'}</td>
+                                                                <td>${invoice.paymentDescription ?? 'N/A'}</td>
+                                                                <td>${invoice.appliedDescription ?? 'N/A'}</td>
+                                                                <td>${invoice.discountsDescription ?? 'N/A'}</td>
+                                                                <td>${invoice.serviceConsumedDetails ?? 'N/A'}</td>
+                                                                <td>${invoice.paymentServiceInvoiceStatusDescription ?? 'N/A'}</td>
+                                                            </tr>
+                                                        `);
                             });
                         } else {
                             alert(response.message);
@@ -78,7 +76,6 @@
                 printWindow.document.write('</head><body >');
                 printWindow.document.write('<h1>Reporte de Facturas</h1>');
                 printWindow.document.write(document.getElementById('invoiceTable').outerHTML);
-                printWindow.document.write('</body></html>');
                 printWindow.document.close();
                 printWindow.focus();
                 printWindow.print();

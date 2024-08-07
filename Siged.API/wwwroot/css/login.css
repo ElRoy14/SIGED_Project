@@ -1,0 +1,111 @@
+﻿body {
+    background-size: 50%;
+    background-position: left;
+    background-repeat: no-repeat;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    width: 350px;
+    height: 500px;
+    border: 2px solid rgba(141, 209, 231, 0.83);
+    border-radius: 55px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    background-color: rgba(217, 217, 217, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 15%;
+}
+
+.card-body-overlay {
+    border-radius: 15px;
+    padding: 30px;
+    width: 100%;
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 25px;
+}
+
+.custom-input {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 10px;
+    color: #2D93B9;
+}
+
+.input-field {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #2D93B9;
+    background: none;
+    outline: none;
+    padding-left: 40px;
+    transition: border-color 0.3s;
+}
+
+    .input-field:focus {
+        border-color: #2D93B9;
+    }
+
+.register-link {
+    margin-top: 20px;
+}
+
+.input-field::placeholder {
+    color: black;
+}
+
+@media (min-width: 768px) {
+    .login-form {
+        max-width: 350px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, rgba(45, 147, 185, 0.69), #144253);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        transition: background 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin: 0 auto;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, rgba(45, 147, 185, 0.9), #0c1f33);
+        }
+}

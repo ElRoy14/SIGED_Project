@@ -3,9 +3,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!-- Tabla para listar las facturas existentes -->
+<h3>Gestión de Pagos de Servicios</h3>
+
 <!-- Botón para abrir el modal de registro -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#registerInvoiceModal">
-    Registrar Nueva Factura de Servicio
+    Registrar Pago de Servicio
 </button>
 
 <!-- Modal para registrar una nueva factura -->
@@ -13,7 +16,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="registerInvoiceModalLabel">Registrar Nueva Factura de Servicio</h5>
+                <h5 class="modal-title" id="registerInvoiceModalLabel">Registrar Pago de Servicio</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -21,7 +24,7 @@
             <div class="modal-body">
                 <form id="registerInvoiceForm">
                     <div class="form-group">
-                        <label for="userId">ID de Usuario</label>
+                        <label for="userId">Usuario</label>
                         <!-- Campo de selección para usuarios -->
                         <select class="form-control" id="userId" name="userId" required>
                             <option value="">Seleccione un Usuario</option>
@@ -33,7 +36,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="serviceNameId">ID del Servicio</label>
+                        <label for="serviceNameId">Servicio</label>
                         <!-- Campo de selección para servicios -->
                         <select class="form-control" id="serviceNameId" name="serviceNameId" required>
                             <option value="">Seleccione un Servicio</option>
@@ -45,7 +48,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="paymentMethodId">ID del Método de Pago</label>
+                        <label for="paymentMethodId">Método de Pago</label>
                         <!-- Campo de selección para métodos de pago -->
                         <select class="form-control" id="paymentMethodId" name="paymentMethodId" required>
                             <option value="">Seleccione un Método de Pago</option>
@@ -57,7 +60,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="appliedTaxesId">ID de Impuestos Aplicados</label>
+                        <label for="appliedTaxesId">Impuestos Aplicados</label>
                         <!-- Campo de selección para impuestos aplicados -->
                         <select class="form-control" id="appliedTaxesId" name="appliedTaxesId" required>
                             <option value="">Seleccione un Impuesto Aplicado</option>
@@ -69,7 +72,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="discountsId">ID de Descuentos</label>
+                        <label for="discountsId">Descuentos</label>
                         <!-- Campo de selección para descuentos -->
                         <select class="form-control" id="discountsId" name="discountsId" required>
                             <option value="">Seleccione un Descuento</option>
@@ -81,12 +84,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="serviceConsumedDetails">Detalles Consumidos</label>
+                        <label for="serviceConsumedDetails">Detalles de Servicio</label>
                         <textarea class="form-control" id="serviceConsumedDetails" name="serviceConsumedDetails" rows="3" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="paymentServiceInvoiceStatusId">ID del Estado de la Factura</label>
+                        <label for="paymentServiceInvoiceStatusId">Estado de la Factura</label>
                         <!-- Campo de selección para estado de la factura -->
                         <select class="form-control" id="paymentServiceInvoiceStatusId" name="paymentServiceInvoiceStatusId" required>
                             <option value="">Seleccione un Estado</option>
@@ -104,12 +107,10 @@
     </div>
 </div>
 
-<!-- Tabla para listar las facturas existentes -->
-<h3>Facturas Existentes</h3>
 <table id="invoiceTable" class="table table-striped">
     <thead>
         <tr>
-            <th>ID de Factura de Servicio</th>
+            <th>ID de Factura</th>
             <th>Usuario</th>
             <th>Número de Factura</th>
             <th>Servicio</th>

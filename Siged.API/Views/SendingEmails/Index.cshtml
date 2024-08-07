@@ -17,13 +17,14 @@
                             <option>Elegir Destinatario</option>
                             @foreach (var customer in ViewBag.Customers)
                             {
-                                <option value="@customer.Email">@customer.Email</option>
+                                <option value="@customer.Email">@customer.FullName</option>
                             }
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="mailSubject">Asunto</label>
                         <select id="mailSubject" class="form-control">
+                            <option>Elegir Asunto</option>
                             <option value="Confirmación de cita">Confirmación de cita</option>
                             <option value="Aviso de Pago">Aviso de Pago</option>
                         </select>
