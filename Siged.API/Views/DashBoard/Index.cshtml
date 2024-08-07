@@ -4,5 +4,367 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba dashboard</h1>
+<h1>Dashboard</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"
+    <!-- Incluir Chart.js desde jsDelivr -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Incluir jQuery desde jsDelivr -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .chart-container {
+            display: none;
+        }
+
+        .chart-flex {
+            display: flex;
+            align-items: center;
+        }
+
+        .graph-container {
+            width: 100% !important;
+            height: 300px !important;
+        }
+        .chart-flex canvas {
+            width: 50% !important;
+        }
+
+        /* Estilo para los botones */
+        button {
+            background-color: #004A93; /* Color de fondo verde */
+            border: none;
+            color: white; /* Color del texto */
+            padding: 12px 29px; /* Relleno del botón */
+            text-align: center; /* Alineación del texto */
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px; /* Espacio entre los botones */
+            cursor: pointer;
+            border-radius: 8px; /* Bordes redondeados */
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+            button:hover {
+                background-color: #004A70; /* Color de fondo cuando se pasa el ratón */
+            }
+
+            button:active {
+                transform: scale(0.98); /* Efecto de presión */
+            }
+    </style>
+</head>
+<body>
+    <div style="width: 100%; margin: auto; padding: 20px;">
+        <div>
+            <button id="btnActivities">Actividades</button>
+            <button id="btnUsers">Usuarios</button>
+            <button id="btnCustomerSups">Clientes/Suplidores</button>
+            <button id="btnPayments">Facturas</button>
+        </div>
+        <br/>
+        <div id="allContainer" class="chart-container graph-container chart-flex">
+                <canvas id="activitiesChart2"></canvas>
+                <canvas id="usersChart2"></canvas>
+        </div>
+        <br/>
+        <div id="allContainer" class="chart-container graph-container chart-flex">
+            <canvas id="customerSupsChart2"></canvas>
+            <canvas id="paymentsChart2"></canvas>
+        </div>
+        <div id="activitiesContainer" class="chart-container">
+            <canvas id="activitiesChart" width="400" height="200"></canvas>
+        </div>
+        <div id="usersContainer" class="chart-container">
+            <canvas id="usersChart" width="400" height="200"></canvas>
+        </div>
+        <div id="customerSupsContainer" class="chart-container">
+            <canvas id="customerSupsChart" width="400" height="200"></canvas>
+        </div>
+        <div id="paymentsContainer" class="chart-container">
+            <canvas id="paymentsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Variables para almacenar los gráficos
+        var activitiesChart2, usersChart2;
+
+        // Función para crear gráficos
+        function createCharts() {
+            // Obtener el contexto de los elementos canvas donde se renderizarán los gráficos
+            var activitiesCtx = document.getElementById('activitiesChart').getContext('2d');
+            var usersCtx = document.getElementById('usersChart').getContext('2d');
+            var customerSupsCtx = document.getElementById('customerSupsChart').getContext('2d');
+            var paymentsCtx = document.getElementById('paymentsChart').getContext('2d');
+
+            var activitiesCtx2 = document.getElementById('activitiesChart2').getContext('2d');
+            var usersCtx2 = document.getElementById('usersChart2').getContext('2d');
+            var customerSupsCtx2 = document.getElementById('customerSupsChart2').getContext('2d');
+            var paymentsCtx2 = document.getElementById('paymentsChart2').getContext('2d');
+
+            // Crear el gráfico de actividades de inicio
+            activitiesChart2 = new Chart(activitiesCtx2, {
+                type: 'pie', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Tareas Pendientes', 'Tareas Hechas'],
+                    datasets: [{
+                        label: 'Tareas',
+                        data: [@ViewBag.PendingTasks, @ViewBag.DoneTasks], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Crear el gráfico de usuarios de inicio
+            usersChart2 = new Chart(usersCtx2, {
+                type: 'bar', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Empleados', 'Gerentes', 'Supervisores', 'Recursos Humanos', 'SuperAdmins'],
+                    datasets: [{
+                        label: 'Usuarios',
+                        data: [@ViewBag.EmployeeUsers, @ViewBag.ManagerUsers, @ViewBag.SupervisorUsers, @ViewBag.RRHHUsers, @ViewBag.SuperAdminUsers], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Crear el gráfico de clientes y suplidores de inicio
+            customerSupsChart2 = new Chart(customerSupsCtx2, {
+                type: 'bar', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Cliente', 'Suplidor'],
+                    datasets: [{
+                        label: 'Agentes Externos',
+                        data: [@ViewBag.TotalCustomers, @ViewBag.TotalSuppliers], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Crear el gráfico de pagos de inicio
+            paymentsChart2 = new Chart(paymentsCtx2, {
+                type: 'line', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                    datasets: [{
+                        label: 'Facturas',
+                        data: [5, 10, 15, 20, 25], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Crear el gráfico de actividades
+            activitiesChart = new Chart(activitiesCtx, {
+                type: 'pie', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Tareas Pendientes', 'Tareas Hechas'],
+                    datasets: [{
+                        label: 'Tareas',
+                        data: [@ViewBag.PendingTasks, @ViewBag.DoneTasks], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Crear el gráfico de usuarios
+            usersChart = new Chart(usersCtx, {
+                type: 'bar', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Empleados', 'Gerentes', 'Supervisores', 'Recursos Humanos', 'SuperAdmins'],
+                    datasets: [{
+                        label: 'Usuarios',
+                        data: [@ViewBag.EmployeeUsers, @ViewBag.ManagerUsers, @ViewBag.SupervisorUsers, @ViewBag.RRHHUsers, @ViewBag.SuperAdminUsers], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Crear el gráfico de clientes y suplidores
+            customerSupsChart = new Chart(customerSupsCtx, {
+                type: 'bar', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Cliente', 'Suplidor'],
+                    datasets: [{
+                        label: 'Agentes Externos',
+                        data: [@ViewBag.TotalCustomers, @ViewBag.TotalSuppliers], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Crear el gráfico de pagos de inicio
+            paymentsChart = new Chart(paymentsCtx, {
+                type: 'line', // Cambiar a 'line', 'pie', 'doughnut', etc. para otros tipos de gráficos
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+                    datasets: [{
+                        label: 'Facturas',
+                        data: [5, 10, 15, 20, 25], // Sustituir con los datos correctos
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Función para mostrar el gráfico seleccionado
+        function showChart(containerId) {
+            // Ocultar todos los contenedores de gráficos
+            $('.chart-container').hide();
+
+            // Mostrar el contenedor seleccionado
+            $('#' + containerId).show();
+        }
+
+        // Asignar eventos de clic a los botones
+        $('#btnActivities').on('click', function () {
+            showChart('activitiesContainer');
+        });
+        $('#btnUsers').on('click', function () {
+            showChart('usersContainer');
+        });
+        $('#btnCustomerSups').on('click', function () {
+            showChart('customerSupsContainer');
+        });
+        $('#btnPayments').on('click', function () {
+            showChart('paymentsContainer');
+        });
+
+        // Crear los gráficos una vez que el documento esté listo
+        $(document).ready(function () {
+            createCharts();
+            document.getElementById('allContainer').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
 
