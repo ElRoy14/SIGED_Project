@@ -26,23 +26,32 @@ namespace Siged.Application.Attendances
             _mapper = mapper;
         }
 
-        public async Task<CreateCheckIn> CheckIn(GetAttendance attendance)
+        public async Task<GetAttendance> CheckIn(CreateCheckIn attendance)
         {
             try
             {
-                attendance.CheckIn = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                DateTime currentDate = DateTime.Now;
+                TimeSpan currentTime = new TimeSpan(currentDate.Hour, currentDate.Minute, currentDate.Second);
 
-                var checkIn = await _attendanceRepository.CreateAsync(_mapper.Map<Attendance>(attendance));
+                var newAttendance = new Attendance
+                {
+                    UserId = attendance.UserId,
+                    AttendanceDate = currentDate,
+                    CheckIn = currentTime
+                };
 
-                var query = await _attendanceRepository.VerifyDataExistenceAsync(c => c.AttendanceId == checkIn.AttendanceId);
-                checkIn = query
-                    .Include(attendance => attendance.User).First();
+                var createdAttendance = await _attendanceRepository.CreateAsync(newAttendance);
 
-                return _mapper.Map<CreateCheckIn>(checkIn);
+                var query = await _attendanceRepository.VerifyDataExistenceAsync(c => c.AttendanceId == createdAttendance.AttendanceId);
+                createdAttendance = query
+                    .Include(att => att.User)
+                    .First();
+
+                return _mapper.Map<GetAttendance>(createdAttendance);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CheckInFailedException();
+                throw;
             }
         }
 

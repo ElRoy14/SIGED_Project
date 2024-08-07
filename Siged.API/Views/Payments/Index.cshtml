@@ -3,4 +3,204 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Prueba de pagos</h1>
+<!-- Botón para abrir el modal de registro -->
+<button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#registerInvoiceModal">
+    Registrar Nueva Factura de Servicio
+</button>
+
+<!-- Modal para registrar una nueva factura -->
+<div class="modal fade" id="registerInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="registerInvoiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerInvoiceModalLabel">Registrar Nueva Factura de Servicio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="registerInvoiceForm">
+                    <div class="form-group">
+                        <label for="userId">ID de Usuario</label>
+                        <!-- Campo de selección para usuarios -->
+                        <select class="form-control" id="userId" name="userId" required>
+                            <option value="">Seleccione un Usuario</option>
+                            @foreach (var user in ViewBag.Users)
+                            {
+                                <option value="@user.UserId">@user.FullName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceNameId">ID del Servicio</label>
+                        <!-- Campo de selección para servicios -->
+                        <select class="form-control" id="serviceNameId" name="serviceNameId" required>
+                            <option value="">Seleccione un Servicio</option>
+                            @foreach (var serviceName in ViewBag.ServiceNames)
+                            {
+                                <option value="@serviceName.ServiceNameId">@serviceName.ServiceName1</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMethodId">ID del Método de Pago</label>
+                        <!-- Campo de selección para métodos de pago -->
+                        <select class="form-control" id="paymentMethodId" name="paymentMethodId" required>
+                            <option value="">Seleccione un Método de Pago</option>
+                            @foreach (var paymentMethod in ViewBag.PaymentMethods)
+                            {
+                                <option value="@paymentMethod.PaymentMethodId">@paymentMethod.PaymentMethod1</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appliedTaxesId">ID de Impuestos Aplicados</label>
+                        <!-- Campo de selección para impuestos aplicados -->
+                        <select class="form-control" id="appliedTaxesId" name="appliedTaxesId" required>
+                            <option value="">Seleccione un Impuesto Aplicado</option>
+                            @foreach (var appliedTax in ViewBag.AppliedTaxes)
+                            {
+                                <option value="@appliedTax.AppliedTaxesId">@appliedTax.TaxToApply</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discountsId">ID de Descuentos</label>
+                        <!-- Campo de selección para descuentos -->
+                        <select class="form-control" id="discountsId" name="discountsId" required>
+                            <option value="">Seleccione un Descuento</option>
+                            @foreach (var discount in ViewBag.Discounts)
+                            {
+                                <option value="@discount.DiscountsId">@discount.ServiceDiscount</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceConsumedDetails">Detalles Consumidos</label>
+                        <textarea class="form-control" id="serviceConsumedDetails" name="serviceConsumedDetails" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentServiceInvoiceStatusId">ID del Estado de la Factura</label>
+                        <!-- Campo de selección para estado de la factura -->
+                        <select class="form-control" id="paymentServiceInvoiceStatusId" name="paymentServiceInvoiceStatusId" required>
+                            <option value="">Seleccione un Estado</option>
+                            @foreach (var status in ViewBag.PaymentServiceInvoiceStatuses)
+                            {
+                                <option value="@status.PaymentServiceInvoiceStatusId">@status.ServicePaymentStatus</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Registrar Factura</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla para listar las facturas existentes -->
+<h3>Facturas Existentes</h3>
+<table id="invoiceTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID de Factura de Servicio</th>
+            <th>Usuario</th>
+            <th>Número de Factura</th>
+            <th>Servicio</th>
+            <th>Método de Pago</th>
+            <th>Impuestos Aplicados</th>
+            <th>Descuentos</th>
+            <th>Detalles Consumidos</th>
+            <th>Estado de la Factura</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section Scripts {
+   
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Cargar las facturas existentes al inicio
+            loadInvoices();
+
+            // Función para cargar las facturas desde el servidor
+            function loadInvoices() {
+                $.ajax({
+                    url: '@Url.Action("GetInvoice", "ServicePaymentInvoice")',
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.status) {
+                            let invoices = response.value;
+                            let tableBody = $('#invoiceTable tbody');
+                            tableBody.empty();
+                            invoices.forEach(invoice => {
+                                tableBody.append(`
+                                                    <tr>
+                                                        <td>${invoice.serviceInvoiceId}</td>
+                                                        <td>${invoice.userDescription ?? 'N/A'}</td>
+                                                        <td>${invoice.invoiceNumber ?? 'N/A'}</td>
+                                                        <td>${invoice.serviceDescription ?? 'N/A'}</td>
+                                                        <td>${invoice.paymentDescription ?? 'N/A'}</td>
+                                                        <td>${invoice.appliedDescription ?? 'N/A'}</td>
+                                                        <td>${invoice.discountsDescription ?? 'N/A'}</td>
+                                                        <td>${invoice.serviceConsumedDetails ?? 'N/A'}</td>
+                                                        <td>${invoice.paymentServiceInvoiceStatusDescription ?? 'N/A'}</td>
+                                                    </tr>
+                                                `);
+                            });
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+
+            // Manejo del envío del formulario de registro
+            $('#registerInvoiceForm').submit(function (event) {
+                event.preventDefault();
+
+                let formData = {
+                    userId: $('#userId').val(),
+                    serviceNameId: $('#serviceNameId').val(),
+                    paymentMethodId: $('#paymentMethodId').val(),
+                    appliedTaxesId: $('#appliedTaxesId').val(),
+                    discountsId: $('#discountsId').val(),
+                    serviceConsumedDetails: $('#serviceConsumedDetails').val(),
+                    paymentServiceInvoiceStatusId: $('#paymentServiceInvoiceStatusId').val()
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Register", "ServicePaymentInvoice")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        if (response.status) {
+                            alert(response.message);
+                            $('#registerInvoiceForm')[0].reset();
+                            $('#registerInvoiceModal').modal('hide'); // Ocultar el modal
+                            loadInvoices(); // Recargar la tabla de facturas
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+}

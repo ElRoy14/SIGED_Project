@@ -45,10 +45,15 @@ using Siged.Application.PaymenInvoiceStatus.Interfaces;
 using Siged.Application.PaymenInvoiceStatus.Services;
 using Siged.Application.ActivitiesCalendar.Interfaces;
 using Siged.Application.ActivitiesCalendar.Services;
+
+using Siged.Application.ServicePaymentInvoices.Interfaces;
+using Siged.Application.ServicePaymentInvoices.Services;
+
 using Siged.Application.Email.Interface;
 using Siged.Application.Email.Service;
 using Siged.Application.DashBoard.Service;
 using Siged.Application.DashBoard.Interface;
+
 
 namespace Siged.Application
 {
@@ -80,8 +85,12 @@ namespace Siged.Application
                 .AddScoped<IDiscountService, DiscountService>()
                 .AddScoped<IPaymentServiceInvoiceStatusService, PaymentServiceInvoiceStatusService>()
                 .AddScoped<IActivitiesCalendarService, ActivitiesCalendarService>()
+
+                .AddScoped<IServicePaymentInvoiceService, ServicePaymentInvoiceService>()
+
                 .AddScoped<IEmailService, EmailService>()
                 .AddScoped<IDashBoardService, DashBoardService>();
+
 
 
 

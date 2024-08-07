@@ -10,8 +10,6 @@ namespace Siged.Application.Attendances.DTOs
     {
         public int AttendanceId { get; set; }
         public int? UserId { get; set; }
-        public DateTime? AttendanceDate { get; set; }
         public TimeSpan? Check_Out { get; set; }
-        public decimal? HoursWorked { get; set; }
     }
 }

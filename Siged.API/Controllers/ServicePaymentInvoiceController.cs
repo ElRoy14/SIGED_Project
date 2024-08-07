@@ -1,28 +1,35 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Siged.API.Utility;
 using Siged.Application.AppliedTaxes.Interfaces;
+using Siged.Application.Customers.DTOs;
 using Siged.Application.DiscountsService.Interface;
 using Siged.Application.PaymenInvoiceStatus.Interfaces;
 using Siged.Application.PaymentMethods.Interfaces;
 using Siged.Application.ServiceNames.Interfaces;
+using Siged.Application.ServicePaymentInvoices.DTOs;
 using Siged.Application.ServicePaymentInvoices.Interfaces;
 using Siged.Application.Users.Interfaces;
+using Siged.Application.Users.Services;
 
 namespace Siged.API.Controllers
 {
+    //[Route("api/[controller]")]
+    //[ApiController]
     [Authorize]
-    public class PaymentsController : Controller
+    public class ServicePaymentInvoiceController : Controller
     {
-
+       
+   
         private readonly IServicePaymentInvoiceService _servicePaymentInvoiceService;
         private readonly IServiceNamesService _serviceNamesService;
-        private readonly IPaymentMethodService _paymentMethodService;
+        private readonly IPaymentMethodService _paymentMethodService; 
         private readonly IDiscountService _discountService;
-        private readonly IAppliedTaxesService _appliedTaxesService;
+        private readonly IAppliedTaxesService _appliedTaxesService; 
         private readonly IPaymentServiceInvoiceStatusService _paymentServiceInvoiceStatusService;
         private readonly IUserService _userService;
 
-        public PaymentsController(
+        public ServicePaymentInvoiceController(
          IServicePaymentInvoiceService servicePaymentInvoiceService,
          IServiceNamesService serviceNamesService,
          IPaymentMethodService paymentMethodService,
@@ -39,6 +46,9 @@ namespace Siged.API.Controllers
             _paymentServiceInvoiceStatusService = paymentServiceInvoiceStatusService;
             _userService = userService; // Inicialización correcta del servicio de usuarios
         }
+
+        // Métodos adicionales del controlador aquí
+
         public async Task<IActionResult> Index()
         {
             ViewBag.ServiceNames = await _serviceNamesService.GetAllServiceNamesAsync();
@@ -51,5 +61,46 @@ namespace Siged.API.Controllers
             return View();
         }
 
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoice()
+        {
+            var response = new Response<List<GetServicePaymentInvoice>>();
+            try
+            {
+                response.status = true;
+                response.value = await _servicePaymentInvoiceService.GetPaymentInvoicesAsync();
+                response.message = "Successful data";
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] CreateServicePaymentInvoice paymentInvoice)
+        {
+            var response = new Response<GetServicePaymentInvoice>();
+            try
+            {
+                response.status = true;
+                response.value = await _servicePaymentInvoiceService.Register(paymentInvoice);
+                response.message = "Registro exitoso";
+            }
+            catch (Exception ex)
+            {
+                response.status = false;
+                response.message = ex.Message;
+            }
+            return Ok(response);
+        }
+
+
+
     }
+
 }

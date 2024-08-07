@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Siged.API.Utility;
 using Siged.Application.Attendances.DTOs;
 using Siged.Application.Attendances.Interfaces;
+using Siged.Application.Users.DTOs;
 
 namespace Siged.API.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
     [Authorize]
     public class AttendanceController : Controller
     {
@@ -24,8 +23,7 @@ namespace Siged.API.Controllers
         }
 
         [HttpGet]
-        //[Route("GetAllAttendance")]
-        public async Task<ActionResult> GetAllAttendance()
+        public async Task<IActionResult> GetAllAttendance()
         {
             var response = new Response<List<GetAttendance>>();
             
@@ -40,7 +38,7 @@ namespace Siged.API.Controllers
                 response.status = false;
                 response.message = ex.Message;
             }
-            return View(response);
+            return Ok(response);
         }
 
         [HttpGet]
@@ -51,18 +49,17 @@ namespace Siged.API.Controllers
 
         // POST: AttendanceController1/Create
         [HttpPost]
-        //[Route("Create")]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> CheckIn(GetAttendance attendance)
+        public async Task<IActionResult> CheckInCreate([FromBody] CreateCheckIn createCheckIn)
         {
-            var response = new Response<CreateCheckIn>();
+            var response = new Response<GetAttendance>();
 
             try
             {
-                attendance.UserDescription = User.Identity.Name;
+                //attendance.UserDescription = User.Identity.Name;
 
                 response.status = true;
-                response.value = await _attendanceService.CheckIn(attendance);
+                response.value = await _attendanceService.CheckIn(createCheckIn);
                 response.message = "Check In successful";
             }
             catch(Exception ex)
@@ -70,8 +67,9 @@ namespace Siged.API.Controllers
                 response.status = false;
                 response.message = ex.Message;
             }
-            return View(response);
+            return Ok(response);
         }
+
 
         [HttpGet]
         public async Task<ActionResult> CheckOut()
@@ -79,9 +77,9 @@ namespace Siged.API.Controllers
             return View();
         }
 
-        // POST: AttendanceController1/Edit/5
+
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+     
         public async Task<ActionResult> CheckOut(GetAttendance attendance)
         {
             var response = new Response<CheckOut>();
